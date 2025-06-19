@@ -1,0 +1,24 @@
+<?php
+use App\Models\Employee;
+use App\Http\Controllers\PrcController;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+
+Route::middleware(['admin','revalidate'])->group(function() {
+    Route::get('/dashboard', function () {
+        $userInfo = Employee::where('emp_id' ,Auth::user()->id)->first(); 
+        return view('dashboard')-> with(['userInfo'=> $userInfo]);
+    })->name('dashboard');
+
+    Route::get('manage-emps/dashboard', function() {
+        $fname = Employee::where('emp_id', Auth::user()->id)->value('emp_fname'); 
+        return view('manage-emps.manage-emps-dashboard')->with(['fname'=> $fname]); 
+    })->name('manage-emps.dashboard');
+
+    Route::get('/under-construction', function () {
+        return view('construction');
+    })->name('construction');
+
+
+})
+?>

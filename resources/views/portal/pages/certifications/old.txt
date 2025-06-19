@@ -1,0 +1,457 @@
+<x-app-layout>
+    <div class="w-full flex justify-center py-8">
+        <div class="w-[95%] flex flex-col p-8 rounded-lg bg-white items-start">
+
+            <!-- header -->
+            <div class="w-full flex">
+                    
+                        
+                    <img src = "{{asset('images/logos/school/soc_logo.png')}}" class="w-[100px] h-[100px] mr-2"/> 
+                
+                    <div class="w-full flex flex-col justify-center">
+                 <!-- title header  -->    
+                        <h1 class="text-[1.5rem] font-bold leading-tight">{{$user-> emp_lname . ', ' . $user-> emp_fname . ' ' . $user-> emp_mname}}</h1>
+                        <h1 class="text-[1.2rem] font-semibold text-gray-700"> {{$user-> emp_id}}</h1>
+                        <span class="text-gray-500 text-sm">Number of Research and Publications: {{$research-> count()}} </span>
+                    </div>
+            </div>
+
+            <a href="{{route('portal.respub.type')}}" class="flex justify-center items-center bg-gray-500 hover:bg-gray-400 text-white rounded-lg px-8 py-1 gap-2 mb-4">
+                <img src="{{asset('images/icons/upload.png')}}" class="w-[20px] h-[20px]" alt="">
+                <span> Upload a New Entry</span>
+            </a>
+            
+                <hr class="w-full opacity-100 my-2">
+
+            
+
+
+
+
+
+
+
+
+        <div class="w-full flex">
+
+
+            <button id = "overview_btn" class="hover:bg-gray-100 text-gray-400 font-semibold px-8 py-2 active_link"> Overview </button>
+
+
+
+            <button id = "approved_btn" class="hover:bg-gray-100 text-gray-400 font-semibold px-8 py-2"> Approved </button>
+
+            <button id = "pending_btn" class="hover:bg-gray-100 text-gray-400 font-semibold px-8 py-2"> Pending </button>
+
+            <button id = "toreview_btn" class="hover:bg-gray-100 text-gray-400 font-semibold px-8 py-2"> To-review </button>
+
+            
+        </div>
+        <hr class="mb-2 opacity-90 w-full">
+
+        <div id= "overview" class="w-full flex flex-col">
+            <h1 class="font-extrabold text-gray-700 text-[1.5rem] mb-2"> My Research </h1>
+
+            <div class="w-full flex items-center gap-2 mb-4">
+                <!-- a card -->
+                <div class="flex flex-col items-center justify-center w-[150px] h-[150px] rounded-lg bg-green-700 text-white leading-tight">
+                   <span class="font-thin">Approved</span>
+                   <h1 class="text-[5rem] font-bold">{{$rapproved->count()}}</h1>
+                </div>
+
+                <div class="flex flex-col items-center justify-center w-[150px] h-[150px] rounded-lg bg-orange-700 text-white leading-tight">
+                   <span class="font-thin">Pending</span>
+                   <h1 class="text-[5rem] font-bold">2</h1>
+                </div>
+
+                <div class="flex flex-col items-center justify-center w-[150px] h-[150px] rounded-lg bg-red-700 text-white leading-tight">
+                   <span class="font-thin">To-review</span>
+                   <h1 class="text-[5rem] font-bold">2</h1>
+                </div>
+
+                <div class="flex flex-col items-center justify-center w-[150px] h-[150px] rounded-lg bg-gray-900 text-white leading-tight">
+                   <span class="font-thin">Total</span>
+                   <h1 class="text-[5rem] font-bold">2</h1>
+                </div>
+            </div>
+
+
+            <h1 class="font-extrabold text-gray-700 text-[1.5rem] mb-2"> My Publications </h1>
+
+            <div class="w-full flex items-center gap-2 mb-4">
+                <!-- a card -->
+                <div class="flex flex-col items-center justify-center w-[150px] h-[150px] rounded-lg bg-green-700 text-white leading-tight">
+                <span class="font-thin">Approved</span>
+                <h1 class="text-[5rem] font-bold">{{$rapproved->count()}}</h1>
+                </div>
+
+                <div class="flex flex-col items-center justify-center w-[150px] h-[150px] rounded-lg bg-orange-700 text-white leading-tight">
+                <span class="font-thin">Pending</span>
+                <h1 class="text-[5rem] font-bold">2</h1>
+                </div>
+
+                <div class="flex flex-col items-center justify-center w-[150px] h-[150px] rounded-lg bg-red-700 text-white leading-tight">
+                <span class="font-thin">To-review</span>
+                <h1 class="text-[5rem] font-bold">2</h1>
+                </div>
+
+                <div class="flex flex-col items-center justify-center w-[150px] h-[150px] rounded-lg bg-gray-900 text-white leading-tight">
+                <span class="font-thin">Total</span>
+                <h1 class="text-[5rem] font-bold">2</h1>
+                </div>
+
+
+
+
+            </div>
+        </div>
+
+
+        <!-- table for approved -->
+        <div id = "approved" class="w-full flex flex-col border border-gray-200 gap-0 inactive_link">
+        
+
+             <div class="w-full bg-red-900 text-white grid grid-cols-[25%_10%_45%_20%] p-2">
+                    <h1>Title</h1>
+                    <h1>Type</h1>
+                    <h1>Attachment</h1>
+                    <h1>Status</h1>
+                  
+             </div>
+
+             <!-- body with empty data -->
+
+             @if($approved->count()==0) 
+             <div class="w-full flex items-center justify-center text-sm text-gray-400 pt-4 pb-12">
+                  <span class="italic"> No user data. </span> 
+             </div>
+             @else
+
+
+             <div class="w-full flex flex-col overflow-y-auto h-[300px]">
+
+           
+                @foreach($approved as $item)
+                <div class="w-full  text-gray-500 grid grid-cols-[25%_10%_45%_20%] p-4">
+                            <h1>{{$item->  cert_title}}</h1>
+                            <h1>{{$item-> cert_type}}</h1>
+                            
+                            <div class="w-full flex items-start gap-2">
+                                <img src = "{{asset('images/icons/attachment.png')}}" class="w-[20px] h-[20px]"/> 
+                                <a class="text-underline" href = "{{asset('storage/' . $item->file_path )}}" target="_blank"> {{$item -> attachment}}</a>
+                            </div>
+            
+
+
+                            <div class="w-full flex items-center justify-center">
+                            <form action = "{{route('portal.certifications.view',['id'=>$item->id])}}" class='w-full' method = "GET"> 
+
+                                  
+
+                                
+                                    <button class="w-[95%] py-1 bg-green-700 text-white  rounded-lg hover:bg-green-600"> INFO </button>
+                                </form>
+
+                                <form action = "{{route('portal.certifications.delete',['id'=> $item->id])}}" class="w-full" method = "POST"> 
+                                            @csrf
+                                            @method('DELETE') 
+
+                                 
+
+
+                                    <button class="w-[95%] py-1 bg-red-700 text-white  rounded-lg hover:bg-red-600" type = "button" onclick="confirmDelete(this)"> DELETE </button>
+                                </form>
+
+
+
+                              
+
+                            </div>
+
+
+                           
+                    </div>
+                    @endforeach
+
+                </div>
+
+
+             @endif
+             
+
+        </div>
+
+
+
+           <!-- table for pending -->
+           <div id = "pending"  class="w-full flex flex-col border border-gray-200 gap-0 inactive_link">
+            <!-- header -->
+             <!-- <div class="w-full bg-gray-500 text-white grid grid-cols-[50%_30%_20%] p-2">
+                    <h1>ORGANIZATION</h1>
+                    <h1>POSITION</h1>
+                    <H1>DATE JOINED</H1>
+             </div> -->
+
+             <div class="w-full bg-red-900 text-white grid grid-cols-[25%_10%_45%_20%] p-2">
+                    <h1>Title</h1>
+                    <h1>Type</h1>
+                    <h1>Attachment</h1>
+                    <h1>Status</h1>
+                  
+             </div>
+
+             <!-- body with empty data -->
+
+             @if($pending->count()==0) 
+             <div class="w-full flex items-center justify-center text-sm text-gray-400 pt-4 pb-12">
+                  <span class="italic"> No user data. </span> 
+             </div>
+             @else
+
+
+             <div class="w-full flex flex-col overflow-y-auto h-[300px]">
+
+           
+                @foreach($pending as $item)
+                <div class="w-full  text-gray-500 grid grid-cols-[25%_10%_45%_20%] p-4 border-b border-gray-200">
+                <h1>{{$item->  cert_title}}</h1>
+                            <h1>{{$item-> cert_type}}</h1>
+                            
+                            <div class="w-full flex items-start gap-2">
+                                <img src = "{{asset('images/icons/attachment.png')}}" class="w-[20px] h-[20px]"/> 
+                                <a class="text-underline" href = "{{asset('storage/' . $item->file_path )}}" target="_blank"> {{$item -> attachment}}</a>
+                            </div>
+            
+
+
+                            <div class="w-full flex items-center justify-center">
+                            <form action = "{{route('portal.certifications.view',['id'=>$item->id])}}" class='w-full' method = "GET"> 
+
+                                  
+
+                                
+                                    <button class="w-[95%] py-1 bg-green-700 text-white  rounded-lg hover:bg-green-600"> INFO </button>
+                                </form>
+
+                                <form action = "{{route('portal.certifications.delete',['id'=> $item->id])}}" class="w-full" method = "POST"> 
+                                            @csrf
+                                            @method('DELETE') 
+
+                                 
+
+
+                                    <button class="w-[95%] py-1 bg-red-700 text-white  rounded-lg hover:bg-red-600" type = "button" onclick="confirmDelete(this)"> DELETE </button>
+                                </form>
+
+
+
+                              
+
+                            </div>
+
+                           
+                    </div>
+                    @endforeach
+
+                </div>
+
+
+             @endif
+             
+
+        </div>
+
+
+        
+           <!-- table for to-review -->
+           <div  id = "toreview"  class="w-full flex flex-col border border-gray-200 gap-0 inactive_link">
+            <!-- header -->
+             <!-- <div class="w-full bg-gray-500 text-white grid grid-cols-[50%_30%_20%] p-2">
+                    <h1>ORGANIZATION</h1>
+                    <h1>POSITION</h1>
+                    <H1>DATE JOINED</H1>
+             </div> -->
+
+             <div class="w-full bg-red-900 text-white grid grid-cols-[25%_10%_45%_20%] p-2">
+                    <h1>Title</h1>
+                    <h1>Type</h1>
+                    <h1>Attachment</h1>
+                    <h1>Status</h1>
+                  
+             </div>
+
+             <!-- body with empty data -->
+
+             @if($toreview->count()==0) 
+             <div class="w-full flex items-center justify-center text-sm text-gray-400 pt-4 pb-12">
+                  <span class="italic"> No user data. </span> 
+             </div>
+             @else
+
+
+             <div class="w-full flex flex-col overflow-y-auto h-[300px]">
+
+           
+                @foreach($toreview as $item)
+                <div class="w-full  text-gray-500 grid grid-cols-[25%_10%_45%_20%] p-4">
+                <h1>{{$item->  cert_title}}</h1>
+                            <h1>{{$item-> cert_type}}</h1>
+                            
+                            <div class="w-full flex items-start gap-2">
+                                <img src = "{{asset('images/icons/attachment.png')}}" class="w-[20px] h-[20px]"/> 
+                                <a class="text-underline" href = "{{asset('storage/' . $item->file_path )}}" target="_blank"> {{$item -> attachment}}</a>
+                            </div>
+            
+
+
+                            <div class="w-full flex items-center justify-center">
+                            <form action = "{{route('portal.certifications.view',['id'=>$item->id])}}" class='w-full' method = "GET"> 
+
+                                  
+
+                                
+                                    <button class="w-[95%] py-1 bg-green-700 text-white  rounded-lg hover:bg-green-600"> INFO </button>
+                                </form>
+
+                                <form action = "{{route('portal.certifications.delete',['id'=> $item->id])}}" class="w-full" method = "POST"> 
+                                            @csrf
+                                            @method('DELETE') 
+
+                                 
+
+
+                                    <button class="w-[95%] py-1 bg-red-700 text-white  rounded-lg hover:bg-red-600" type = "button" onclick="confirmDelete(this)"> DELETE </button>
+                                </form>
+
+
+
+                              
+
+                            </div>
+
+                           
+                    </div>
+                    @endforeach
+
+                </div>
+
+
+             @endif
+             
+
+        </div>
+
+            
+
+
+        </div>
+        
+    </div>
+</x-app-layout>
+
+<style>
+    a, button { 
+        transition: 150ms;
+    }
+
+    .active_link{ 
+        border-bottom: 4px solid #FFD700   ;
+        font-weight: 700;
+        transition: 300ms;
+    }
+
+    
+
+    .active_link:hover { 
+        background-color: rgb(230,230,230);
+
+    }
+
+    .inactive_link { 
+        display: none;
+    }
+</style>
+
+<script>
+
+const approved_btn = document.getElementById('approved_btn'); 
+const pending_btn = document.getElementById('pending_btn')
+const toreview_btn =document.getElementById('toreview_btn')
+const overview_btn = document.getElementById('overview_btn')
+
+const approved_tbl = document.getElementById('approved') 
+const pending_tbl = document.getElementById('pending') 
+const toreview_tbl = document.getElementById('toreview') 
+const overview = document.getElementById('overview')
+
+
+//class for hiding the table is: 'hide'
+
+approved_btn.addEventListener("click",()=> { 
+    approved_btn.classList.add("active_link"); 
+    pending_btn.classList.remove('active_link'); 
+    toreview_btn.classList.remove('active_link'); 
+    overview_btn.classList.remove('active_link'); 
+
+    approved_tbl.classList.remove('inactive_link'); 
+    pending_tbl.classList.add('inactive_link')  
+    toreview_tbl.classList.add('inactive_link')
+    overview.classList.add('inactive_link')
+
+})
+
+
+pending_btn.addEventListener("click",()=> { 
+    approved_btn.classList.remove("active_link"); 
+    pending_btn.classList.add('active_link'); 
+    toreview_btn.classList.remove('active_link'); 
+    overview_btn.classList.remove('active_link'); 
+    
+    
+
+    approved_tbl.classList.add('inactive_link'); 
+    pending_tbl.classList.remove('inactive_link')  
+    toreview_tbl.classList.add('inactive_link')
+    overview.classList.add('inactive_link')
+
+})
+
+toreview_btn.addEventListener("click",()=> { 
+    approved_btn.classList.remove("active_link"); 
+    pending_btn.classList.remove('active_link'); 
+    toreview_btn.classList.add('active_link'); 
+    overview_btn.classList.remove('active_link'); 
+    
+
+    approved_tbl.classList.add('inactive_link'); 
+    pending_tbl.classList.add('inactive_link')  
+    toreview_tbl.classList.remove('inactive_link')
+    overview.classList.add('inactive_link')
+
+})
+
+overview_btn.addEventListener("click",()=> { 
+    approved_btn.classList.remove("active_link"); 
+    pending_btn.classList.remove('active_link'); 
+    toreview_btn.classList.remove('active_link'); 
+    overview_btn.classList.add('active_link'); 
+    
+
+    approved_tbl.classList.add('inactive_link'); 
+    pending_tbl.classList.add('inactive_link')  
+    toreview_tbl.classList.add('inactive_link')
+    overview.classList.remove('inactive_link')
+
+})
+
+
+function confirmDelete(button) { 
+    const form = button.closest('form');
+        if(confirm('Are you sure you want to delete this record?')) { 
+           form.submit()
+        }
+}
+
+
+
+</script>

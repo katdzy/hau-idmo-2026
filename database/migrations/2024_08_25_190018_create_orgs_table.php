@@ -1,0 +1,34 @@
+ <?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('orgs', function (Blueprint $table) {
+            $table->string('id'); //submission id
+            $table->string('emp_id'); 
+            $table-> string('org'); //org name
+            $table->string('position'); 
+            $table->date('date_joined'); 
+            $table->string('status'); 
+            $table->string('attachment'); 
+            $table-> string('added_by');  //user id of the admin
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('orgs');
+    }
+};

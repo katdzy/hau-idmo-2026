@@ -1,0 +1,77 @@
+[33m76ba0cb[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m before deployment
+[33meb1bf5d[m user org
+[33m4f295ef[m Updated Admin Controls Sidebar
+[33md61b47c[m Updated Portal Sidebar + Delete License
+[33m42a7efc[m Data Table Designs Edited. Card-Type instead of table
+[33mdcdd1f8[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Merge branch 'main' of https://github.com/bedaniadale/hau-epf
+[33m31698ba[m DerrickPC
+[33md241fac[m Edit Employment (+ File Change)
+[33mf8e3fa5[m Fixed Delete Bugs for Certifications, Respub, Employment
+[33m88575e5[m Fixed Delete Bugs
+[33mfd59ff4[m User Filtering
+[33mbf57a7f[m Fixed Pending Requests Queries Bugs
+[33m2c15731[m Employment - File Upload
+[33m54b7492[m Fixed Unique ID Generator + Remove irrelevant table such as table_entries_checker
+[33md2e6d76[m Fixed UI of Pending Request
+[33m6fb60a9[m Fixed Certification UI + Research and Publications UI
+[33me6981c6[m Started Editing - User View Profile
+[33md10bf0f[m Approve Employment (Admin View)
+[33mb44fdf0[m Users - Filter by Dept
+[33m5e4e793[m Merge branch 'main' of https://github.com/bedaniadale/hau-epf
+[33m4854ae8[m Employment Records + View Individual Record
+[33m3cb7036[m Employment Form + Submission
+[33mdbda380[m Made User Management - VIEW RECORD + View Profile
+[33m51cf1e9[m Department Records Paginated + Fixed Some UI
+[33m7665645[m Update Records via File Upload - All Records
+[33md91d3f0[m App Registry -> List of Departments
+[33m3034a0a[m Edit Organization Membership
+[33m7b2dd86[m Delete Organization Membership
+[33m5e042d3[m Organization Memberships Page + Add Pagge
+[33md069223[m Admin Access Levels to Data
+[33mdb5d3a8[m Filtered Loads Search
+[33m3e69c71[m Filtered Search by Account
+[33me25843b[m Pending Request FILTER (HR Admin & Super Admin)
+[33md4978a6[m Modified Login Authentication Process
+[33m96d8db1[m Fixed subject table + migrations
+[33mae249c7[m Fixed error handling for the subjects finder
+[33m10c88e7[m Records Dashboard + Added to Admin Navigation
+[33m9fc1055[m Fixed Table Relationships (Employe -> provincial contact, dependencies, emergency contact, accounting details)
+[33mb10a906[m Delete Teaching Load
+[33m95b1c00[m Teaching Loads - Batch Upload Feature
+[33m32c7c2b[m Error Handling - Individual Load
+[33m8e6706f[m Unfinished (Batch Upload - Add users)
+[33mc9c4f58[m BATCH LOADS -> SUBJECT SELECTOR
+[33mf9a29db[m Admin Dashboard
+[33mce7185d[m Teaching Loads Dashboard
+[33mab2baf4[m Fixed Admin Routing + Applied Middleware
+[33me32c8b8[m Fixed Migration Files
+[33m0736270[m Feature Added: Load Subject + Add Load to User
+[33m3e5f671[m Feature: Add New Subject
+[33m4098c65[m Started Manage Teaching Loads (unfinished)
+[33m10f5feb[m Search Dropdown Automation
+[33m4e46d2d[m Manage Subjects Feature + Search, View Subject
+[33m207d53f[m Added Research and Publications Pending Request to Admin
+[33m4f6acf7[m Certification - To-review submission (Employee + Admin)
+[33m489825e[m Started the To-review (unfinished)
+[33m3f458d3[m Finished Approve Certification Request
+[33mde6de31[m Added search to admin pending requests
+[33mcf1a2f7[m Admin Authentication + Started Admin-Pending Requests
+[33m3941802[m Fixed certificate preview + started org feature
+[33m4e8fc3a[m Finished Certification feature + Fixed backend bugs on update/submission + request + Page title indicator
+[33mbf8f0c2[m Fixed the pending requests filtering + Certificates Filtering
+[33m204e712[m Finished research and publication, fixed UI, started requests
+[33m47082f4[m View Information Pages (Fixed) + BackEnd FIX
+[33m84c1688[m[33m ([m[1;32mstatus-bar-development[m[33m)[m Research and Publications features done
+[33m3da8b63[m Research and Publications updated
+[33m2614d1c[m Research and Publications
+[33m7ae06e2[m Dependency features added
+[33m4b181a3[m update july 31
+[33m304fed8[m change profile picture functionality
+[33m149947b[m july 30 update
+[33m5be09b1[m Dependencies list, table, etc.
+[33m2873ced[m Created edit pages (unfinished) - already working
+[33m11e0a27[m Started edit pages
+[33m5e73f54[m Added employee portal profile (not yet finished)
+[33mc9552ff[m Finished dashboard
+[33m681c89d[m system files
+[33m061e0ee[m first commit

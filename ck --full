@@ -1,0 +1,238 @@
+[33mcommit 76ba0cb869ba4d7d703a70d13ae4c9d53ea7411d[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: DEYYLLLL <123535361+bedaniadale@users.noreply.github.com>
+Date:   Wed Oct 16 14:22:07 2024 +0800
+
+    before deployment
+
+[33mcommit eb1bf5d27171386d70715473fa9924f645f73b53[m
+Author: DEYYLLLL <123535361+bedaniadale@users.noreply.github.com>
+Date:   Sat Oct 12 18:18:59 2024 +0800
+
+    user org
+
+[33mcommit 4f295ef1a94b0284131b6e1040095bec1b1932d1[m
+Author: DEYYLLLL <123535361+bedaniadale@users.noreply.github.com>
+Date:   Mon Sep 30 18:06:05 2024 +0800
+
+    Updated Admin Controls Sidebar
+
+[33mcommit d61b47cf9bce47943bc8d04dfa3bd9bdae3fcdb7[m
+Author: DEYYLLLL <123535361+bedaniadale@users.noreply.github.com>
+Date:   Mon Sep 30 16:04:45 2024 +0800
+
+    Updated Portal Sidebar + Delete License
+
+[33mcommit 42a7efc63ee824f264b52cee3e44cfd144fea4c7[m
+Author: DEYYLLLL <123535361+bedaniadale@users.noreply.github.com>
+Date:   Mon Sep 30 14:01:32 2024 +0800
+
+    Data Table Designs Edited. Card-Type instead of table
+
+[33mcommit dcdd1f8f626ff44d879683113fdbade707f72a1c[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Merge: 31698ba d241fac
+Author: DEYYLLLL <dale.bedania10@gmail.com>
+Date:   Tue Sep 24 22:17:59 2024 +0800
+
+    Merge branch 'main' of https://github.com/bedaniadale/hau-epf
+
+[33mcommit 31698ba9e6801e54e438b5a8ac1937bdd7f314fa[m
+Author: DEYYLLLL <dale.bedania10@gmail.com>
+Date:   Tue Sep 24 22:17:21 2024 +0800
+
+    DerrickPC
+
+[33mcommit d241fac4252148b5b1c4773c89ced40e236ba7e1[m
+Author: DEYYLLLL <123535361+bedaniadale@users.noreply.github.com>
+Date:   Tue Sep 24 15:33:31 2024 +0800
+
+    Edit Employment (+ File Change)
+
+[33mcommit f8e3fa5026a67f3f6506e59ca891995c9de91ff3[m
+Author: DEYYLLLL <123535361+bedaniadale@users.noreply.github.com>
+Date:   Tue Sep 24 10:35:33 2024 +0800
+
+    Fixed Delete Bugs for Certifications, Respub, Employment
+
+[33mcommit 88575e521f4c84295b1030892edfd5b8374143b9[m
+Author: DEYYLLLL <123535361+bedaniadale@users.noreply.github.com>
+Date:   Tue Sep 24 10:35:06 2024 +0800
+
+    Fixed Delete Bugs
+
+[33mcommit fd59ff497a2da9a77db511c9a45f5ab9e01e7c3f[m
+Author: DEYYLLLL <dale.bedania10@gmail.com>
+Date:   Mon Sep 23 20:15:24 2024 +0800
+
+    User Filtering
+
+[33mcommit bf57a7fc6e5e5ce94b28159881fd370b93636f8b[m
+Author: DEYYLLLL <123535361+bedaniadale@users.noreply.github.com>
+Date:   Mon Sep 16 16:10:42 2024 +0800
+
+    Fixed Pending Requests Queries Bugs
+
+[33mcommit 2c1573198b6faa1eb3fed97be5ced1b16408aa88[m
+Author: DEYYLLLL <123535361+bedaniadale@users.noreply.github.com>
+Date:   Mon Sep 16 12:19:22 2024 +0800
+
+    Employment - File Upload
+
+[33mcommit 54b749271bdab1d96600ef334cc7f060b0e576c1[m
+Author: DEYYLLLL <123535361+bedaniadale@users.noreply.github.com>
+Date:   Fri Sep 13 21:25:41 2024 +0800
+
+    Fixed Unique ID Generator + Remove irrelevant table such as table_entries_checker
+
+[33mcommit d2e6d768e67b8c54ea85af3d344a0ca4099026fc[m
+Author: DEYYLLLL <123535361+bedaniadale@users.noreply.github.com>
+Date:   Thu Sep 12 15:04:15 2024 +0800
+
+    Fixed UI of Pending Request
+
+[33mcommit 6fb60a9e3199612c688199516011c8e5839f7569[m
+Author: DEYYLLLL <123535361+bedaniadale@users.noreply.github.com>
+Date:   Thu Sep 12 11:16:18 2024 +0800
+
+    Fixed Certification UI + Research and Publications UI
+
+[33mcommit e6981c61aa98eb68f52bc033c0e4b4c23cfcf406[m
+Author: DEYYLLLL <123535361+bedaniadale@users.noreply.github.com>
+Date:   Wed Sep 11 16:11:47 2024 +0800
+
+    Started Editing - User View Profile
+
+[33mcommit d10bf0f2a3f40dcdfd56e1b4208ad02712256f57[m
+Author: DEYYLLLL <123535361+bedaniadale@users.noreply.github.com>
+Date:   Wed Sep 11 12:36:02 2024 +0800
+
+    Approve Employment (Admin View)
+
+[33mcommit b44fdf0de354786660c91aa215a84b0dca8a0446[m
+Author: DEYYLLLL <123535361+bedaniadale@users.noreply.github.com>
+Date:   Wed Sep 11 10:00:44 2024 +0800
+
+    Users - Filter by Dept
+
+[33mcommit 5e4e7933becd77437e38f9c6b0e4100b8e4c50cd[m
+Merge: 4854ae8 dbda380
+Author: DEYYLLLL <123535361+bedaniadale@users.noreply.github.com>
+Date:   Wed Sep 11 08:46:22 2024 +0800
+
+    Merge branch 'main' of https://github.com/bedaniadale/hau-epf
+
+[33mcommit 4854ae8a416662a3314ca89e3b1448c45bbff8b3[m
+Author: DEYYLLLL <123535361+bedaniadale@users.noreply.github.com>
+Date:   Mon Sep 9 14:51:45 2024 +0800
+
+    Employment Records + View Individual Record
+
+[33mcommit 3cb7036195464ed81745c90000ace1c45246a5d4[m
+Author: DEYYLLLL <123535361+bedaniadale@users.noreply.github.com>
+Date:   Mon Sep 9 11:33:12 2024 +0800
+
+    Employment Form + Submission
+
+[33mcommit dbda3809d4470d3c4521f64945caa69443f0015a[m
+Author: Derrick PC <dale.bedania10@gmail.com>
+Date:   Sun Sep 8 23:30:58 2024 +0800
+
+    Made User Management - VIEW RECORD + View Profile
+
+[33mcommit 51cf1e9143c04eee0d7a4d782d5c0878e442f61c[m
+Author: DEYYLLLL <123535361+bedaniadale@users.noreply.github.com>
+Date:   Fri Aug 30 16:37:45 2024 +0800
+
+    Department Records Paginated + Fixed Some UI
+
+[33mcommit 766564569c0e38c09c72522f57f99e2d5af3a923[m
+Author: DEYYLLLL <123535361+bedaniadale@users.noreply.github.com>
+Date:   Fri Aug 30 14:01:50 2024 +0800
+
+    Update Records via File Upload - All Records
+
+[33mcommit d91d3f08535677efae0f8e02def5e8cb8296323e[m
+Author: DEYYLLLL <123535361+bedaniadale@users.noreply.github.com>
+Date:   Thu Aug 29 14:43:10 2024 +0800
+
+    App Registry -> List of Departments
+
+[33mcommit 3034a0ad0a34f72f6eb39b615334a8df0cbebc2c[m
+Author: DEYYLLLL <123535361+bedaniadale@users.noreply.github.com>
+Date:   Thu Aug 29 11:50:41 2024 +0800
+
+    Edit Organization Membership
+
+[33mcommit 7b2dd864816e9204093d1b78d2f4cbbeb55e93c7[m
+Author: DEYYLLLL <123535361+bedaniadale@users.noreply.github.com>
+Date:   Thu Aug 29 10:56:30 2024 +0800
+
+    Delete Organization Membership
+
+[33mcommit 5e042d319dc56e0ce292cd25d1f46b33b3c30f54[m
+Author: DEYYLLLL <123535361+bedaniadale@users.noreply.github.com>
+Date:   Wed Aug 28 14:58:14 2024 +0800
+
+    Organization Memberships Page + Add Pagge
+
+[33mcommit d069223abfeff49616d71d4b6b08d2e534491594[m
+Author: DEYYLLLL <123535361+bedaniadale@users.noreply.github.com>
+Date:   Sat Aug 24 19:36:34 2024 +0800
+
+    Admin Access Levels to Data
+
+[33mcommit db5d3a8eec095833f743d18109a00dd09e2eb08a[m
+Author: DEYYLLLL <123535361+bedaniadale@users.noreply.github.com>
+Date:   Sat Aug 24 14:46:52 2024 +0800
+
+    Filtered Loads Search
+
+[33mcommit 3e69c717c0b27659b427a29ca63cbaf6281715c8[m
+Author: DEYYLLLL <123535361+bedaniadale@users.noreply.github.com>
+Date:   Sat Aug 24 12:50:24 2024 +0800
+
+    Filtered Search by Account
+
+[33mcommit e25843b8127d75d68ece9d6f89ca4208025c45fb[m
+Author: DEYYLLLL <123535361+bedaniadale@users.noreply.github.com>
+Date:   Sat Aug 24 00:43:20 2024 +0800
+
+    Pending Request FILTER (HR Admin & Super Admin)
+
+[33mcommit d4978a6e078be246e190d2a27a5cf451f4c477fc[m
+Author: DEYYLLLL <123535361+bedaniadale@users.noreply.github.com>
+Date:   Sat Aug 24 00:09:56 2024 +0800
+
+    Modified Login Authentication Process
+
+[33mcommit 96d8db14a02de3b155e5493cd8a3141e5cae0bdc[m
+Author: DEYYLLLL <123535361+bedaniadale@users.noreply.github.com>
+Date:   Fri Aug 23 23:01:33 2024 +0800
+
+    Fixed subject table + migrations
+
+[33mcommit ae249c74da1ca71faa57160796bdaf02844ba7b4[m
+Author: DEYYLLLL <123535361+bedaniadale@users.noreply.github.com>
+Date:   Fri Aug 23 22:31:26 2024 +0800
+
+    Fixed error handling for the subjects finder
+
+[33mcommit 10c88e7f38d34adc20dcca895c0d074d09f8ce6c[m
+Author: DEYYLLLL <123535361+bedaniadale@users.noreply.github.com>
+Date:   Thu Aug 22 14:54:31 2024 +0800
+
+    Records Dashboard + Added to Admin Navigation
+
+[33mcommit 9fc1055f230ccfc2392b1d55701889a0aae3ef1d[m
+Author: DEYYLLLL <123535361+bedaniadale@users.noreply.github.com>
+Date:   Thu Aug 22 13:50:37 2024 +0800
+
+    Fixed Table Relationships (Employe -> provincial contact, dependencies, emergency contact, accounting details)
+
+[33mcommit b10a9061c2af93e0b8689c0791f85a8a699a569c[m
+Author: DEYYLLLL <123535361+bedaniadale@users.noreply.github.com>
+Date:   Thu Aug 22 12:57:46 2024 +0800
+
+    Delete Teaching Load
+
+[33mcommit 95b1c0066f8ff95c68d69060322c43fc14937b82[m
+Author: DEYYLLLL <123535361+bedaniadale@us
