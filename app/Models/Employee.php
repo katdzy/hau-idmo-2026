@@ -102,6 +102,14 @@ class Employee extends Authenticatable
         return $this->belongsTo(batch_queue::class, 'emp_id', 'emp_id');
 
     }
+// display name properly when searching
+    protected $appends = ['full_name'];
+    public function getFullNameAttribute()
+    {
+        $middleInitial = $this->emp_mname ? strtoupper(substr($this->emp_mname, 0, 1)) . '.' : '';
+        return trim("{$this->emp_lname}, {$this->emp_fname} {$middleInitial}");
+    }
+
     protected $table = 'tbl_info'; 
     protected $primaryKey = 'emp_id'; 
     protected $fillable = [

@@ -7,7 +7,8 @@
                 <img src="{{ asset('images/blankdp.jpg') }}" class="w-[30px] h-[30px] rounded-lg" alt="User Image"/>
             @endif
             <h1 class="text-lg font-semibold">
-                {{ $user->emp_lname }}, {{ $user->emp_fname }} {{ $user->emp_mname }}
+                <!-- Fix Displaying Null -->
+                {{ $user->full_name }}
             </h1>
             <span class="text-sm text-gray-400">
                 {{ $user->login->email }}

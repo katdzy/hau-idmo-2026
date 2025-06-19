@@ -434,7 +434,7 @@
                         <div class="w-3/4 flex items-center gap-2 py-2">
                             <img src="${profilePicture}" class="w-[30px] h-[30px] rounded-full" alt="User Image" />
                             <h1 class="text-lg font-semibold">
-                                ${user.emp_lname}, ${user.emp_fname} ${user.emp_mname}
+                                ${user.full_name} 
                             </h1>
                             <span class="text-sm text-gray-400">
                                 ${user.login.email}
