@@ -2,7 +2,7 @@
     <div class="w-full flex items-center">
         <div class="w-3/4 flex items-center gap-2 py-2">
             @if($user->profile_picture != '')
-                <img src="{{ asset('storage/profile_pictures/' . $user->profile_picture) }}" class="w-[30px] h-[30px] rounded-full" alt="User Image"/>
+                <img src="{{ asset('storage/profile_pictures/' . $user->profile_picture) }}?v={{ $user->updated_at->timestamp }}" class="w-[30px] h-[30px] rounded-full" alt="User Image"/>
             @else
                 <img src="{{ asset('images/blankdp.jpg') }}" class="w-[30px] h-[30px] rounded-lg" alt="User Image"/>
             @endif
