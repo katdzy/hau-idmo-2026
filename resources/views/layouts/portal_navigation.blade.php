@@ -1,16 +1,9 @@
 <div class="sidebar h-screen dark:bg-gray-800">
-    <!-- Sidebar -->
+    <!-- Sidebar for employees -->
     <aside class="bg-white dark:bg-gray-900 w-64 md:w-80 border-r border-gray-200 dark:border-gray-700 flex flex-col items-center justify-center flex-shrink-0 main gap-0 leading-tight">
-
-    
-
-
-  
 
     <div class = "w-full flex flex-col items-center mt-8"> 
         <h1 class="mb-2 font-extrabold text-xl">HAU-IDMO Portal</h1>
-
-    
 
         <!-- profile card -->
 
@@ -219,14 +212,22 @@
                      
                     </div>
                 </a> 
-
+         @if(Auth::user()->role !== 'Employee')
+        <!-- A LINK NAVIGATION  -->
+        <div class="w-full flex justify-center my-4">
+            <a href="{{route('dashboard')}}" class="w-[90%] flex items-center justify-center px-4 py-1 gap-2 bg-white hover:bg-gray-200 rounded-xl">
+            <img src="{{asset('images/icons/back_maroon.png')}}" alt="" class="w-[20px] h-[20px">
+                <span class="text-red-900 font-semibold">Back to Main Dashboard</span>
+            </a>
+        </div>
+        @endif
 
 
 
               
 
     </div> 
-    
+   
 
 
    

@@ -1,3 +1,5 @@
+<!-- This is the page for batch issuing certificates -->
+
 <x-app-layout>
     <div class="min-h-screen">
         <div class="w-full flex justify-center py-8">
@@ -128,7 +130,7 @@
                             <div class="flex items-center justify-between border p-2 rounded-md shadow-sm bg-gray-50 hover:bg-gray-100 transition duration-200 cursor-pointer" onclick="addToQueue(${user.emp_id}, '${escapeQuotes(user.emp_lname)}', '${escapeQuotes(user.emp_fname)}', '${escapeQuotes(user.emp_mname)}', '${profilePicture}')">
                                 <div class="flex items-center gap-2">
                                     <img src="${profilePicture}" class="w-[35px] h-[35px] rounded-full" alt="user_image" />
-                                    <h1 class="text-sm font-medium text-gray-800">${user.emp_lname}, ${user.emp_fname} ${user.emp_mname}</h1>
+                                    <h1 class="text-sm font-medium text-gray-800">${user.full_name}</h1>
                                 </div>
                                 <button class="bg-red-900 hover:bg-red-800 text-white px-2 py-1 rounded-lg transition duration-200">Add</button>
                             </div>
@@ -147,6 +149,7 @@
 
         // Utility function to escape single quotes in strings
         function escapeQuotes(str) {
+            if (!str) return '';
             return str.replace(/'/g, "\\'");
         }
 

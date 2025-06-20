@@ -43,7 +43,7 @@
                 <img src="{{asset('storage/profile_pictures/' . $user->profile_picture)}}?v={{ $user->updated_at->timestamp }}" class="w-[120px] h-[120px] rounded-[50%]"/>
                 <div class="flex flex-col items-start justify-center text-gray-700 font-bold gap-0 leading-tight">
                     <h1> {{$user->emp_id}}</h1>
-<!-- changed below -->
+<!-- changed below to display name as Doe, John M. -->
                     <h1> {{ $user->full_name }}</h1> 
                     <h1> {{$user->login->email}}</h1>
                 </div> 

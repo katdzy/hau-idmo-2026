@@ -4,7 +4,10 @@ $mname = '';
      
 ?>
 
-
+<!-- 
+    This is the employee dashboard.
+    This is different from the dean, hr, and super. 
+-->
 
     <x-app-layout>
 
