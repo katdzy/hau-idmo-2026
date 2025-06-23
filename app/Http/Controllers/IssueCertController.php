@@ -1,5 +1,5 @@
 <?php
-
+// This is the certificate controller to view details
 namespace App\Http\Controllers;
 
 use App\Models\certifications;
@@ -172,6 +172,61 @@ class IssueCertController extends Controller
         // Flash a success message to the session
         session()->flash('msg', 'Batch issue');
 
-        return redirect()->route('admin.certs')->with('success', 'Certificates issued successfully.');
+        return redirect()->route('admin.certs.view', ['id' => $id])->with('success', 'Certificates issued successfully.');
     }
+
+    /**
+     * Edit HAU Certificate.
+     *
+     * @param string $id
+     * @return \Illuminate\View\View
+     */
+    public function edit($id)
+    {
+        $cert = HAUCert::findOrFail($id);
+
+        return view('manage-emps.certs.edit', [
+            'data' => $cert
+        ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $cert = HAUCert::findOrFail($id);
+
+        // Validate the request
+        $request->validate([
+            'cert_title' => 'required|string|max:255',
+            'issued_by' => 'required|string|max:255',
+            'duration' => 'required|string|max:255',
+            'cert_validity' => 'required|date',
+            'cert_type' => 'required|string|max:255',
+            'role' => 'required|string|max:255',
+            'attachment' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        ]);
+
+        // Update fields
+        $cert->cert_title = $request->cert_title;
+        $cert->issued_by = $request->issued_by;
+        $cert->duration = $request->duration;
+        $cert->cert_validity = $request->cert_validity;
+        $cert->cert_type = $request->cert_type;
+        $cert->role = $request->role;
+
+        // If new attachment uploaded
+        if ($request->hasFile('attachment')) {
+            $filePath = 'hau_certs/';
+            $fileName = $cert->id . '.' . $request->file('attachment')->getClientOriginalExtension();
+            $request->file('attachment')->storeAs($filePath, $fileName, 'public');
+            
+            $cert->attachment = $request->file('attachment')->getClientOriginalName();
+            $cert->file_path = $filePath . $fileName;
+        }
+
+        $cert->save();
+
+        // Redirect back to view page (change this to your "view" route)
+        return redirect()->route('admin.certs.view', ['id' => $id])->with('success', 'Certificates issued successfully.');
+    }
+
 }

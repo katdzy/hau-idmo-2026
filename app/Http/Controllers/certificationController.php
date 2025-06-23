@@ -22,8 +22,6 @@ use Illuminate\Support\Str;
 class certificationController extends Controller
 {   
     
-
-
     protected function updateRequest($id,$title) { 
         DB::table('requests')->where('id', $id)->update(['title' => $title]);
         return true;
@@ -93,13 +91,13 @@ class certificationController extends Controller
             'cert_validity'=> $validity 
         ]);
 
-        $validatedData = $request-> validate([ 
-            'cert_title'=> 'string',
-            'issued_by'=> 'string', 
-            'duration'=> 'string', 
-            'cert_type'=> 'string', 
-            'role'=> 'string',
-            'attachment'=> 'file'
+        $validatedData = $request->validate([ 
+            'cert_title'=> 'required|string',
+            'issued_by'=> 'required|string', 
+            'duration'=> 'required|string', 
+            'cert_type'=> 'required|string', 
+            'role'=> 'required|string',
+            'attachment'=> 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120' // attachment is optional in update
         ]);
         
         $data = certifications::findOrFail($id); 
@@ -147,6 +145,16 @@ class certificationController extends Controller
 
     public function store(Request $request)
     {
+        // Add validation of file
+        $validatedData = $request->validate([
+            'cert_title' => 'required|string',
+            'issued_by' => 'required|string',
+            'duration' => 'required|string',
+            'cert_validity' => 'required|date',
+            'cert_type' => 'required|string',
+            'role' => 'required|string',
+            'attachment' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120', // 5 MB limit
+        ]);
 
 
         $userId = Auth::user()->id;
@@ -230,7 +238,7 @@ class certificationController extends Controller
 
     public function viewItem($id)
     {
-        $data = certifications::where('id', $id)->get()->first();
+        $data = certifications::findOrFail($id);
         return view('portal.pages.certifications.view')->with('data', $data);
     }
 
