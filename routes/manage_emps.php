@@ -5,6 +5,7 @@ use App\Http\Controllers\LoadsController;
 use App\Http\Controllers\LoadsImportController;
 use App\Http\Controllers\PendingController;
 use App\Http\Controllers\SubjectsController;
+use App\Http\Controllers\ManageCertificateController;
 use App\Models\certifications;
 use App\Models\Departments;
 use App\Models\Employee;
@@ -170,6 +171,12 @@ Route::middleware(['admin','revalidate'])->group(function() {
     Route::post('manage-emps/certifications/create', [IssueCertController::class, 'create_certification'])->name('admin.certs.create'); 
 
     Route::post('manage-emps/certifications/issue/{id}/p', [IssueCertController::class, 'issue_cert'])->name('admin.certs.issue');
+
+    // Edit Certificate - Show the edit form
+    Route::get('manage-emps/certifications/edit/{id}', [IssueCertController::class, 'edit'])->name('admin.certs.edit');
+    // Update Certificate - Submit the edit form
+    Route::put('manage-emps/certifications/update/{id}', [IssueCertController::class, 'update'])->name('admin.certs.update');
+
         
     });
 ?> 

@@ -1,3 +1,5 @@
+<!-- This is where the certificate is viewed and edited. -->
+
 <x-app-layout>
     <div class="min-h-screen">
         <div class="w-full flex justify-center py-8">
@@ -11,10 +13,16 @@
                     <p class="text-gray-700"><strong>Date Issued:</strong> {{ \Carbon\Carbon::parse($data->date_issued)->format('M d, Y') }}</p>
                     <p class="text-gray-700"><strong>Validity:</strong> {{ \Carbon\Carbon::parse($data->cert_validity)->format('M d, Y') }}</p>
                     
-                    <!-- Show/Hide Preview Button -->
-                    <button id="togglePreview" class="mt-4 bg-red-900 text-white px-4 py-2 rounded-md hover:bg-red-800 focus:outline-none">
-                        Show Preview
-                    </button>
+                    <!-- Show/Hide Preview and Edit Button -->
+                    <div class="flex space-x-2 mt-4">
+                        <button id="togglePreview" class="bg-red-900 text-white px-4 py-2 rounded-md hover:bg-red-800 focus:outline-none">
+                            Show Preview
+                        </button>
+
+                        <a href="{{ route('admin.certs.edit', ['id' => $data->id]) }}" class="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-500 focus:outline-none">
+                            Edit Certificate
+                        </a>
+                    </div>
                     
                     <!-- Iframe for Certificate Preview -->
                     <div id="previewContainer" class="hidden my-2">
