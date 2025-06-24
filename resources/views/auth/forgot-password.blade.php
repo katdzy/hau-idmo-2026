@@ -22,7 +22,16 @@
             <x-input-error :messages="$errors->get('captcha')" class="mt-2" />
         </div>
 
-        <div class="flex items-center justify-end mt-4">
+        <div class="flex items-center justify-end gap-4 mt-4">
+            <!-- Back to log in button -->
+            <x-secondary-button 
+                class="text-white px-4 py-2 rounded hover:opacity-80"
+                style="background-color: #70121D;"
+                onclick="window.location='{{ route('login') }}'">
+                {{ __('Back to Login') }}
+            </x-secondary-button>
+            
+            <!-- Email Pssword Button -->
             <x-primary-button>
                 {{ __('Email Password Reset Link') }}
             </x-primary-button>

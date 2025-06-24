@@ -1,3 +1,4 @@
+<!-- This is the manage employees dashboard for super admin, hr admin, and dean -->
 <x-app-layout>
     <div class="min-h-screen">
         <div class="w-full flex justify-center py-8">

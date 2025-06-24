@@ -1,5 +1,5 @@
 <div class="sidebar flex h-screen dark:bg-gray-800">
-    <!-- Sidebar -->
+    <!-- This is the admin Sidebar -->
     <aside class="bg-white dark:bg-gray-900 w-64 md:w-80 border-r border-gray-200 dark:border-gray-700 flex-shrink-0 main flex flex-col">
 
 <!-- 
@@ -117,34 +117,29 @@
 
     <div class="navigation-links">
 
-    @if(Auth::user()->role !== 'Employee' && Auth::user()->role !== 'Dean' )
-                <!-- A LINK NAVIGATION  -->
-                <hr>
-                 
-                <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.pendings*') ? 'active' : '' }}">
-                                
-                <div class="nav-link">
-                                    
-                                        <img src="{{ asset('images/icons/nav/admin-controls.svg') }}" />
-                                    
-                                   
-                                        <h3>Admin Controls</h3>
-                                        </div>
-                               
-                            </a> 
-                @endif
+    <!-- Employee Dashboard (shown to everyone EXCEPT Employee role) -->
+    @if(Auth::user()->role !== 'Employee')
+        <hr>
+       <a href="{{ route('portal.dashboard') }}" class="{{ request()->routeIs('portal.dashboard*') ? 'font-semibold' : '' }}">
+            <div class="nav-link">        
+                <img src="{{ asset('images/icons/portal_nav/profile.svg') }}" />
+                <h3>Employee Dashboard</h3>
+            </div>            
+        </a> 
+    @endif
 
-
-
-        
+    <!-- Admin Controls (visible to HR Admin and Super Admin only) -->
+    @if(Auth::user()->role === 'HR Admin' || Auth::user()->role === 'SuperAdmin')
+        <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.pendings*') ? 'active' : '' }}">
+            <div class="nav-link">        
+                <img src="{{ asset('images/icons/nav/admin-controls.svg') }}" />
+                <h3>Admin Controls</h3>
+            </div>            
+        </a> 
+    @endif
+      
     </div>
-    
-
-
-    
-    
-    
-    
+ 
     </aside>
 
    

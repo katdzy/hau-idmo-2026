@@ -39,10 +39,12 @@
 
             <span class="text-[0.8rem] text-gray-400 font-semibold mb-2 ">User Details</span>
             <div class="flex justify-start gap-4 mb-4">
-                <img src="{{asset('storage/profile_pictures/' . $user->profile_picture)}}" class="w-[120px] h-[120px] rounded-[50%]"/>
+<!-- Here below -->
+                <img src="{{asset('storage/profile_pictures/' . $user->profile_picture)}}?v={{ $user->updated_at->timestamp }}" class="w-[120px] h-[120px] rounded-[50%]"/>
                 <div class="flex flex-col items-start justify-center text-gray-700 font-bold gap-0 leading-tight">
                     <h1> {{$user->emp_id}}</h1>
-                    <h1> {{$user->emp_lname}}, {{$user->emp_fname}} {{$user->emp_mname}}</h1>
+<!-- changed below to display name as Doe, John M. -->
+                    <h1> {{ $user->full_name }}</h1> 
                     <h1> {{$user->login->email}}</h1>
                 </div> 
             </div>
