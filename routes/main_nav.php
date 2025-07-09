@@ -15,6 +15,19 @@ Route::middleware(['admin','revalidate'])->group(function() {
         return view('manage-emps.manage-emps-dashboard')->with(['fname'=> $fname]); 
     })->name('manage-emps.dashboard');
 
+<<<<<<< Updated upstream
+=======
+    Route::get('scholarship-grants/dashboard', function() {
+        $fname = Employee::where('emp_id', Auth::user()->id)->value('emp_fname'); 
+        return view('scholarships-grants.scholarships-grants-dashboard')->with(['fname'=> $fname]); 
+    })->name('scholarship-grants.dashboard');
+
+    Route::get('sharepoint-sites/dashboard', function() {
+        $fname = Employee::where('emp_id', Auth::user()->id)->value('emp_fname'); 
+        return view('sharepoint-sites.sharepoint-sites-dashboard')->with(['fname'=> $fname]); 
+    })->name('sharepoint-sites.dashboard');
+
+>>>>>>> Stashed changes
     Route::get('/under-construction', function () {
         return view('construction');
     })->name('construction');

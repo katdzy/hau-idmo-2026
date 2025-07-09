@@ -501,5 +501,12 @@ Route::middleware('auth','revalidate')->group(function () {
     // Change Profile Picture View (different from update action)
     Route::get('profile/change-profile-picture', [ProfileController::class, 'changepic'])
         ->name('profile.changepic');
-
+    
+    /*------------------------------------------------------------------
+    | 17. SharePoint Sites
+    |------------------------------------------------------------------*/
+    Route::get('sharepoint-sites/dashboard', function() {
+        $fname = Employee::where('emp_id', Auth::user()->id)->value('emp_fname'); 
+        return view('sharepoint-sites.sharepoint-sites-dashboard')->with(['fname'=> $fname]); 
+    })->name('sharepoint-sites.dashboard');
 });

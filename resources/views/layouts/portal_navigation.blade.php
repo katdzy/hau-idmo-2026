@@ -211,7 +211,20 @@
                             <h3>Filing Application</h3>
                      
                     </div>
+                </a>
+
+                <!-- A LINK NAVIGATION  -->
+                 <a href="{{ route('sharepoint-sites.dashboard') }}" class="{{ request()->routeIs('sharepoint-sites*') ? 'font-semibold' : '' }}">
+                    <div class="nav-link">
+                        
+                            <img src="{{ asset('images/icons/portal_nav/send.svg') }}" />
+                    
+                     
+                            <h3>SharePoint Sites</h3>
+                     
+                    </div>
                 </a> 
+
          @if(Auth::user()->role !== 'Employee')
         <!-- A LINK NAVIGATION  -->
         <div class="w-full flex justify-center my-4">
