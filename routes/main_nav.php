@@ -27,6 +27,11 @@ Route::middleware(['admin','revalidate'])->group(function() {
         return view('sharepoint-sites.sharepoint-sites-dashboard')->with(['fname'=> $fname]); 
     })->name('sharepoint-sites.dashboard');
 
+    Route::get('sharepoint-sites/dashboard', function() {
+        $fname = Employee::where('emp_id', Auth::user()->id)->value('emp_fname'); 
+        return view('sharepoint-sites.sharepoint-sites-dashboard')->with(['fname'=> $fname]); 
+    })->name('sharepoint-sites.dashboard');
+
 >>>>>>> Stashed changes
     Route::get('/under-construction', function () {
         return view('construction');

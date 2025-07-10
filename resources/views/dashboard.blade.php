@@ -28,6 +28,7 @@ $mname = '';
                         <h3 class = "bg-red-900 text-white font-semibold rounded-lg py-1 px-1 w-[20%] text-center mb-2"> {{Auth::user()-> id}}</h3>
                         <h1 class = "text-[3rem] font-extrabold mb-1">{{$userInfo->emp_fname}}</h1>
                         <h2 class = "text-[1.2rem] font-semibold mt-1">{{$userInfo->emp_mname ?? ' '}} {{$userInfo->emp_lname}} </h2>
+                        <h2 class = "text-[1.2rem] font-semibold mt-1">{{$userInfo->emp_mname ?? ' '}} {{$userInfo->emp_lname}} </h2>
                         
                     
                         @if(session('dept')==true)
@@ -62,6 +63,8 @@ $mname = '';
             @if (Auth::user()->role !== 'Employee' && Auth::user()->role !== 'Dean' && Auth::user()->role !== 'HR Admin') 
             <div class = "navigation-cards-box-4">
                 <!-- a card slot  -->
+            <div class = "navigation-cards-box-4">
+                <!-- a card slot  -->
                 <a href = "{{route('manage-emps.dashboard')}}">
                     <div class = "nav-card"> 
                         <div class = "nav-card-icon"> <img src = "{{asset('images/icons/nav/employees.png')}}"/> </div>
@@ -73,6 +76,7 @@ $mname = '';
 
 
                 <!-- a card slot  -->
+                <a href = "{{route('scholarship-grants.dashboard')}}">
                 <a href = "{{route('scholarship-grants.dashboard')}}">
                     <div class = "nav-card"> 
                         <div class = "nav-card-icon"> <img src = "{{asset('images/icons/nav/scholarships.png')}}"/> </div>
@@ -102,6 +106,9 @@ $mname = '';
                 </a> 
 
                 <!-- end of card slot  -->
+            </div>
+            
+            <div class = "navigation-cards-box-3">
             </div>
             
             <div class = "navigation-cards-box-3">
@@ -135,7 +142,18 @@ $mname = '';
 
                 <!-- end of card slot  -->
             </div>
+                <!-- a card slot  -->
+                <a href = "{{route('sharepoint-sites.dashboard')}}">
+                    <div class = "nav-card"> 
+                        <div class = "nav-card-icon"> <img src = "{{asset('images/icons/nav/sharepoint.png')}}" class = "w-24 h-24"/> </div>
+                        <div class  = "nav-card-title"> <h3> SharePoint Sites</h3> </div> 
+                    </div> 
+                </a> 
+
+                <!-- end of card slot  -->
+            </div>
             @else
+            <div class = "relative w-[85%] h-[85%] rounded-[15px] grid grid-cols- overflow-hidden">
             <div class = "relative w-[85%] h-[85%] rounded-[15px] grid grid-cols- overflow-hidden">
 
             <!-- a card slot  -->
@@ -186,6 +204,16 @@ $mname = '';
                     <div class = "nav-card"> 
                         <div class = "nav-card-icon"> <img src = "{{asset('images/icons/nav/research.png')}}"/> </div>
                         <div class  = "nav-card-title"> <h3> Research</h3> </div> 
+                    </div> 
+                </a> 
+
+                <!-- end of card slot  -->
+
+                <!-- a card slot  -->
+                <a href = "{{route('sharepoint-sites.dashboard')}}">
+                    <div class = "nav-card"> 
+                        <div class = "nav-card-icon"> <img src = "{{asset('images/icons/nav/scholarships.png')}}"/> </div>
+                        <div class  = "nav-card-title"> <h3> SharePoint Sites</h3> </div> 
                     </div> 
                 </a> 
 
@@ -345,6 +373,10 @@ $mname = '';
         margin-top: -50px;
     }
 
+    .navigation-cards + .navigation-cards {
+        margin-top: -50px;
+    }
+
     .navigation-cards-box { 
         position: relative;
 
@@ -398,9 +430,49 @@ $mname = '';
     .navigation-cards-box-4 a,
     .navigation-cards-box-3 a {
         width: 100%;
+        width: 100%; 
+        height: 100%;
+        display: flex; 
+        justify-content: center;
+        align-items: center; 
+    }
+
+    .navigation-cards-box-4 { 
+        position: relative;
+
+        width: 85%; 
+        height: 85%;
+        border-radius: 15px;
+   
+        /* background-color: white; */
+        display: grid; 
+        grid-template-columns: repeat(4, 1fr); 
+        /* box-shadow: 5px 5px 5px rgb(0,0,0,0.1); */
+        overflow: hidden;
+    }
+
+    .navigation-cards-box-3 { 
+        position: relative;
+
+        width: 85%; 
+        height: 85%;
+        border-radius: 15px;
+   
+        /* background-color: white; */
+        display: grid; 
+        grid-template-columns: repeat(3, 1fr); 
+        /* box-shadow: 5px 5px 5px rgb(0,0,0,0.1); */
+        overflow: hidden;
+    }
+
+    .navigation-cards-box-4 a,
+    .navigation-cards-box-3 a {
+        width: 100%;
         height: 100%;
         display: flex;
+        display: flex;
         justify-content: center;
+        align-items: center;
         align-items: center;
     }
 
