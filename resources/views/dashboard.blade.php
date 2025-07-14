@@ -60,7 +60,7 @@ $mname = '';
 
         <div class = "navigation-cards">
             @if (Auth::user()->role !== 'Employee' && Auth::user()->role !== 'Dean' && Auth::user()->role !== 'HR Admin') 
-            <div class = "navigation-cards-box-4">
+            <div class = "navigation-cards-box">
                 <!-- a card slot  -->
                 <a href = "{{route('manage-emps.dashboard')}}">
                     <div class = "nav-card"> 
@@ -102,9 +102,8 @@ $mname = '';
                 </a> 
 
                 <!-- end of card slot  -->
-            </div>
-            
-            <div class = "navigation-cards-box-3">
+
+
                 <!-- a card slot  -->
                 <a href = "{{route('construction')}}">
                     <div class = "nav-card"> 
@@ -115,6 +114,7 @@ $mname = '';
 
                 <!-- end of card slot  -->
 
+
                 <!-- a card slot  -->
                 <a href = "{{route('admin.prc')}}">
                     <div class = "nav-card"> 
@@ -124,6 +124,7 @@ $mname = '';
                 </a> 
 
                 <!-- end of card slot  -->
+
 
                 <!-- a card slot  -->
                 <a href = "{{route('sharepoint-sites.dashboard')}}">
@@ -348,13 +349,13 @@ $mname = '';
     .navigation-cards-box { 
         position: relative;
 
-        width: 85%; 
+        width: 95%; 
         height: 85%;
         border-radius: 15px;
    
         /* background-color: white; */
         display: grid; 
-        grid-template-columns: repeat(6, 1fr); 
+        grid-template-columns: repeat(7, 1fr); 
         /* box-shadow: 5px 5px 5px rgb(0,0,0,0.1); */
         overflow: hidden;
     }
@@ -365,43 +366,6 @@ $mname = '';
         display: flex; 
         justify-content: center;
         align-items: center; 
-    }
-
-    .navigation-cards-box-4 { 
-        position: relative;
-
-        width: 85%; 
-        height: 85%;
-        border-radius: 15px;
-   
-        /* background-color: white; */
-        display: grid; 
-        grid-template-columns: repeat(4, 1fr); 
-        /* box-shadow: 5px 5px 5px rgb(0,0,0,0.1); */
-        overflow: hidden;
-    }
-
-    .navigation-cards-box-3 { 
-        position: relative;
-
-        width: 85%; 
-        height: 85%;
-        border-radius: 15px;
-   
-        /* background-color: white; */
-        display: grid; 
-        grid-template-columns: repeat(3, 1fr); 
-        /* box-shadow: 5px 5px 5px rgb(0,0,0,0.1); */
-        overflow: hidden;
-    }
-
-    .navigation-cards-box-4 a,
-    .navigation-cards-box-3 a {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
     }
 
     .nav-card { 

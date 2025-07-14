@@ -3,9 +3,27 @@
     <div class="min-h-screen bg-gray-50">
         <div class="w-full flex justify-center py-8">
             <div class="w-[95%] flex flex-col bg-white rounded-lg px-8 py-8 shadow-lg">
-                <h1 class="text-[1.8rem] font-semibold mb-2">
-                    SharePoint Sites
-                </h1>
+                <div class="flex justify-between items-center mb-6">
+                    <h1 class="text-[1.8rem] font-semibold mb-2">
+                        SharePoint Sites
+                    </h1>
+                    @if(Auth::user()->role === 'SuperAdmin')
+                        <div class="relative inline-block text-left">
+                            <button id="adminDropdownBtn" type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-red-900 hover:bg-gray-100 focus:outline-none">
+                                Options
+                                <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </button>
+                            <div id="adminDropdownMenu" class="origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden z-20">
+                                <div class="py-1">
+                                    <a href="{{ route('sharepoint-sites.add') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Add Link</a>
+                                    <a href="{{ route('sharepoint-sites.edit-list') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Edit Link</a>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                </div>
                 <hr class="opacity-100 my-4">
 
                 <!-- Tabs -->
@@ -52,7 +70,7 @@
                                                     </button>
                                                     <ul class="ml-6 mt-1 hidden file-list">
                                                         @foreach ($officeLinks as $link)
-                                                            <li>
+                                                            <li class="mb-2">
                                                                 <a href="{{ $link->url }}" target="_blank" class="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded hover:bg-blue-200">
                                                                     {{ $link->label }}
                                                                 </a>
@@ -61,7 +79,7 @@
                                                     </ul>
                                                 @else
                                                     @foreach ($officeLinks as $link)
-                                                        <li>
+                                                        <li class="mb-2">
                                                             <a href="{{ $link->url }}" target="_blank" class="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded hover:bg-blue-200">
                                                                 {{ $link->label }}
                                                             </a>
@@ -96,7 +114,7 @@
                                                     </button>
                                                     <ul class="ml-6 mt-1 hidden file-list">
                                                         @foreach ($officeLinks as $link)
-                                                            <li>
+                                                            <li class="mb-2">
                                                                 <a href="{{ $link->url }}" target="_blank" title="{{ $link->description }}"
                                                                     class="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded hover:bg-blue-200">
                                                                     {{ $link->label }}
@@ -106,7 +124,7 @@
                                                     </ul>
                                                 @else
                                                     @foreach ($officeLinks as $link)
-                                                        <li>
+                                                        <li class="mb-2">
                                                             <a href="{{ $link->url }}" target="_blank" title="{{ $link->description }}"
                                                                 class="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded hover:bg-blue-200">
                                                                 {{ $link->label }}
@@ -142,7 +160,7 @@
                                                     </button>
                                                     <ul class="ml-6 mt-1 hidden file-list">
                                                         @foreach ($officeLinks as $link)
-                                                            <li>
+                                                            <li class="mb-2">
                                                                 <a href="{{ $link->url }}" target="_blank" title="{{ $link->description }}" 
                                                                     class="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded hover:bg-blue-200">
                                                                     {{ $link->label }}
@@ -152,7 +170,7 @@
                                                     </ul>
                                                 @else
                                                     @foreach ($officeLinks as $link)
-                                                        <li>
+                                                        <li class="mb-2">
                                                             <a href="{{ $link->url }}" target="_blank" title="{{ $link->description }}" 
                                                                 class="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded hover:bg-blue-200">
                                                                 {{ $link->label }}
@@ -176,6 +194,18 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        const dropdownBtn = document.getElementById('adminDropdownBtn');
+        const dropdownMenu = document.getElementById('adminDropdownMenu');
+        if(dropdownBtn) {
+            dropdownBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                dropdownMenu.classList.toggle('hidden');
+            });
+            document.addEventListener('click', function() {
+                dropdownMenu.classList.add('hidden');
+            });
+        }
+
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', function () {
                 document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));

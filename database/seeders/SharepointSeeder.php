@@ -528,5 +528,68 @@ class SharepointSeeder extends Seeder
             'department' => 'INTERNAL AUDIT TEAM (IAT)',
             'office' => 'INTERNAL QUALITY AUDIT',
         ]);
+
+
+        // MID-YEAR REVIEW
+        SharepointLinks::create([
+            'label' => 'MID-YEAR REVIEW',
+            'url' => 'https://hauph.sharepoint.com/sites/Mid-YearReview',
+            'category' => 'Planning and Review',
+            'department' => 'INSTITUTIONAL PLANNING, RESEARCH & PUBLICATIONS OFFICE',
+        ]);
+
+
+        // YEAR-END REVIEW
+        SharepointLinks::create([
+            'label' => 'YEAR-END REVIEW',
+            'url' => 'https://hauph.sharepoint.com/sites/Year-endReview',
+            'category' => 'Planning and Review',
+            'department' => 'INSTITUTIONAL PLANNING, RESEARCH & PUBLICATIONS OFFICE',
+        ]);
+
+
+        // OPERATIONAL PLANS
+        SharepointLinks::create([
+            'label' => 'OPERATIONAL PLANS',
+            'url' => 'https://hauph.sharepoint.com/sites/OperationalPlans',
+            'category' => 'Planning and Review',
+            'department' => 'INSTITUTIONAL PLANNING, RESEARCH & PUBLICATIONS OFFICE',
+        ]);
+
+
+        // STRATEGIC PLANS
+        SharepointLinks::create([
+            'label' => 'STRATEGIC PLANS',
+            'url' => 'https://hauph.sharepoint.com/sites/StrategicPlan2018-23',
+            'category' => 'Planning and Review',
+            'department' => 'INSTITUTIONAL PLANNING, RESEARCH & PUBLICATIONS OFFICE',
+        ]);
+
+
+        // HAU KPIs AND MEASURES
+        SharepointLinks::create([
+            'label' => 'HAU KPIs AND MEASURES',
+            'url' => 'https://hauph.sharepoint.com/sites/PLANNING#',
+            'category' => 'Planning and Review',
+            'department' => 'INSTITUTIONAL PLANNING, RESEARCH & PUBLICATIONS OFFICE',
+        ]);
+
+
+        // OIE'S INSTITUTIONAL RECORDS HUB
+        SharepointLinks::create([
+            'label' => 'OIE\'S INSTITUTIONAL RECORDS HUB',
+            'url' => 'https://hauph.sharepoint.com/sites/PLANNING#',
+            'category' => 'Quality Assurance',
+            'department' => 'QUALITY ASSURANCE',
+        ]);
+
+
+        // ACCREDITATION
+        SharepointLinks::create([
+            'label' => 'ACCREDITATION',
+            'url' => 'https://hauph.sharepoint.com/sites/Accreditation',
+            'category' => 'Quality Assurance',
+            'department' => 'QUALITY ASSURANCE',
+        ]);
     }
 }
