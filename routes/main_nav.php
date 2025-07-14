@@ -1,4 +1,5 @@
 <?php
+// THE MAIN NAVIGATION ROUTES ARE HERE
 use App\Models\Employee;
 use App\Http\Controllers\PrcController;
 use App\Http\Controllers\SharepointController;
@@ -20,9 +21,9 @@ Route::middleware(['admin','revalidate'])->group(function() {
         $fname = Employee::where('emp_id', Auth::user()->id)->value('emp_fname'); 
         return view('scholarships-grants.scholarships-grants-dashboard')->with(['fname'=> $fname]); 
     })->name('scholarship-grants.dashboard');
-
+  
     Route::get('sharepoint-sites/dashboard', [SharepointController::class, 'index'])->name('sharepoint-sites.dashboard');
-
+  
     Route::get('/under-construction', function () {
         return view('construction');
     })->name('construction');
