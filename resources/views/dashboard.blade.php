@@ -194,7 +194,7 @@ $mname = '';
                 <!-- a card slot  -->
                 <a href = "{{route('sharepoint-sites.dashboard')}}">
                     <div class = "nav-card"> 
-                        <div class = "nav-card-icon"> <img src = "{{asset('images/icons/nav/scholarships.png')}}"/> </div>
+                        <div class = "nav-card-icon"> <img src = "{{asset('images/icons/nav/sharepoint.png')}}"/> </div>
                         <div class  = "nav-card-title"> <h3> SharePoint Sites</h3> </div> 
                     </div> 
                 </a> 

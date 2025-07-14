@@ -31,6 +31,7 @@ use App\Http\Controllers\TrainingsController;
 use App\Http\Controllers\certificationController;
 use App\Http\Controllers\UpdatesController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SharepointController;
 
 //
 // All routes are protected by the "auth" middleware.
@@ -505,8 +506,5 @@ Route::middleware('auth','revalidate')->group(function () {
     /*------------------------------------------------------------------
     | 17. SharePoint Sites
     |------------------------------------------------------------------*/
-    Route::get('sharepoint-sites/dashboard', function() {
-        $fname = Employee::where('emp_id', Auth::user()->id)->value('emp_fname'); 
-        return view('sharepoint-sites.sharepoint-sites-dashboard')->with(['fname'=> $fname]); 
-    })->name('sharepoint-sites.dashboard');
+    Route::get('sharepoint-sites/dashboard', [SharepointController::class, 'index'])->name('sharepoint-sites.dashboard');
 });
