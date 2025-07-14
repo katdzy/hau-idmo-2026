@@ -1,4 +1,5 @@
 <?php
+// THE MAIN NAVIGATION ROUTES ARE HERE
 use App\Models\Employee;
 use App\Http\Controllers\PrcController;
 use Illuminate\Support\Facades\Route;
@@ -14,6 +15,11 @@ Route::middleware(['admin','revalidate'])->group(function() {
         $fname = Employee::where('emp_id', Auth::user()->id)->value('emp_fname'); 
         return view('manage-emps.manage-emps-dashboard')->with(['fname'=> $fname]); 
     })->name('manage-emps.dashboard');
+
+    Route::get('scholarship-grants/dashboard', function() {
+        $fname = Employee::where('emp_id', Auth::user()->id)->value('emp_fname'); 
+        return view('scholarships-grants.scholarships-grants-dashboard')->with(['fname'=> $fname]); 
+    })->name('scholarship-grants.dashboard');
 
     Route::get('/under-construction', function () {
         return view('construction');

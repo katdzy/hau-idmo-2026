@@ -143,7 +143,7 @@ $mname = '';
 
 
                 <!-- a card slot  -->
-                <a href = "{{route('dashboard')}}">
+                <a href = "{{route('scholarship-grants.dashboard')}}">
                     <div class = "nav-card"> 
                         <div class = "nav-card-icon"> <img src = "{{asset('images/icons/nav/scholarships.png')}}"/> </div>
                         <div class  = "nav-card-title"> <h3> Scholarships and Grants</h3> </div> 
