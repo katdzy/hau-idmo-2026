@@ -67,7 +67,7 @@
                                                     <ul class="ml-6 mt-1 hidden file-list">
                                                         @foreach ($officeLinks as $link)
                                                             <li class="mb-2">
-                                                                <a href="{{ $link->url }}" target="_blank" class="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded hover:bg-blue-200">
+                                                                <a href="{{ $link->url }}" target="_blank" title="{{ $link->description }}" class="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded hover:bg-blue-200">
                                                                     {{ $link->label }}
                                                                 </a>
                                                             </li>
@@ -76,7 +76,7 @@
                                                 @else
                                                     @foreach ($officeLinks as $link)
                                                         <li class="mb-2">
-                                                            <a href="{{ $link->url }}" target="_blank" class="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded hover:bg-blue-200">
+                                                            <a href="{{ $link->url }}" target="_blank" title="{{ $link->description }}" class="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded hover:bg-blue-200">
                                                                 {{ $link->label }}
                                                             </a>
                                                         </li>
