@@ -3,6 +3,7 @@
 use App\Models\Employee;
 use App\Http\Controllers\PrcController;
 use App\Http\Controllers\SharepointController;
+use App\Http\Controllers\KPIController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,6 +24,8 @@ Route::middleware(['admin','revalidate'])->group(function() {
     })->name('scholarship-grants.dashboard');
   
     Route::get('sharepoint-sites/dashboard', [SharepointController::class, 'index'])->name('sharepoint-sites.dashboard');
+
+    Route::get('/kpis/dashboard', [KPIController::class, 'dashboard'])->name('kpis.dashboard');
   
     Route::get('/under-construction', function () {
         return view('construction');

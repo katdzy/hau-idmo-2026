@@ -3,18 +3,14 @@ $mname = '';
 
      
 ?>
-
 <!-- This is the Super Admin Dashboard -->
-
     <x-app-layout>
-
     <div class= "min-h-screen">
         <div class = "profile_card" > 
             <div class = "profile_card_box">
                 
                 <div class = "square"> </div> 
                 <div class = "left"> 
-                
 
                 @if(Auth::user()->user->profile_picture)
                 <img src ="{{asset ('storage/profile_pictures/' . $userInfo->profile_picture)}}"/>
@@ -28,15 +24,12 @@ $mname = '';
                         <h3 class = "bg-red-900 text-white font-semibold rounded-lg py-1 px-1 w-[20%] text-center mb-2"> {{Auth::user()-> id}}</h3>
                         <h1 class = "text-[3rem] font-extrabold mb-1">{{$userInfo->emp_fname}}</h1>
                         <h2 class = "text-[1.2rem] font-semibold mt-1">{{$userInfo->emp_mname ?? ' '}} {{$userInfo->emp_lname}} </h2>
-                        
                     
                         @if(session('dept')==true)
 
                         <h3 class = "role">{{ $userInfo->department->dept }} </h3> 
                         
                         @endif
-            
-            
                     </div> 
 
                     <div class = "logo">
@@ -68,18 +61,16 @@ $mname = '';
                         <div class  = "nav-card-title"> <h3> Manage Employees</h3> </div> 
                     </div> 
                 </a> 
-
                 <!-- end of card slot  -->
 
 
                 <!-- a card slot  -->
-                <a href = "{{route('scholarship-grants.dashboard')}}">
+                <a href = "{{route('construction')}}">
                     <div class = "nav-card"> 
                         <div class = "nav-card-icon"> <img src = "{{asset('images/icons/nav/scholarships.png')}}"/> </div>
                         <div class  = "nav-card-title"> <h3> Scholarships and Grants</h3> </div> 
                     </div> 
                 </a> 
-
                 <!-- end of card slot  -->
 
                 <!-- a card slot  -->
@@ -89,7 +80,6 @@ $mname = '';
                         <div class  = "nav-card-title"> <h3> Outreach Programs</h3> </div> 
                     </div> 
                 </a> 
-
                 <!-- end of card slot  -->
 
 
@@ -100,7 +90,6 @@ $mname = '';
                         <div class  = "nav-card-title"> <h3> Accreditations</h3> </div> 
                     </div> 
                 </a> 
-
                 <!-- end of card slot  -->
 
 
@@ -111,7 +100,6 @@ $mname = '';
                         <div class  = "nav-card-title"> <h3> Research</h3> </div> 
                     </div> 
                 </a> 
-
                 <!-- end of card slot  -->
 
 
@@ -122,7 +110,6 @@ $mname = '';
                         <div class  = "nav-card-title"> <h3> PRC Results</h3> </div> 
                     </div> 
                 </a> 
-
                 <!-- end of card slot  -->
 
 
@@ -133,20 +120,28 @@ $mname = '';
                         <div class  = "nav-card-title"> <h3> SharePoint Sites</h3> </div> 
                     </div> 
                 </a> 
+                <!-- end of card slot  -->
 
+                
+                <!-- a card slot  -->
+                <a href = "{{route('construction')}}">
+                    <div class = "nav-card"> 
+                        <div class = "nav-card-icon"> <img src = "{{asset('images/icons/nav/kpi.png')}}" class = "w-24 h-24"/> </div>
+                        <div class  = "nav-card-title"> <h3> KPIs</h3> </div> 
+                    </div> 
+                </a> 
                 <!-- end of card slot  -->
             </div>
             @else
             <div class = "relative w-[85%] h-[85%] rounded-[15px] grid grid-cols- overflow-hidden">
 
-            <!-- a card slot  -->
+                <!-- a card slot  -->
                 <a href = "{{route('manage-emps.dashboard')}}">
                     <div class = "nav-card"> 
                         <div class = "nav-card-icon"> <img src = "{{asset('images/icons/nav/employees.png')}}"/> </div>
                         <div class  = "nav-card-title"> <h3> Manage Employees</h3> </div> 
                     </div> 
                 </a> 
-
                 <!-- end of card slot  -->
 
 
@@ -157,7 +152,6 @@ $mname = '';
                         <div class  = "nav-card-title"> <h3> Scholarships and Grants</h3> </div> 
                     </div> 
                 </a> 
-
                 <!-- end of card slot  -->
 
                 <!-- a card slot  -->
@@ -167,7 +161,6 @@ $mname = '';
                         <div class  = "nav-card-title"> <h3> Outreach Programs</h3> </div> 
                     </div> 
                 </a> 
-
                 <!-- end of card slot  -->
 
 
@@ -178,7 +171,6 @@ $mname = '';
                         <div class  = "nav-card-title"> <h3> Accreditations</h3> </div> 
                     </div> 
                 </a> 
-
                 <!-- end of card slot  -->
 
 
@@ -189,7 +181,6 @@ $mname = '';
                         <div class  = "nav-card-title"> <h3> Research</h3> </div> 
                     </div> 
                 </a> 
-
                 <!-- end of card slot  -->
 
                 <!-- a card slot  -->
@@ -199,17 +190,12 @@ $mname = '';
                         <div class  = "nav-card-title"> <h3> SharePoint Sites</h3> </div> 
                     </div> 
                 </a> 
-
                 <!-- end of card slot  -->
                 </div>
             @endif
         </div> 
     </div>
-
-    
-  
 </x-app-layout>
-
 
 <style> 
     .profile_card { 
@@ -355,7 +341,7 @@ $mname = '';
    
         /* background-color: white; */
         display: grid; 
-        grid-template-columns: repeat(7, 1fr); 
+        grid-template-columns: repeat(8, 1fr); 
         /* box-shadow: 5px 5px 5px rgb(0,0,0,0.1); */
         overflow: hidden;
     }

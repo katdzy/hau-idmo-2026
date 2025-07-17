@@ -50,10 +50,6 @@
                 <!-- ISO Tab -->
                 <div id="tab-iso" class="tab-content overflow-y-auto" style="max-height: 70vh;">
                     <div class="w-full flex flex-col gap-8">
-                        <p class="font-semibold text-red-900 mb-2">
-                            This site serves as HAU’s central repository for documentation related to the university's implementation of the ISO 21001:2018 Educational Organization Management System (EOMS). It provides access to institutional manuals, audit reports, policies, procedures, forms, and other records. 
-                            <br>The site also supports coordination for internal audits and continual improvement tracking.
-                        </p>
                         <ul id="departments-list" class="space-y-4">
                             @foreach ($isoLinks as $department => $deptLinks)
                                 <li>
