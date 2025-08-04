@@ -104,7 +104,7 @@
                 </a>
 
                 <!-- A LINK NAVIGATION  -->
-                 <a href="{{ route('construction') }}" class="{{ request()->routeIs('kpis*') ? 'active' : '' }}">
+                 <a href="{{ route('kpis.dashboard') }}" class="{{ request()->routeIs('kpis*') ? 'active' : '' }}">
                     <div class="nav-link">
                         
                             <img src="{{ asset('images/icons/nav/kpi.png') }}" class = "w-24 h-24"/>

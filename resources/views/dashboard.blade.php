@@ -124,7 +124,7 @@ $mname = '';
 
                 
                 <!-- a card slot  -->
-                <a href = "{{route('construction')}}">
+                <a href = "{{route('kpis.dashboard')}}">
                     <div class = "nav-card"> 
                         <div class = "nav-card-icon"> <img src = "{{asset('images/icons/nav/kpi.png')}}" class = "w-24 h-24"/> </div>
                         <div class  = "nav-card-title"> <h3> KPIs</h3> </div> 

@@ -23,5 +23,7 @@ class DatabaseSeeder extends Seeder
         $this->call(tags::class); 
         $this->call(NewSeeder::class); 
         $this->call(SharepointSeeder::class);
+        $this->call(KpiSeeder::class);
+        $this->call(KpiSegmentationSeeder::class);
     }
 }
