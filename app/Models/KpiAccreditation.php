@@ -2,20 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class KpiSegmentation extends Model
+class KpiAccreditation extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'kpi_id',
-        'segmentation',
-        'code',
-        'owner',
-        'target_level',
-        'goal',
+        'accrediting_body_id',
+        'accrediting_body_name',
+        'program_unit',
     ];
 
     public function kpi()

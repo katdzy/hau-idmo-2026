@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('code')->nullable();
             $table->string('owner')->nullable();
             $table->text('target_level')->nullable();
+            $table->string('goal')->nullable();
             $table->timestamps();
         });
     }

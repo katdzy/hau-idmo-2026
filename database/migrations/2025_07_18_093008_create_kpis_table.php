@@ -40,19 +40,16 @@ return new class extends Migration
             $table->string('objective')->nullable();
             $table->string('objective_owner')->nullable();
 
-            $table->string('strategy')->nullable();
-            $table->text('goal_code')->nullable();
-            $table->text('goal')->nullable();
-            $table->text('goal_owner')->nullable();
-
             $table->text('intended_results')->nullable();
             $table->text('strategic_initiatives')->nullable();
             
-
             // Comparator & Meta
             $table->text('comparator')->nullable();
             $table->string('item_author')->nullable();
-            $table->string('date')->nullable();
+            $table->date('date')->nullable();
+
+            // Strategic Plan
+            $table->string('strat_plan')->nullable();
 
             $table->timestamps();
         });

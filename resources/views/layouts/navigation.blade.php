@@ -6,7 +6,7 @@
         <img src="{{asset('images/logo-circle.png')}}" alt="" class="w-[130px] h-[130px]">
 
         <h1 class="font-bold text-md truncate">Office of Institutional Effectiveness</h1>
-        <h1 class="font-thin text-sm truncate">Institution Database Management Office</h1>
+        <!-- <h1 class="font-thin text-sm truncate">Institution Database Management Office</h1> -->
     </div>
 
     <div class = "navigation_links"> 
@@ -92,6 +92,30 @@
                     </div>
                 </a>
 
+                <!-- A LINK NAVIGATION  -->
+                 <a href="{{ route('sharepoint-sites.dashboard') }}" class="{{ request()->routeIs('sharepoint-sites*') ? 'active' : '' }}">
+                    <div class="nav-link">
+                        
+                            <img src="{{ asset('images/icons/nav/sharepoint.svg') }}" class = "w-24 h-24"/>
+                        
+                            <h3>SharePoint Sites</h3>
+                      
+                    </div>
+                </a>
+
+                <!-- A LINK NAVIGATION  -->
+                 <a href="{{ route('kpis.dashboard') }}" class="{{ request()->routeIs('kpis*') ? 'active' : '' }}">
+                    <div class="nav-link">
+                        
+                            <img src="{{ asset('images/icons/nav/kpi.png') }}" class = "w-24 h-24"/>
+                        
+                            <h3>KPIs</h3>
+                      
+                    </div>
+                </a> 
+                @endif
+
+                @if(Auth::user()->role !== 'Employee')
                 <!-- A LINK NAVIGATION  -->
                  <a href="{{ route('sharepoint-sites.dashboard') }}" class="{{ request()->routeIs('sharepoint-sites*') ? 'active' : '' }}">
                     <div class="nav-link">

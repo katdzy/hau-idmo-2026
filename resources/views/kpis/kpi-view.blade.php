@@ -1,5 +1,11 @@
 <x-app-layout>
     <div class="max-w-5xl mx-auto p-6 bg-white rounded shadow text-sm text-gray-800">
+        <div class="mb-4">
+            <a href="{{ route('kpis.dashboard') }}" class="inline-flex gap-1 items-center bg-red-900 hover:bg-red-700 px-6 py-1 text-white rounded-xl">
+                <img src="{{ asset('images/icons/back.png') }}" class="w-[20px] h-[20px]" alt="">
+                <span>Return to KPI Dashboard</span>
+            </a>
+        </div>
         <h1 class="text-xl font-bold mb-4">Balanced Scorecard KPI Dictionary for {{ $kpi->measure_code }}</h1>
 
         <div class="border border-gray-300">
@@ -43,31 +49,18 @@
                 <div class="p-2 col-span-3 whitespace-pre-line">{{ $kpi->description }}</div>
             </div>
 
-            {{-- ROW 5 — Objective OR Goal --}}
+           {{-- ROW 5 — Objective --}}
             <div class="grid grid-cols-4 border-t border-gray-300">
-                @if ($kpi->objective)
-                    <div class="bg-gray-100 p-2 font-semibold">Objective</div>
-                    <div class="p-2">{{ $kpi->objective }}</div>
-                @elseif ($kpi->goal)
-                    <div class="bg-gray-100 p-2 font-semibold">Goal</div>
-                    <div class="p-2">{{ $kpi->goal_code }}: {{ $kpi->goal }}</div>
-                @else
-                    <div class="bg-gray-100 p-2 font-semibold">Objective/Goal</div>
-                    <div class="p-2 italic text-gray-500 col-span-3">Not defined</div>
-                @endif
-
+                <div class="bg-gray-100 p-2 font-semibold">Objective</div>
+                <div class="p-2 col-span-1">{{ $kpi->objective }}</div>
                 <div class="bg-gray-100 p-2 font-semibold">Measure Type</div>
                 <div class="p-2">{{ $kpi->measure_type }}</div>
             </div>
 
-            {{-- ROW 6 — Objective Owner OR Goal Owner --}}
+            {{-- ROW 6 — Objective Owner --}}
             <div class="grid grid-cols-4 border-t border-gray-300">
-                <div class="bg-gray-100 p-2 font-semibold">
-                    {{ $kpi->objective_owner ? 'Objective Owner' : ($kpi->goal_owner ? 'Goal Owner' : 'Owner') }}
-                </div>
-                <div class="p-2">
-                    {{ $kpi->objective_owner ?? $kpi->goal_owner ?? '' }}
-                </div>
+                <div class="bg-gray-100 p-2 font-semibold">Objective Owner</div>
+                <div class="p-2">{{ $kpi->objective_owner }}</div>
                 <div class="bg-gray-100 p-2 font-semibold">Lead/Lag</div>
                 <div class="p-2">{{ $kpi->lead_lag }}</div>
             </div>
@@ -168,29 +161,38 @@
         @if($kpi->segmentations && $kpi->segmentations->count())
             @php
                 $hasTargetLevel = $kpi->segmentations->contains(fn($seg) => !is_null($seg->target_level));
+                $hasGoal = $kpi->segmentations->contains(fn($seg) => !is_null($seg->goal));
             @endphp
 
             <div class="mt-6">
                 <table class="table-fixed border border-gray-300 w-full text-sm">
                     <thead class="bg-gray-100">
                         <tr>
-                            <th class="border px-4 py-2 text-left w-2/5">Segmentation</th>
-                            <th class="border px-4 py-2 text-left w-1/5">Code</th>
-                            <th class="border px-4 py-2 text-left w-1/5">Owner</th>
+                            <th class="border px-4 py-2 text-left w-1/4">Segmentation</th>
+                            <th class="border px-4 py-2 text-left w-1/6">Code</th>
+                            <th class="border px-4 py-2 text-left w-1/6">Owner</th>
                             @if ($hasTargetLevel)
-                                <th class="border px-4 py-2 text-left w-1/5">Target Level</th>
+                                <th class="border px-4 py-2 text-left w-1/6">Target Level</th>
+                            @endif
+                            @if ($hasGoal)
+                                <th class="border px-4 py-2 text-left w-1/4">Goal</th>
                             @endif
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($kpi->segmentations as $seg)
                             <tr>
-                                <td class="border px-4 py-2 w-2/5">{{ $seg->segmentation }}</td>
-                                <td class="border px-4 py-2 w-1/5">{{ $seg->code }}</td>
-                                <td class="border px-4 py-2 w-1/5">{{ $seg->owner }}</td>
+                                <td class="border px-4 py-2 w-1/4">{{ $seg->segmentation }}</td>
+                                <td class="border px-4 py-2 w-1/6">{{ $seg->code }}</td>
+                                <td class="border px-4 py-2 w-1/6">{{ $seg->owner }}</td>
                                 @if ($hasTargetLevel)
-                                    <td class="border px-4 py-2 w-1/5">
+                                    <td class="border px-4 py-2 w-1/6">
                                         {{ $seg->target_level ?? '-' }}
+                                    </td>
+                                @endif
+                                @if ($hasGoal)
+                                    <td class="border px-4 py-2 w-1/4">
+                                        {{ $seg->goal ?? '-' }}
                                     </td>
                                 @endif
                             </tr>
@@ -199,6 +201,54 @@
                 </table>
             </div>
         @endif
+
+
+        {{-- ACCREDITING BODY TABLE --}}
+        @if($kpi->accreditations && $kpi->accreditations->count())
+            <div class="mt-6">
+                <table class="table-auto border border-gray-300 w-full text-sm">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="border px-4 py-2 text-left w-1/3">Accrediting Body ID</th>
+                            <th class="border px-4 py-2 text-left w-1/3">Accrediting Body Name</th>
+                            <th class="border px-4 py-2 text-left w-1/3">Program Unit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($kpi->accreditations as $acc)
+                            <tr>
+                                <td class="border px-4 py-2">{{ $acc->accrediting_body_id }}</td>
+                                <td class="border px-4 py-2">{{ $acc->accrediting_body_name }}</td>
+                                <td class="border px-4 py-2">{{ $acc->program_unit }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @endif
+
+        {{-- DIMENSIONS TABLE --}}
+        @if($kpi->dimensions && $kpi->dimensions->count())
+            <div class="mt-6">
+                <table class="table-auto border border-gray-300 w-full text-sm">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="border px-4 py-2 text-left w-1/3">Dimensions</th>
+                            <th class="border px-4 py-2 text-left w-1/3">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($kpi->dimensions as $dim)
+                            <tr>
+                                <td class="border px-4 py-2">{{ $dim->dimensions }}</td>
+                                <td class="border px-4 py-2">{{ $dim->description }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @endif
+
 
     </div>
 </x-app-layout>

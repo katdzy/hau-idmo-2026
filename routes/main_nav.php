@@ -25,13 +25,11 @@ Route::middleware(['admin','revalidate'])->group(function() {
   
     Route::get('sharepoint-sites/dashboard', [SharepointController::class, 'index'])->name('sharepoint-sites.dashboard');
 
-    Route::get('/kpis/dashboard', [KpiController::class, 'dashboard'])->name('kpis.dashboard');
-    Route::get('/kpis/{id}', [KpiController::class, 'showKpiView'])->name('kpis.show');
+    Route::get('/kpis/dashboard', [KpiController::class, 'dashboard'])->name('kpis.dashboard');    
 
     Route::get('/under-construction', function () {
         return view('construction');
     })->name('construction');
 
 
-})
-?>
+    });

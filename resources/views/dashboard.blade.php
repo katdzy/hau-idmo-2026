@@ -133,7 +133,7 @@ $mname = '';
                 <!-- end of card slot  -->
             </div>
             @else
-            <div class = "relative w-[85%] h-[85%] rounded-[15px] grid grid-cols- overflow-hidden">
+            <div class = "navigation-cards-box">
 
                 <!-- a card slot  -->
                 <a href = "{{route('manage-emps.dashboard')}}">
@@ -146,7 +146,7 @@ $mname = '';
 
 
                 <!-- a card slot  -->
-                <a href = "{{route('scholarship-grants.dashboard')}}">
+                <a href = "{{route('construction')}}">
                     <div class = "nav-card"> 
                         <div class = "nav-card-icon"> <img src = "{{asset('images/icons/nav/scholarships.png')}}"/> </div>
                         <div class  = "nav-card-title"> <h3> Scholarships and Grants</h3> </div> 
@@ -155,7 +155,7 @@ $mname = '';
                 <!-- end of card slot  -->
 
                 <!-- a card slot  -->
-                <a href = "{{route('dashboard')}}">
+                <a href = "{{route('construction')}}">
                     <div class = "nav-card"> 
                         <div class = "nav-card-icon"> <img src = "{{asset('images/icons/nav/outreach.png')}}"/> </div>
                         <div class  = "nav-card-title"> <h3> Outreach Programs</h3> </div> 
@@ -165,7 +165,7 @@ $mname = '';
 
 
                 <!-- a card slot  -->
-                <a href = "{{route('dashboard')}}">
+                <a href = "{{route('construction')}}">
                     <div class = "nav-card"> 
                         <div class = "nav-card-icon"> <img src = "{{asset('images/icons/nav/accreditation.png')}}"/> </div>
                         <div class  = "nav-card-title"> <h3> Accreditations</h3> </div> 
@@ -175,9 +175,9 @@ $mname = '';
 
 
                 <!-- a card slot  -->
-                <a href = "{{route('dashboard')}}">
+                <a href = "{{route('construction')}}">
                     <div class = "nav-card"> 
-                        <div class = "nav-card-icon"> <img src = "{{asset('images/icons/nav/research.png')}}"/> </div>
+                        <div class = "nav-card-icon"> <img src = "{{asset('images/icons/nav/research.png')}}" class = "w-24 h-24"/> </div>
                         <div class  = "nav-card-title"> <h3> Research</h3> </div> 
                     </div> 
                 </a> 
@@ -186,8 +186,17 @@ $mname = '';
                 <!-- a card slot  -->
                 <a href = "{{route('sharepoint-sites.dashboard')}}">
                     <div class = "nav-card"> 
-                        <div class = "nav-card-icon"> <img src = "{{asset('images/icons/nav/sharepoint.png')}}"/> </div>
+                        <div class = "nav-card-icon"> <img src = "{{asset('images/icons/nav/sharepoint.png')}}" class = "w-24 h-24"/> </div>
                         <div class  = "nav-card-title"> <h3> SharePoint Sites</h3> </div> 
+                    </div> 
+                </a> 
+                <!-- end of card slot  -->
+
+                <!-- a card slot  -->
+                <a href = "{{route('kpis.dashboard')}}">
+                    <div class = "nav-card"> 
+                        <div class = "nav-card-icon"> <img src = "{{asset('images/icons/nav/kpi.png')}}" class = "w-24 h-24"/> </div>
+                        <div class  = "nav-card-title"> <h3> KPIs</h3> </div> 
                     </div> 
                 </a> 
                 <!-- end of card slot  -->

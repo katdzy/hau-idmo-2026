@@ -25,5 +25,7 @@ class DatabaseSeeder extends Seeder
         $this->call(SharepointSeeder::class);
         $this->call(KpiSeeder::class);
         $this->call(KpiSegmentationSeeder::class);
+        $this->call(KpiAccreditationSeeder::class);
+        $this->call(KpiDimensionsSeeder::class);
     }
 }

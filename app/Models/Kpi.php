@@ -37,18 +37,29 @@ class Kpi extends Model
         'objective',
         'objective_owner',
         'strategic_initiatives',
-        'strategy',
-        'goal_code',
-        'goal',
-        'goal_owner',
         'intended_results',
         'comparator',
         'item_author',
         'date',
     ];
 
+    public function getRouteKeyName()
+    {
+        return 'measure_code';
+    }
+
     public function segmentations()
     {
         return $this->hasMany(\App\Models\KpiSegmentation::class, 'kpi_id');
+    }
+
+    public function accreditations()
+    {
+        return $this->hasMany(\App\Models\KpiAccreditation::class);
+    }
+
+    public function dimensions()
+    {
+        return $this->hasMany(\App\Models\KpiDimensions::class);
     }
 }
