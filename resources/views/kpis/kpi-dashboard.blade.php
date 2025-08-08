@@ -18,15 +18,27 @@
 
         <!-- Search Form -->
         <div class="relative mb-6 sticky top-0 z-20 bg-white">
-            <input
-                type="text"
-                name="search"
-                id="search"
-                placeholder="Search KPIs..."
-                class="w-full border border-red-300 rounded-lg px-4 py-3 shadow-sm text-sm focus:outline-none focus:ring-2 focus:ring-red-500"
-                autocomplete="off"
-            >
-            <button type="button" id="clear-search" class="absolute right-2 top-1/2 -translate-y-1/2 bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1 rounded-lg text-xs font-semibold transition">Clear</button>
+            <div class="flex gap-4 items-center">
+                <div class="flex-1 relative">
+                    <input
+                        type="text"
+                        name="search"
+                        id="search"
+                        placeholder="Search for KPIs or Measure Code..."
+                        class="w-full border border-red-300 rounded-lg px-4 py-3 pr-16 shadow-sm text-sm focus:outline-none focus:ring-2 focus:ring-red-500"
+                        autocomplete="off"
+                    >
+                    <button type="button" id="clear-search" class="absolute right-2 top-1/2 -translate-y-1/2 bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1 rounded-lg text-xs font-semibold transition">Clear</button>
+                </div>
+                <div class="flex gap-2 items-center">
+                    <label class="text-sm font-medium text-gray-700 whitespace-nowrap">Sort by:</label>
+                    <select id="sort-filter" class="border border-red-300 rounded-lg px-7 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-500">
+                        <option value="id" {{ !isset($sortBy) || $sortBy === 'id' ? 'selected' : '' }}>Default</option>
+                        <option value="name" {{ isset($sortBy) && $sortBy === 'name' ? 'selected' : '' }}>Name (A-Z)</option>
+                        <option value="code" {{ isset($sortBy) && $sortBy === 'code' ? 'selected' : '' }}>Code (A-Z)</option>
+                    </select>
+                </div>
+            </div>
         </div>
 
         <!-- KPI List Container -->
@@ -62,9 +74,11 @@
     </div>
 
     <script>
-        document.getElementById('search').addEventListener('input', function () {
-            const search = this.value;
-            fetch(`{{ route('kpis.ajax-search') }}?search=${encodeURIComponent(search)}`, {
+        function performSearch() {
+            const search = document.getElementById('search').value;
+            const sortBy = document.getElementById('sort-filter').value;
+            
+            fetch(`{{ route('kpis.ajax-search') }}?search=${encodeURIComponent(search)}&sort_by=${encodeURIComponent(sortBy)}`, {
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest'
                 }
@@ -73,20 +87,16 @@
             .then(html => {
                 document.getElementById('kpi-list').innerHTML = html;
             });
-        });
+        }
+
+        document.getElementById('search').addEventListener('input', performSearch);
+        
+        document.getElementById('sort-filter').addEventListener('change', performSearch);
 
         document.getElementById('clear-search').addEventListener('click', function () {
             const searchInput = document.getElementById('search');
             searchInput.value = '';
-            fetch(`{{ route('kpis.ajax-search') }}`, {
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-            })
-            .then(res => res.text())
-            .then(html => {
-                document.getElementById('kpi-list').innerHTML = html;
-            });
+            performSearch();
         });
     </script>
 </x-app-layout>

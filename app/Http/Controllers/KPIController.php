@@ -18,15 +18,26 @@ class KpiController extends Controller
     public function dashboard(Request $request)
     {
         $search = $request->input('search');
+        $sortBy = $request->input('sort_by', 'id'); // Default to id
 
         $kpis = Kpi::query()
             ->when($search, function ($query, $search) {
                 $query->where('measure_name', 'like', "%{$search}%")
+                      ->orWhere('measure_code', 'like', "%{$search}%")
                       ->orWhere('description', 'like', "%{$search}%");
+            })
+            ->when($sortBy === 'code', function ($query) {
+                $query->orderBy('measure_code', 'asc');
+            })
+            ->when($sortBy === 'name', function ($query) {
+                $query->orderBy('measure_name', 'asc');
+            })
+            ->when($sortBy === 'id', function ($query) {
+                $query->orderBy('id', 'asc');
             })
             ->get();
 
-        return view('kpis.kpi-dashboard', compact('kpis'));
+        return view('kpis.kpi-dashboard', compact('kpis', 'sortBy'));
     }
 
     /**
@@ -165,10 +176,22 @@ class KpiController extends Controller
     public function ajaxSearch(Request $request)
     {
         $search = $request->input('search');
+        $sortBy = $request->input('sort_by', 'id'); // Default to id
 
-        $kpis = KPI::when($search, function ($query, $search) {
-            return $query->where('measure_name', 'like', "%{$search}%");
-        })->get();
+        $kpis = Kpi::when($search, function ($query, $search) {
+            return $query->where('measure_name', 'like', "%{$search}%")
+                         ->orWhere('measure_code', 'like', "%{$search}%");
+        })
+        ->when($sortBy === 'code', function ($query) {
+            $query->orderBy('measure_code', 'asc');
+        })
+        ->when($sortBy === 'name', function ($query) {
+            $query->orderBy('measure_name', 'asc');
+        })
+        ->when($sortBy === 'id', function ($query) {
+            $query->orderBy('id', 'asc');
+        })
+        ->get();
 
         return view('kpis.kpi-search', compact('kpis'));
     }
