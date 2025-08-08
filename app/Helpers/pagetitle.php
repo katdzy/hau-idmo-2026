@@ -277,6 +277,23 @@ class pagetitle
                 $curr_page = 'Resubmit Training';
                 break;
 
+            //Scholarships and Grants
+            case 'scholarship-grants.dashboard':
+                $curr_page = 'Scholarships and Grants';
+                break;
+
+            //SharePoint Sites
+            case 'sharepoint-sites.dashboard':
+                $curr_page = 'SharePoint Sites';
+                break;
+
+            // KPIs
+            case 'kpis.dashboard':
+            case 'kpis.show':
+                $curr_page = 'KPIs';
+                break;
+
+
 
         
         }

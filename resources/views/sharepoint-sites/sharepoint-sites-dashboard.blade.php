@@ -4,9 +4,7 @@
         <div class="w-full flex justify-center py-8">
             <div class="w-[95%] flex flex-col bg-white rounded-lg px-8 py-8 shadow-lg">
                 <div class="flex justify-between items-center mb-6">
-                    <h1 class="text-[1.8rem] font-semibold mb-2">
-                        SharePoint Sites
-                    </h1>
+                    <h1 class="text-2xl font-bold text-red-900">Dashboard</h1>
                     @if(Auth::user()->role === 'SuperAdmin')
                         <div class="relative inline-block text-left">
                             <button id="adminDropdownBtn" type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-red-900 hover:bg-gray-100 focus:outline-none">
@@ -50,10 +48,6 @@
                 <!-- ISO Tab -->
                 <div id="tab-iso" class="tab-content overflow-y-auto" style="max-height: 70vh;">
                     <div class="w-full flex flex-col gap-8">
-                        <p class="font-semibold text-red-900 mb-2">
-                            This site serves as HAU’s central repository for documentation related to the university's implementation of the ISO 21001:2018 Educational Organization Management System (EOMS). It provides access to institutional manuals, audit reports, policies, procedures, forms, and other records. 
-                            <br>The site also supports coordination for internal audits and continual improvement tracking.
-                        </p>
                         <ul id="departments-list" class="space-y-4">
                             @foreach ($isoLinks as $department => $deptLinks)
                                 <li>
@@ -71,7 +65,9 @@
                                                     <ul class="ml-6 mt-1 hidden file-list">
                                                         @foreach ($officeLinks as $link)
                                                             <li class="mb-2">
-                                                                <a href="{{ $link->url }}" target="_blank" class="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded hover:bg-blue-200">
+                                                                <a href="{{ $link->url }}" target="_blank" title="{{ $link->description }}" 
+                                                                    class="inline-block bg-blue-100 px-3 py-1 rounded hover:bg-blue-200"
+                                                                    style="color: #2563eb !important;">
                                                                     {{ $link->label }}
                                                                 </a>
                                                             </li>
@@ -80,7 +76,9 @@
                                                 @else
                                                     @foreach ($officeLinks as $link)
                                                         <li class="mb-2">
-                                                            <a href="{{ $link->url }}" target="_blank" class="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded hover:bg-blue-200">
+                                                            <a href="{{ $link->url }}" target="_blank" title="{{ $link->description }}" 
+                                                                class="inline-block bg-blue-100 px-3 py-1 rounded hover:bg-blue-200"
+                                                                style="color: #2563eb !important;">
                                                                 {{ $link->label }}
                                                             </a>
                                                         </li>
@@ -115,8 +113,9 @@
                                                     <ul class="ml-6 mt-1 hidden file-list">
                                                         @foreach ($officeLinks as $link)
                                                             <li class="mb-2">
-                                                                <a href="{{ $link->url }}" target="_blank" title="{{ $link->description }}"
-                                                                    class="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded hover:bg-blue-200">
+                                                                <a href="{{ $link->url }}" target="_blank" title="{{ $link->description }}" 
+                                                                    class="inline-block bg-blue-100 px-3 py-1 rounded hover:bg-blue-200"
+                                                                    style="color: #2563eb !important;">
                                                                     {{ $link->label }}
                                                                 </a>
                                                             </li>
@@ -125,8 +124,9 @@
                                                 @else
                                                     @foreach ($officeLinks as $link)
                                                         <li class="mb-2">
-                                                            <a href="{{ $link->url }}" target="_blank" title="{{ $link->description }}"
-                                                                class="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded hover:bg-blue-200">
+                                                            <a href="{{ $link->url }}" target="_blank" title="{{ $link->description }}" 
+                                                                class="inline-block bg-blue-100 px-3 py-1 rounded hover:bg-blue-200"
+                                                                style="color: #2563eb !important;">
                                                                 {{ $link->label }}
                                                             </a>
                                                         </li>
@@ -162,7 +162,8 @@
                                                         @foreach ($officeLinks as $link)
                                                             <li class="mb-2">
                                                                 <a href="{{ $link->url }}" target="_blank" title="{{ $link->description }}" 
-                                                                    class="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded hover:bg-blue-200">
+                                                                    class="inline-block bg-blue-100 px-3 py-1 rounded hover:bg-blue-200"
+                                                                    style="color: #2563eb !important;">
                                                                     {{ $link->label }}
                                                                 </a>
                                                             </li>
@@ -172,7 +173,8 @@
                                                     @foreach ($officeLinks as $link)
                                                         <li class="mb-2">
                                                             <a href="{{ $link->url }}" target="_blank" title="{{ $link->description }}" 
-                                                                class="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded hover:bg-blue-200">
+                                                                class="inline-block bg-blue-100 px-3 py-1 rounded hover:bg-blue-200"
+                                                                style="color: #2563eb !important;">
                                                                 {{ $link->label }}
                                                             </a>
                                                         </li>

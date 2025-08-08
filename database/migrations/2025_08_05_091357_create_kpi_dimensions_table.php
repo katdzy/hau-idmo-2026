@@ -1,5 +1,5 @@
 <?php
-// Departments for SharePoint sites
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sharepoint_departments', function (Blueprint $table) {
+        Schema::create('kpi_dimensions', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->foreignId('kpi_id')->constrained()->onDelete('cascade');
+            $table->string('dimensions')->nullable();
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }
@@ -23,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sharepoint_departments');
+        Schema::dropIfExists('kpi_dimensions');
     }
 };

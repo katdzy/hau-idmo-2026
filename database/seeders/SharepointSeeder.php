@@ -18,6 +18,7 @@ class SharepointSeeder extends Seeder
             'category' => 'ISO',
             'department' => 'DOC_LOG',
             'office' => null,
+            'description' => 'This site serves as HAU’s central repository for documentation related to the university\'s Year-End Review. It provides access to institutional reports, performance evaluations, and other records that summarize the university\'s achievements and challenges over the past year.',
         ]);
 
         // HAU-ISO 21001:2018 link
@@ -27,6 +28,7 @@ class SharepointSeeder extends Seeder
             'category' => 'ISO',
             'department' => 'HAU-ISO 21001:2018',
             'office' => null,
+            'description' => 'This site serves as HAU’s central repository for documentation related to the university\'s Year-End Review. It provides access to institutional reports, performance evaluations, and other records that summarize the university\'s achievements and challenges over the past year.',
         ]);
 
         // OFFICE OF THE PRESIDENT (OOP) links
@@ -85,6 +87,7 @@ class SharepointSeeder extends Seeder
                 'category' => 'ISO',
                 'department' => 'OFFICE OF THE PRESIDENT (OOP)',
                 'office' => $item['office'],
+                'description' => 'This site serves as HAU’s central repository for documentation related to the university\'s Year-End Review. It provides access to institutional reports, performance evaluations, and other records that summarize the university\'s achievements and challenges over the past year.',
             ]);
         }
 
@@ -180,6 +183,7 @@ class SharepointSeeder extends Seeder
                 'category' => 'ISO',
                 'department' => 'ACADEMIC AFFAIRS CLUSTER (AAC)',
                 'office' => $item['office'],
+                'description' => 'This site serves as HAU’s central repository for documentation related to the university\'s Year-End Review. It provides access to institutional reports, performance evaluations, and other records that summarize the university\'s achievements and challenges over the past year.',
             ]);
         }
 
@@ -215,6 +219,7 @@ class SharepointSeeder extends Seeder
                 'category' => 'ISO',
                 'department' => 'INSTITUTE FOR CHRISTIAN FORMATION & SOCIAL INTEGRATION (CFS)',
                 'office' => $item['office'],
+                'description' => 'This site serves as HAU’s central repository for documentation related to the university\'s Year-End Review. It provides access to institutional reports, performance evaluations, and other records that summarize the university\'s achievements and challenges over the past year.',
             ]);
         }
 
@@ -250,6 +255,7 @@ class SharepointSeeder extends Seeder
                 'category' => 'ISO',
                 'department' => 'OFFICE OF INSTITUTIONAL EFFECTIVENESS (OIE)',
                 'office' => $item['office'],
+                'description' => 'This site serves as HAU’s central repository for documentation related to the university\'s Year-End Review. It provides access to institutional reports, performance evaluations, and other records that summarize the university\'s achievements and challenges over the past year.',
             ]);
         }
 
@@ -275,6 +281,7 @@ class SharepointSeeder extends Seeder
                 'category' => 'ISO',
                 'department' => 'HUMAN RESOURCE MANAGEMENT OFFICE (HRO)',
                 'office' => $item['office'],
+                'description' => 'This site serves as HAU’s central repository for documentation related to the university\'s Year-End Review. It provides access to institutional reports, performance evaluations, and other records that summarize the university\'s achievements and challenges over the past year.',
             ]);
         }
 
@@ -326,6 +333,7 @@ class SharepointSeeder extends Seeder
                 'category' => 'ISO',
                 'department' => 'FINANCE & RESOURCES MANAGEMENT SERVICES (FRM)',
                 'office' => $item['office'],
+                'description' => 'This site serves as HAU’s central repository for documentation related to the university\'s Year-End Review. It provides access to institutional reports, performance evaluations, and other records that summarize the university\'s achievements and challenges over the past year.',
             ]);
         }
 
@@ -351,6 +359,7 @@ class SharepointSeeder extends Seeder
                 'category' => 'ISO',
                 'department' => 'RECORDS SYSTEMS & SERVICES (RSS)',
                 'office' => $item['office'],
+                'description' => 'This site serves as HAU’s central repository for documentation related to the university\'s Year-End Review. It provides access to institutional reports, performance evaluations, and other records that summarize the university\'s achievements and challenges over the past year.',
             ]);
         }
 
@@ -396,6 +405,7 @@ class SharepointSeeder extends Seeder
                 'category' => 'ISO',
                 'department' => 'STUDENT SERVICES & AFFAIRS (SSA)',
                 'office' => $item['office'],
+                'description' => 'This site serves as HAU’s central repository for documentation related to the university\'s Year-End Review. It provides access to institutional reports, performance evaluations, and other records that summarize the university\'s achievements and challenges over the past year.',
             ]);
         }
 
@@ -436,6 +446,7 @@ class SharepointSeeder extends Seeder
                 'category' => 'ISO',
                 'department' => 'EXTERNAL AFFAIRS CLUSTER (EAC)',
                 'office' => $item['office'],
+                'description' => 'This site serves as HAU’s central repository for documentation related to the university\'s Year-End Review. It provides access to institutional reports, performance evaluations, and other records that summarize the university\'s achievements and challenges over the past year.',
             ]);
         }
 
@@ -486,6 +497,7 @@ class SharepointSeeder extends Seeder
                 'category' => 'ISO',
                 'department' => 'CAMPUS SERVICES & DEVELOPMENT OFFICE (CSD)',
                 'office' => $item['office'],
+                'description' => 'This site serves as HAU’s central repository for documentation related to the university\'s Year-End Review. It provides access to institutional reports, performance evaluations, and other records that summarize the university\'s achievements and challenges over the past year.',
             ]);
         }
 
@@ -516,6 +528,7 @@ class SharepointSeeder extends Seeder
                 'category' => 'ISO',
                 'department' => 'INSTITUTE FOR ACADEMIC INNOVATION & ENTREPRENEURSHIP (AIE)',
                 'office' => $item['office'],
+                'description' => 'This site serves as HAU’s central repository for documentation related to the university\'s Year-End Review. It provides access to institutional reports, performance evaluations, and other records that summarize the university\'s achievements and challenges over the past year.',
             ]);
         }
 
@@ -527,6 +540,7 @@ class SharepointSeeder extends Seeder
             'category' => 'ISO',
             'department' => 'INTERNAL AUDIT TEAM (IAT)',
             'office' => 'INTERNAL QUALITY AUDIT',
+            'description' => 'This site serves as HAU’s central repository for documentation related to the university\'s Year-End Review. It provides access to institutional reports, performance evaluations, and other records that summarize the university\'s achievements and challenges over the past year.',
         ]);
 
 
@@ -536,6 +550,7 @@ class SharepointSeeder extends Seeder
             'url' => 'https://hauph.sharepoint.com/sites/Mid-YearReview',
             'category' => 'Planning and Review',
             'department' => 'INSTITUTIONAL PLANNING, RESEARCH & PUBLICATIONS OFFICE',
+            'description' => 'This site hosts the university’s Mid-Year Performance Review documents, templates, submissions, and related data. It supports unit heads and offices in reporting accomplishments, challenges, and progress towards targets set in the Operational and Strategic Plans. Managed by the Institutional Planning, Research, and Publications Office',
         ]);
 
 
@@ -545,6 +560,7 @@ class SharepointSeeder extends Seeder
             'url' => 'https://hauph.sharepoint.com/sites/Year-endReview',
             'category' => 'Planning and Review',
             'department' => 'INSTITUTIONAL PLANNING, RESEARCH & PUBLICATIONS OFFICE',
+            'description' => 'A dedicated repository for final performance reports, evaluations, and supporting documents submitted by university units at the close of the academic or fiscal year. It contains year-end scorecards, assessments, and evidence of accomplishments. Managed by the Institutional Planning, Research, and Publications Office',
         ]);
 
 
@@ -554,6 +570,7 @@ class SharepointSeeder extends Seeder
             'url' => 'https://hauph.sharepoint.com/sites/OperationalPlans',
             'category' => 'Planning and Review',
             'department' => 'INSTITUTIONAL PLANNING, RESEARCH & PUBLICATIONS OFFICE',
+            'description' => 'This site consolidates annual Operational Plans of all academic and administrative units. It includes templates, guidelines, and approved plans aligned with institutional objectives and the Strategic Plan. This site consolidates annual Operational Plans of all academic and administrative units. It includes templates, guidelines, and approved plans aligned with institutional objectives and the Strategic Plan. Managed by the Institutional Planning, Research, and Publications Office',
         ]);
 
 
@@ -563,6 +580,7 @@ class SharepointSeeder extends Seeder
             'url' => 'https://hauph.sharepoint.com/sites/StrategicPlan2018-23',
             'category' => 'Planning and Review',
             'department' => 'INSTITUTIONAL PLANNING, RESEARCH & PUBLICATIONS OFFICE',
+            'description' => 'A centralized space for the Strategic Plan and related resources, including strategic objectives, key initiatives, targets, and progress monitoring tools. Managed by the Institutional Planning, Research, and Publications Office',
         ]);
 
 
@@ -572,6 +590,7 @@ class SharepointSeeder extends Seeder
             'url' => 'https://hauph.sharepoint.com/sites/PLANNING#',
             'category' => 'Planning and Review',
             'department' => 'INSTITUTIONAL PLANNING, RESEARCH & PUBLICATIONS OFFICE',
+            'description' => 'This site provides access to Holy Angel University’s institutional Key Performance Indicators (KPIs) and metrics, definitions, computation methods, and data visualization reports. Managed by the Institutional Planning, Research, and Publications Office and the Institutional Database Management Office',
         ]);
 
 
@@ -581,6 +600,7 @@ class SharepointSeeder extends Seeder
             'url' => 'https://hauph.sharepoint.com/sites/PLANNING#',
             'category' => 'Quality Assurance',
             'department' => 'QUALITY ASSURANCE',
+            'description' => 'Managed by the Office of Institutional Effectiveness (OIE), this hub houses institutional records, reports, and official submissions relevant to strategy management, accreditation, and quality assurance.',
         ]);
 
 
@@ -590,6 +610,7 @@ class SharepointSeeder extends Seeder
             'url' => 'https://hauph.sharepoint.com/sites/Accreditation',
             'category' => 'Quality Assurance',
             'department' => 'QUALITY ASSURANCE',
+            'description' => 'A repository of accreditation-related files, such as self-survey reports, program profiles, certificates, evidentiary documents, and communications with accrediting bodies. It supports the preparation, submission, and monitoring of accreditation activities. Managed by the Quality Assurance Office',
         ]);
     }
 }
