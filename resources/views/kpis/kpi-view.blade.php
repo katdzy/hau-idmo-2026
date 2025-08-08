@@ -22,18 +22,18 @@
 
             {{-- ROW 1 --}}
             <div class="grid grid-cols-4 border-t border-gray-300">
-                <div class="bg-gray-100 p-2 font-semibold">Perspective</div>
-                <div class="p-2">{{ $kpi->perspective }}</div>
                 <div class="bg-gray-100 p-2 font-semibold">Measure Code</div>
                 <div class="p-2">{{ $kpi->measure_code }}</div>
+                <div class="bg-gray-100 p-2 font-semibold">Measure Owner</div>
+                <div class="p-2">{{ $kpi->measure_owner }}</div>
             </div>
 
             {{-- ROW 2 --}}
             <div class="grid grid-cols-4 border-t border-gray-300">
-                <div class="bg-gray-100 p-2 font-semibold">Measure Owner</div>
-                <div class="p-2">{{ $kpi->measure_owner }}</div>
                 <div class="bg-gray-100 p-2 font-semibold">Measure Name</div>
                 <div class="p-2 font-bold uppercase">{{ $kpi->measure_name }}</div>
+                <div class="bg-gray-100 p-2 font-semibold">Perspective</div>
+                <div class="p-2">{{ $kpi->perspective }}</div>
             </div>
 
             {{-- ROW 3 — Strategic Theme or Strategy --}}
@@ -55,10 +55,12 @@
                 <div class="p-2 col-span-3 whitespace-pre-line">{{ $kpi->description }}</div>
             </div>
 
-           {{-- ROW 5 — Objective --}}
+           {{-- ROW 5 — Objective and Objective Owner --}}
             <div class="grid grid-cols-4 border-t border-gray-300">
                 <div class="bg-gray-100 p-2 font-semibold">Objective</div>
-                <div class="p-2 col-span-3">{{ $kpi->objective }}</div>
+                <div class="p-2">{{ $kpi->objective }}</div>
+                <div class="bg-gray-100 p-2 font-semibold">Objective Owner</div>
+                <div class="p-2">{{ $kpi->objective_owner }}</div>
             </div>
 
             {{-- ROW 6 — Measure Type --}}
@@ -67,12 +69,6 @@
                 <div class="p-2">{{ $kpi->measure_type }}</div>
                 <div class="bg-gray-100 p-2 font-semibold">Lead/Lag</div>
                 <div class="p-2">{{ $kpi->lead_lag }}</div>
-            </div>
-
-            {{-- ROW 7 — Objective Owner --}}
-            <div class="grid grid-cols-4 border-t border-gray-300">
-                <div class="bg-gray-100 p-2 font-semibold">Objective Owner</div>
-                <div class="p-2 col-span-3">{{ $kpi->objective_owner }}</div>
             </div>
 
             {{-- ROW 8: Formula --}}

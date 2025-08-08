@@ -9,21 +9,21 @@
                     {{ Str::limit($kpi->description, 200) }}
                 </p>
                 <div class="flex flex-wrap gap-2 mt-2">
-                    <span class="bg-red-50 text-red-700 px-2 py-1 rounded text-xs font-semibold">{{ $kpi->measure_code }}</span>
-                    <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">{{ $kpi->unit_type }}</span>
-                    <span class="bg-red-100 text-red-700 px-2 py-1 rounded text-xs">{{ $kpi->polarity }}</span>
+                    <span class="bg-red-50 text-red-700 px-2 py-1 rounded text-xs font-semibold">{{ $kpi->objective }}</span>
+                            <span class="bg-red-100 text-gray-700 px-2 py-1 rounded text-xs font-semibold">{{ $kpi->strategic_theme }}</span>
+                            <span class="bg-gray-100 text-red-700 px-2 py-1 rounded text-xs font-semibold">{{ $kpi->perspective }}</span>
                 </div>
-                <div class="text-xs text-gray-400 mt-2">Owner: {{ $kpi->measure_owner }}</div>
+                <div class="text-xs text-gray-400 mb-2">Code: {{ $kpi->measure_code }} | Owner: {{ $kpi->measure_owner }}</div>
             </div>
             @if(Auth::user()->role === 'SuperAdmin')
                 <div class="flex flex-col gap-2 items-end ml-6">
                     <a href="{{ route('kpis.edit', $kpi->measure_code) }}"
-                       class="bg-red-700 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-xs font-semibold shadow transition">Edit</a>
+                       class="bg-red-700 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-xs font-semibold shadow transition w-16 text-center">Edit</a>
                     <form action="{{ route('kpis.destroy', $kpi->measure_code) }}" method="POST"
                           onsubmit="return confirm('Are you sure you want to delete this KPI?');">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="bg-red-100 hover:bg-red-200 text-red-700 px-4 py-2 rounded-lg text-xs font-semibold shadow transition">Delete</button>
+                        <button type="submit" class="bg-red-100 hover:bg-red-200 text-red-700 px-4 py-2 rounded-lg text-xs font-semibold shadow transition w-16">Delete</button>
                     </form>
                 </div>
             @endif

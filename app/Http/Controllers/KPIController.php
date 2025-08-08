@@ -24,7 +24,8 @@ class KpiController extends Controller
             ->when($search, function ($query, $search) {
                 $query->where('measure_name', 'like', "%{$search}%")
                       ->orWhere('measure_code', 'like', "%{$search}%")
-                      ->orWhere('description', 'like', "%{$search}%");
+                      ->orWhere('perspective', 'like', "%{$search}%")
+                      ->orWhere('objective', 'like', "%{$search}%");
             })
             ->when($sortBy === 'code', function ($query) {
                 $query->orderBy('measure_code', 'asc');
@@ -180,7 +181,19 @@ class KpiController extends Controller
 
         $kpis = Kpi::when($search, function ($query, $search) {
             return $query->where('measure_name', 'like', "%{$search}%")
-                         ->orWhere('measure_code', 'like', "%{$search}%");
+                         ->orWhere('measure_code', 'like', "%{$search}%")
+                         ->orWhere('perspective', 'like', "%{$search}%")
+                         ->orWhere('objective', 'like', "%{$search}%")
+                         ->orWhere('strategic_theme', 'like', "%{$search}%");
+        })
+        ->when($sortBy === 'perspective', function ($query) {
+            $query->orderBy('perspective', 'asc');
+        })
+        ->when($sortBy === 'objective', function ($query) {
+            $query->orderBy('objective', 'asc');
+        })
+        ->when($sortBy === 'theme', function ($query) {
+            $query->orderBy('strategic_theme', 'asc');
         })
         ->when($sortBy === 'code', function ($query) {
             $query->orderBy('measure_code', 'asc');

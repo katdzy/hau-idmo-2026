@@ -26,125 +26,125 @@
 
                     <!-- KPI Tab -->
                     <div x-show="tab === 'kpi'">
-                        <form class="flex-col w-full px-8" action="{{ route('kpis.update', $kpi->id) }}" method="POST">
+                        <form class="flex-col w-full px-8" action="{{ route('kpis.update', $kpi) }}" method="POST">
                             @csrf
                             @method('PUT')
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div class="flex flex-col">
-                                    <h1 class="text-gray-500">MEASURE CODE <span class="font-bold text-red-500">*</span></h1>
-                                    <input class="rounded-lg w-full" name="measure_code" type="text" value="{{ old('measure_code', $kpi->measure_code) }}" required/>
+                                    <label for="measure_code" class="text-gray-500">MEASURE CODE <span class="font-bold text-red-500">*</span></label>
+                                    <input id="measure_code" class="rounded-lg w-full" name="measure_code" type="text" value="{{ old('measure_code', $kpi->measure_code) }}" required/>
                                 </div>
                                 <div class="flex flex-col">
-                                    <h1 class="text-gray-500">MEASURE NAME <span class="font-bold text-red-500">*</span></h1>
-                                    <input class="rounded-lg w-full" name="measure_name" type="text" value="{{ old('measure_name', $kpi->measure_name) }}" required/>
+                                    <label for="measure_name" class="text-gray-500">MEASURE NAME <span class="font-bold text-red-500">*</span></label>
+                                    <input id="measure_name" class="rounded-lg w-full" name="measure_name" type="text" value="{{ old('measure_name', $kpi->measure_name) }}" required/>
                                 </div>
                                 <div class="flex flex-col">
-                                    <h1 class="text-gray-500">MEASURE OWNER</h1>
-                                    <input class="rounded-lg w-full" name="measure_owner" type="text" value="{{ old('measure_owner', $kpi->measure_owner) }}"/>
+                                    <label for="measure_owner" class="text-gray-500">MEASURE OWNER</label>
+                                    <input id="measure_owner" class="rounded-lg w-full" name="measure_owner" type="text" value="{{ old('measure_owner', $kpi->measure_owner) }}"/>
                                 </div>
                                 <div class="flex flex-col">
-                                    <h1 class="text-gray-500">DESCRIPTION</h1>
-                                    <textarea class="rounded-lg w-full" name="description" rows="3">{{ old('description', $kpi->description) }}</textarea>
+                                    <label for="description" class="text-gray-500">DESCRIPTION</label>
+                                    <textarea id="description" class="rounded-lg w-full" name="description" rows="3">{{ old('description', $kpi->description) }}</textarea>
                                 </div>
                                 <div class="flex flex-col">
-                                    <h1 class="text-gray-500">UNIT TYPE</h1>
-                                    <input class="rounded-lg w-full" name="unit_type" type="text" value="{{ old('unit_type', $kpi->unit_type) }}"/>
+                                    <label for="unit_type" class="text-gray-500">UNIT TYPE</label>
+                                    <input id="unit_type" class="rounded-lg w-full" name="unit_type" type="text" value="{{ old('unit_type', $kpi->unit_type) }}"/>
                                 </div>
                                 <div class="flex flex-col">
-                                    <h1 class="text-gray-500">MEASURE TYPE</h1>
-                                    <input class="rounded-lg w-full" name="measure_type" type="text" value="{{ old('measure_type', $kpi->measure_type) }}"/>
+                                    <label for="measure_type" class="text-gray-500">MEASURE TYPE</label>
+                                    <input id="measure_type" class="rounded-lg w-full" name="measure_type" type="text" value="{{ old('measure_type', $kpi->measure_type) }}"/>
                                 </div>
                                 <div class="flex flex-col">
-                                    <h1 class="text-gray-500">LEAD/LAG</h1>
-                                    <input class="rounded-lg w-full" name="lead_lag" type="text" value="{{ old('lead_lag', $kpi->lead_lag) }}"/>
+                                    <label for="lead_lag" class="text-gray-500">LEAD/LAG</label>
+                                    <input id="lead_lag" class="rounded-lg w-full" name="lead_lag" type="text" value="{{ old('lead_lag', $kpi->lead_lag) }}"/>
                                 </div>
                                 <div class="flex flex-col">
-                                    <h1 class="text-gray-500">FORMULA</h1>
-                                    <textarea class="rounded-lg w-full" name="formula" rows="2">{{ old('formula', $kpi->formula) }}</textarea>
+                                    <label for="formula" class="text-gray-500">FORMULA</label>
+                                    <textarea id="formula" class="rounded-lg w-full" name="formula" rows="2">{{ old('formula', $kpi->formula) }}</textarea>
                                 </div>
                                 <div class="flex flex-col">
-                                    <h1 class="text-gray-500">POLARITY</h1>
-                                    <input class="rounded-lg w-full" name="polarity" type="text" value="{{ old('polarity', $kpi->polarity) }}"/>
+                                    <label for="polarity" class="text-gray-500">POLARITY</label>
+                                    <input id="polarity" class="rounded-lg w-full" name="polarity" type="text" value="{{ old('polarity', $kpi->polarity) }}"/>
                                 </div>
                                 <div class="flex flex-col">
-                                    <h1 class="text-gray-500">DATA PROVIDER</h1>
-                                    <input class="rounded-lg w-full" name="data_provider" type="text" value="{{ old('data_provider', $kpi->data_provider) }}"/>
+                                    <label for="data_provider" class="text-gray-500">DATA PROVIDER</label>
+                                    <input id="data_provider" class="rounded-lg w-full" name="data_provider" type="text" value="{{ old('data_provider', $kpi->data_provider) }}"/>
                                 </div>
                                 <div class="flex flex-col">
-                                    <h1 class="text-gray-500">DATA SOURCE</h1>
-                                    <input class="rounded-lg w-full" name="data_source" type="text" value="{{ old('data_source', $kpi->data_source) }}"/>
+                                    <label for="data_source" class="text-gray-500">DATA SOURCE</label>
+                                    <input id="data_source" class="rounded-lg w-full" name="data_source" type="text" value="{{ old('data_source', $kpi->data_source) }}"/>
                                 </div>
                                 <div class="flex flex-col">
-                                    <h1 class="text-gray-500">COLLECTION FREQUENCY</h1>
-                                    <input class="rounded-lg w-full" name="collection_frequency" type="text" value="{{ old('collection_frequency', $kpi->collection_frequency) }}"/>
+                                    <label for="collection_frequency" class="text-gray-500">COLLECTION FREQUENCY</label>
+                                    <input id="collection_frequency" class="rounded-lg w-full" name="collection_frequency" type="text" value="{{ old('collection_frequency', $kpi->collection_frequency) }}"/>
                                 </div>
                                 <div class="flex flex-col">
-                                    <h1 class="text-gray-500">REPORTING FREQUENCY</h1>
-                                    <input class="rounded-lg w-full" name="reporting_frequency" type="text" value="{{ old('reporting_frequency', $kpi->reporting_frequency) }}"/>
+                                    <label for="reporting_frequency" class="text-gray-500">REPORTING FREQUENCY</label>
+                                    <input id="reporting_frequency" class="rounded-lg w-full" name="reporting_frequency" type="text" value="{{ old('reporting_frequency', $kpi->reporting_frequency) }}"/>
                                 </div>
                                 <div class="flex flex-col">
-                                    <h1 class="text-gray-500">VERIFIED BY</h1>
-                                    <input class="rounded-lg w-full" name="verified_by" type="text" value="{{ old('verified_by', $kpi->verified_by) }}"/>
+                                    <label for="verified_by" class="text-gray-500">VERIFIED BY</label>
+                                    <input id="verified_by" class="rounded-lg w-full" name="verified_by" type="text" value="{{ old('verified_by', $kpi->verified_by) }}"/>
                                 </div>
                                 <div class="flex flex-col">
-                                    <h1 class="text-gray-500">VALIDATED BY</h1>
-                                    <input class="rounded-lg w-full" name="validated_by" type="text" value="{{ old('validated_by', $kpi->validated_by) }}"/>
+                                    <label for="validated_by" class="text-gray-500">VALIDATED BY</label>
+                                    <input id="validated_by" class="rounded-lg w-full" name="validated_by" type="text" value="{{ old('validated_by', $kpi->validated_by) }}"/>
                                 </div>
                                 <div class="flex flex-col">
-                                    <h1 class="text-gray-500">BASELINE</h1>
-                                    <input class="rounded-lg w-full" name="baseline" type="text" value="{{ old('baseline', $kpi->baseline) }}"/>
+                                    <label for="baseline" class="text-gray-500">BASELINE</label>
+                                    <input id="baseline" class="rounded-lg w-full" name="baseline" type="text" value="{{ old('baseline', $kpi->baseline) }}"/>
                                 </div>
                                 <div class="flex flex-col">
-                                    <h1 class="text-gray-500">TARGET</h1>
-                                    <input class="rounded-lg w-full" name="target" type="text" value="{{ old('target', $kpi->target) }}"/>
+                                    <label for="target" class="text-gray-500">TARGET</label>
+                                    <input id="target" class="rounded-lg w-full" name="target" type="text" value="{{ old('target', $kpi->target) }}"/>
                                 </div>
                                 <div class="flex flex-col">
-                                    <h1 class="text-gray-500">THRESHOLD LOW</h1>
-                                    <input class="rounded-lg w-full" name="threshold_low" type="text" value="{{ old('threshold_low', $kpi->threshold_low) }}"/>
+                                    <label for="threshold_low" class="text-gray-500">THRESHOLD LOW</label>
+                                    <input id="threshold_low" class="rounded-lg w-full" name="threshold_low" type="text" value="{{ old('threshold_low', $kpi->threshold_low) }}"/>
                                 </div>
                                 <div class="flex flex-col">
-                                    <h1 class="text-gray-500">THRESHOLD HIGH</h1>
-                                    <input class="rounded-lg w-full" name="threshold_high" type="text" value="{{ old('threshold_high', $kpi->threshold_high) }}"/>
+                                    <label for="threshold_high" class="text-gray-500">THRESHOLD HIGH</label>
+                                    <input id="threshold_high" class="rounded-lg w-full" name="threshold_high" type="text" value="{{ old('threshold_high', $kpi->threshold_high) }}"/>
                                 </div>
                                 <div class="flex flex-col">
-                                    <h1 class="text-gray-500">TARGET RATIONALE</h1>
-                                    <textarea class="rounded-lg w-full" name="target_rationale" rows="2">{{ old('target_rationale', $kpi->target_rationale) }}</textarea>
+                                    <label for="target_rationale" class="text-gray-500">TARGET RATIONALE</label>
+                                    <textarea id="target_rationale" class="rounded-lg w-full" name="target_rationale" rows="2">{{ old('target_rationale', $kpi->target_rationale) }}</textarea>
                                 </div>
                                 <div class="flex flex-col">
-                                    <h1 class="text-gray-500">PERSPECTIVE</h1>
-                                    <input class="rounded-lg w-full" name="perspective" type="text" value="{{ old('perspective', $kpi->perspective) }}"/>
+                                    <label for="perspective" class="text-gray-500">PERSPECTIVE</label>
+                                    <input id="perspective" class="rounded-lg w-full" name="perspective" type="text" value="{{ old('perspective', $kpi->perspective) }}"/>
                                 </div>
                                 <div class="flex flex-col">
-                                    <h1 class="text-gray-500">STRATEGIC THEME</h1>
-                                    <input class="rounded-lg w-full" name="strategic_theme" type="text" value="{{ old('strategic_theme', $kpi->strategic_theme) }}"/>
+                                    <label for="strategic_theme" class="text-gray-500">STRATEGIC THEME</label>
+                                    <input id="strategic_theme" class="rounded-lg w-full" name="strategic_theme" type="text" value="{{ old('strategic_theme', $kpi->strategic_theme) }}"/>
                                 </div>
                                 <div class="flex flex-col">
-                                    <h1 class="text-gray-500">OBJECTIVE</h1>
-                                    <input class="rounded-lg w-full" name="objective" type="text" value="{{ old('objective', $kpi->objective) }}"/>
+                                    <label for="objective" class="text-gray-500">OBJECTIVE</label>
+                                    <input id="objective" class="rounded-lg w-full" name="objective" type="text" value="{{ old('objective', $kpi->objective) }}"/>
                                 </div>
                                 <div class="flex flex-col">
-                                    <h1 class="text-gray-500">OBJECTIVE OWNER</h1>
-                                    <input class="rounded-lg w-full" name="objective_owner" type="text" value="{{ old('objective_owner', $kpi->objective_owner) }}"/>
+                                    <label for="objective_owner" class="text-gray-500">OBJECTIVE OWNER</label>
+                                    <input id="objective_owner" class="rounded-lg w-full" name="objective_owner" type="text" value="{{ old('objective_owner', $kpi->objective_owner) }}"/>
                                 </div>
                                 <div class="flex flex-col">
-                                    <h1 class="text-gray-500">INTENDED RESULTS</h1>
-                                    <textarea class="rounded-lg w-full" name="intended_results" rows="2">{{ old('intended_results', $kpi->intended_results) }}</textarea>
+                                    <label for="intended_results" class="text-gray-500">INTENDED RESULTS</label>
+                                    <textarea id="intended_results" class="rounded-lg w-full" name="intended_results" rows="2">{{ old('intended_results', $kpi->intended_results) }}</textarea>
                                 </div>
                                 <div class="flex flex-col">
-                                    <h1 class="text-gray-500">STRATEGIC INITIATIVES</h1>
-                                    <textarea class="rounded-lg w-full" name="strategic_initiatives" rows="2">{{ old('strategic_initiatives', $kpi->strategic_initiatives) }}</textarea>
+                                    <label for="strategic_initiatives" class="text-gray-500">STRATEGIC INITIATIVES</label>
+                                    <textarea id="strategic_initiatives" class="rounded-lg w-full" name="strategic_initiatives" rows="2">{{ old('strategic_initiatives', $kpi->strategic_initiatives) }}</textarea>
                                 </div>
                                 <div class="flex flex-col">
-                                    <h1 class="text-gray-500">COMPARATOR</h1>
-                                    <textarea class="rounded-lg w-full" name="comparator" rows="2">{{ old('comparator', $kpi->comparator) }}</textarea>
+                                    <label for="comparator" class="text-gray-500">COMPARATOR</label>
+                                    <textarea id="comparator" class="rounded-lg w-full" name="comparator" rows="2">{{ old('comparator', $kpi->comparator) }}</textarea>
                                 </div>
                                 <div class="flex flex-col">
-                                    <h1 class="text-gray-500">ITEM AUTHOR</h1>
-                                    <input class="rounded-lg w-full" name="item_author" type="text" value="{{ old('item_author', $kpi->item_author) }}"/>
+                                    <label for="item_author" class="text-gray-500">ITEM AUTHOR</label>
+                                    <input id="item_author" class="rounded-lg w-full" name="item_author" type="text" value="{{ old('item_author', $kpi->item_author) }}"/>
                                 </div>
                                 <div class="flex flex-col">
-                                    <h1 class="text-gray-500">DATE</h1>
-                                    <input class="rounded-lg w-full" name="date" type="date" value="{{ old('date', $kpi->date) }}"/>
+                                    <label for="date" class="text-gray-500">DATE</label>
+                                    <input id="date" class="rounded-lg w-full" name="date" type="date" value="{{ old('date', $kpi->date) }}"/>
                                 </div>
                             </div>
                             <div class="w-full flex justify-end py-4 gap-2">
@@ -172,17 +172,17 @@
                                 <input type="hidden" name="kpi_id" value="{{ $kpi->id }}">
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div class="flex flex-col">
-                                        <h1 class="text-gray-500">Segmentation <span class="font-bold text-red-500">*</span></h1>
-                                        <input class="rounded-lg w-full" name="segmentation" type="text" value="{{ old('segmentation') }}" required />
+                                        <label for="segmentation" class="text-gray-500">Segmentation <span class="font-bold text-red-500">*</span></label>
+                                        <input id="segmentation" class="rounded-lg w-full" name="segmentation" type="text" value="{{ old('segmentation') }}" required />
                                     </div>
                                     <div class="flex flex-col">
-                                        <h1 class="text-gray-500">Code</h1>
-                                        <input class="rounded-lg w-full" name="code" type="text" value="{{ old('code') }}" />
+                                        <label for="code" class="text-gray-500">Code</label>
+                                        <input id="code" class="rounded-lg w-full" name="code" type="text" value="{{ old('code') }}" />
                                     </div>
                                 </div>
                                 <div class="mt-2 flex flex-col">
-                                    <h1 class="text-gray-500">Owner</h1>
-                                    <input class="rounded-lg w-full" name="owner" type="text" value="{{ old('owner') }}" />
+                                    <label for="owner" class="text-gray-500">Owner</label>
+                                    <input id="owner" class="rounded-lg w-full" name="owner" type="text" value="{{ old('owner') }}" />
                                 </div>
                                 <div class="mt-2 flex gap-4">
                                     <button type="button" @click="showTarget = !showTarget" class="text-maroon underline focus:outline-none">
@@ -196,14 +196,14 @@
                                 </div>
                                 <div x-show="showTarget" class="mt-2">
                                     <div class="flex flex-col mb-2">
-                                        <h1 class="text-gray-500">Target Level</h1>
-                                        <input class="rounded-lg w-full" name="target_level" type="text" value="{{ old('target_level') }}" />
+                                        <label for="target_level" class="text-gray-500">Target Level</label>
+                                        <input id="target_level" class="rounded-lg w-full" name="target_level" type="text" value="{{ old('target_level') }}" />
                                     </div>
                                 </div>
                                 <div x-show="showGoal" class="mt-2">
                                     <div class="flex flex-col">
-                                        <h1 class="text-gray-500">Goal</h1>
-                                        <input class="rounded-lg w-full" name="goal" type="text" value="{{ old('goal') }}" />
+                                        <label for="goal" class="text-gray-500">Goal</label>
+                                        <input id="goal" class="rounded-lg w-full" name="goal" type="text" value="{{ old('goal') }}" />
                                     </div>
                                 </div>
                                 <div class="w-full flex justify-end py-2">
@@ -220,17 +220,17 @@
                                     @method('PUT')
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <div class="flex flex-col">
-                                            <h1 class="text-gray-500">Segmentation</h1>
-                                            <input class="rounded-lg w-full" name="segmentation" type="text" value="{{ old('segmentation', $segmentation->segmentation) }}" />
+                                            <label for="segmentation_{{ $segmentation->id }}" class="text-gray-500">Segmentation</label>
+                                            <input id="segmentation_{{ $segmentation->id }}" class="rounded-lg w-full" name="segmentation" type="text" value="{{ old('segmentation', $segmentation->segmentation) }}" />
                                         </div>
                                         <div class="flex flex-col">
-                                            <h1 class="text-gray-500">Code</h1>
-                                            <input class="rounded-lg w-full" name="code" type="text" value="{{ old('code', $segmentation->code) }}" />
+                                            <label for="code_{{ $segmentation->id }}" class="text-gray-500">Code</label>
+                                            <input id="code_{{ $segmentation->id }}" class="rounded-lg w-full" name="code" type="text" value="{{ old('code', $segmentation->code) }}" />
                                         </div>
                                     </div>
                                     <div class="mt-2 flex flex-col">
-                                        <h1 class="text-gray-500">Owner</h1>
-                                        <input class="rounded-lg w-full" name="owner" type="text" value="{{ old('owner', $segmentation->owner) }}" />
+                                        <label for="owner_{{ $segmentation->id }}" class="text-gray-500">Owner</label>
+                                        <input id="owner_{{ $segmentation->id }}" class="rounded-lg w-full" name="owner" type="text" value="{{ old('owner', $segmentation->owner) }}" />
                                     </div>
                                     <div class="mt-2 flex gap-4">
                                         <button type="button" @click="showTarget = !showTarget" class="text-maroon underline focus:outline-none">
@@ -244,14 +244,14 @@
                                     </div>
                                     <div x-show="showTarget" class="mt-2">
                                         <div class="flex flex-col mb-2">
-                                            <h1 class="text-gray-500">Target Level</h1>
-                                            <input class="rounded-lg w-full" name="target_level" type="text" value="{{ old('target_level', $segmentation->target_level) }}" />
+                                            <label for="target_level_{{ $segmentation->id }}" class="text-gray-500">Target Level</label>
+                                            <input id="target_level_{{ $segmentation->id }}" class="rounded-lg w-full" name="target_level" type="text" value="{{ old('target_level', $segmentation->target_level) }}" />
                                         </div>
                                     </div>
                                     <div x-show="showGoal" class="mt-2">
                                         <div class="flex flex-col">
-                                            <h1 class="text-gray-500">Goal</h1>
-                                            <input class="rounded-lg w-full" name="goal" type="text" value="{{ old('goal', $segmentation->goal) }}" />
+                                            <label for="goal_{{ $segmentation->id }}" class="text-gray-500">Goal</label>
+                                            <input id="goal_{{ $segmentation->id }}" class="rounded-lg w-full" name="goal" type="text" value="{{ old('goal', $segmentation->goal) }}" />
                                         </div>
                                     </div>
                                     <div class="w-full flex justify-end py-2 gap-2">
@@ -277,12 +277,12 @@
                                 <input type="hidden" name="kpi_id" value="{{ $kpi->id }}">
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div class="flex flex-col">
-                                        <h1 class="text-gray-500">Dimensions <span class="font-bold text-red-500">*</span></h1>
-                                        <input class="rounded-lg w-full" name="dimensions" type="text" value="{{ old('dimensions') }}" required />
+                                        <label for="dimensions" class="text-gray-500">Dimensions <span class="font-bold text-red-500">*</span></label>
+                                        <input id="dimensions" class="rounded-lg w-full" name="dimensions" type="text" value="{{ old('dimensions') }}" required />
                                     </div>
                                     <div class="flex flex-col">
-                                        <h1 class="text-gray-500">Description</h1>
-                                        <input class="rounded-lg w-full" name="description" type="text" value="{{ old('description') }}" />
+                                        <label for="dimension_description" class="text-gray-500">Description</label>
+                                        <input id="dimension_description" class="rounded-lg w-full" name="description" type="text" value="{{ old('description') }}" />
                                     </div>
                                 </div>
                                 <div class="w-full flex justify-end py-2">
@@ -295,12 +295,12 @@
                                     @method('PUT')
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <div class="flex flex-col">
-                                            <h1 class="text-gray-500">Dimensions</h1>
-                                            <input class="rounded-lg w-full" name="dimensions" type="text" value="{{ old('dimensions', $dimension->dimensions) }}" />
+                                            <label for="dimensions_{{ $dimension->id }}" class="text-gray-500">Dimensions</label>
+                                            <input id="dimensions_{{ $dimension->id }}" class="rounded-lg w-full" name="dimensions" type="text" value="{{ old('dimensions', $dimension->dimensions) }}" />
                                         </div>
                                         <div class="flex flex-col">
-                                            <h1 class="text-gray-500">Description</h1>
-                                            <input class="rounded-lg w-full" name="description" type="text" value="{{ old('description', $dimension->description) }}" />
+                                            <label for="description_{{ $dimension->id }}" class="text-gray-500">Description</label>
+                                            <input id="description_{{ $dimension->id }}" class="rounded-lg w-full" name="description" type="text" value="{{ old('description', $dimension->description) }}" />
                                         </div>
                                     </div>
                                     <div class="w-full flex justify-end py-2 gap-2">
