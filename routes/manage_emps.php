@@ -199,5 +199,43 @@ Route::middleware(['admin','revalidate'])->group(function() {
 
     // Delete sharepoint link
     Route::delete('sharepoint-sites/delete/{id}', [SharepointController::class, 'destroy'])->name('sharepoint-sites.delete');
+
+
+    /******************** KPI Library ********************/
+    // Place specific routes before parameterized routes
+    Route::get('/kpis/add', [KpiController::class, 'create'])->name('kpis.add');
+    Route::post('/kpis', [KpiController::class, 'store'])->name('kpis.store');
+    Route::get('/kpis/{kpi}/edit', [KpiController::class, 'edit'])->name('kpis.edit');
+    Route::put('/kpis/{kpi}', [KpiController::class, 'update'])->name('kpis.update');
+    Route::delete('/kpis/{kpi}', [KpiController::class, 'destroy'])->name('kpis.destroy');
+    // Route::get('/kpis/search', [KpiController::class, 'search'])->name('kpis.search');
+    Route::get('/kpis/ajax-search', [KpiController::class, 'ajaxSearch'])->name('kpis.ajax-search');
+
+
+    // KPI Segmentation CRUD routes
+    Route::get('/segmentations/create', [KpiSegmentationController::class, 'create'])->name('segmentations.create');
+    Route::get('/segmentations/{id}/edit', [KpiSegmentationController::class, 'edit'])->name('segmentations.edit');
+    Route::post('/segmentations', [KpiSegmentationController::class, 'store'])->name('segmentations.store');
+    Route::put('/segmentations/{id}', [KpiSegmentationController::class, 'update'])->name('segmentations.update');
+    Route::delete('/segmentations/{id}', [KpiSegmentationController::class, 'destroy'])->name('segmentations.destroy');
+
+    // KPI Dimensions CRUD routes
+    Route::get('/dimensions/create/{kpi_id}', [KpiDimensionController::class, 'create'])->name('dimensions.create');
+    Route::post('/dimensions', [KpiDimensionController::class, 'store'])->name('dimensions.store');
+    Route::get('/dimensions/{id}/edit', [KpiDimensionController::class, 'edit'])->name('dimensions.edit');
+    Route::put('/dimensions/{id}', [KpiDimensionController::class, 'update'])->name('dimensions.update');
+    Route::delete('/dimensions/{id}', [KpiDimensionController::class, 'destroy'])->name('dimensions.destroy');
+
+    // Export route for KPI
+    Route::get('/kpis/{kpi}/export', [KpiController::class, 'export'])->name('kpis.export');
+
+    // Place catch-all route last
+    Route::get('/kpis/{kpi}', [KpiController::class, 'showKpiView'])->name('kpis.show');
+
+
+
     });
-?> 
+
+
+// KPI dashboard route for all users
+Route::get('/kpis/dashboard', [KpiController::class, 'dashboard'])->name('kpis.dashboard');
