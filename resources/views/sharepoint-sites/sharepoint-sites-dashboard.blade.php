@@ -214,6 +214,7 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        // Initialize dropdown functionality
         const dropdownBtn = document.getElementById('adminDropdownBtn');
         const dropdownMenu = document.getElementById('adminDropdownMenu');
         if(dropdownBtn) {
@@ -226,15 +227,32 @@
             });
         }
 
+        // Initialize tabs functionality
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', function () {
+                // Clear search first if there's an active search
+                if (searchInput.value.trim() !== '') {
+                    searchInput.value = '';
+                    searchResults.classList.add('hidden');
+                }
+                
+                // Reset all tab styles and content visibility
                 document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                document.querySelectorAll('.tab-content').forEach(tc => tc.classList.add('hidden'));
+                document.querySelectorAll('.tab-content').forEach(tc => {
+                    tc.classList.add('hidden');
+                    tc.style.display = '';
+                });
+                
+                // Activate the clicked tab
                 btn.classList.add('active');
-                document.getElementById(btn.getAttribute('data-tab')).classList.remove('hidden');
+                const targetTab = document.getElementById(btn.getAttribute('data-tab'));
+                if (targetTab) {
+                    targetTab.classList.remove('hidden');
+                }
             });
         });
 
+        // Initialize collapsible sections
         document.querySelectorAll('.department-btn').forEach(btn => {
             btn.addEventListener('click', function () {
                 const officeList = this.nextElementSibling;
@@ -269,12 +287,28 @@
         if (searchTerm === '') {
             // Show normal tabs, hide search results
             searchResults.classList.add('hidden');
-            tabContents.forEach(content => content.style.display = 'block');
+            // Restore normal tab functionality - show only the active tab
+            tabContents.forEach(content => {
+                content.style.display = '';
+                content.classList.add('hidden');
+            });
+            // Show the currently active tab
+            const activeTabBtn = document.querySelector('.tab-btn.active');
+            if (activeTabBtn) {
+                const activeTabId = activeTabBtn.getAttribute('data-tab');
+                const activeTab = document.getElementById(activeTabId);
+                if (activeTab) {
+                    activeTab.classList.remove('hidden');
+                }
+            }
             return;
         }
 
         // Hide tab contents, show search results
-        tabContents.forEach(content => content.style.display = 'none');
+        tabContents.forEach(content => {
+            content.style.display = 'none';
+            content.classList.add('hidden');
+        });
         searchResults.classList.remove('hidden');
         
         // Clear previous results
@@ -288,9 +322,26 @@
             const linkText = link.textContent.toLowerCase();
             const linkTitle = (link.getAttribute('title') || '').toLowerCase();
             
-            // Get original case for display
-            const departmentOriginal = link.closest('.space-y-4')?.querySelector('.department-btn')?.textContent || '';
-            const department = departmentOriginal.toLowerCase();
+            // Get department information by traversing up the DOM properly
+            let departmentOriginal = '';
+            let department = '';
+            
+            // Find the closest li that contains a department-btn
+            const linkLi = link.closest('li');
+            if (linkLi) {
+                // Traverse up to find the department li (the one with department-btn as direct child)
+                let currentElement = linkLi;
+                while (currentElement) {
+                    const departmentBtn = currentElement.querySelector('.department-btn');
+                    if (departmentBtn) {
+                        departmentOriginal = departmentBtn.textContent.trim();
+                        department = departmentOriginal.toLowerCase();
+                        break;
+                    }
+                    // Move up to the parent li
+                    currentElement = currentElement.parentElement?.closest('li');
+                }
+            }
             
             // Find the office by looking for the closest office-btn in the parent structure
             let office = '';
@@ -298,7 +349,7 @@
             const linkItem = link.closest('li');
             const parentOfficeList = linkItem?.closest('.file-list')?.previousElementSibling;
             if (parentOfficeList?.classList.contains('office-btn')) {
-                officeOriginal = parentOfficeList.textContent;
+                officeOriginal = parentOfficeList.textContent.trim();
                 office = officeOriginal.toLowerCase();
             }
 
@@ -348,16 +399,6 @@
         searchInput.value = '';
         performSearch();
         searchInput.focus();
-    });
-
-    // Reset search when switching tabs
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            if (searchInput.value.trim() !== '') {
-                searchInput.value = '';
-                performSearch();
-            }
-        });
     });
 </script>
 

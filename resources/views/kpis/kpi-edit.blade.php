@@ -1,11 +1,24 @@
 <x-app-layout>
+    @if(session('success'))
+        <div id="success-message" class="w-full flex justify-center py-2">
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded-lg text-center">
+                {{ session('success') }}
+            </div>
+        </div>
+        <script>
+            setTimeout(function() {
+                var msg = document.getElementById('success-message');
+                if (msg) msg.style.display = 'none';
+            }, 3000);
+        </script>
+    @endif
     <div class="min-h-screen">
         <div class="flex justify-center items-center w-full py-8">
             <div class="flex-col w-[95%] bg-white rounded-lg py-8">
                 <div class="px-8 pb-4">
                     <a href="{{ route('kpis.dashboard') }}" class="inline-flex gap-1 items-center bg-red-900 hover:bg-red-700 px-6 py-1 text-white rounded-xl">
                         <img src="{{ asset('images/icons/back.png') }}" class="w-[20px] h-[20px]" alt="">
-                        <span>Return to KPI Dashboard</span>
+                        <span>Back to KPI Library</span>
                     </a>
                 </div>
                 <div class="w-full flex flex-col items-center justify-center px-8 py-4 leading-tight">
@@ -148,73 +161,38 @@
                                 </div>
                             </div>
                             <div class="w-full flex justify-end py-4 gap-2">
-                                <form action="{{ route('kpis.update', $kpi->id) }}" method="POST" >
-                                    @csrf
-                                    @method('PUT')
-                                    <button type="submit" class="maroon text-white px-6 py-2 rounded-md">Update KPI</button>
-                                </form>
-                                <form action="{{ route('kpis.destroy', $kpi->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this KPI?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="bg-red-600 text-white px-6 py-2 rounded-md" onclick="return confirm('Are you sure you want to delete this KPI?');">Delete KPI</button>
-                                </form>
+                                <button type="submit" class="maroon text-white px-6 py-2 rounded-md">Update KPI</button>
+                                <button type="button" class="bg-red-600 text-white px-6 py-2 rounded-md" onclick="if(confirm('Are you sure you want to delete this KPI?')) { document.getElementById('delete-kpi-form').submit(); }">Delete KPI</button>
                             </div>
+                        </form>
+                        
+                        <!-- Hidden Delete Form -->
+                        <form id="delete-kpi-form" action="{{ route('kpis.destroy', $kpi->measure_code) }}" method="POST" style="display:none;">
+                            @csrf
+                            @method('DELETE')
                         </form>
                     </div>
 
                     <!-- Segmentation Tab -->
                     <div x-show="tab === 'segmentation'">
                         <div class="px-8">
-                            <!-- Add New Segmentation Form -->
-                            <form x-data="{ showTarget: false, showGoal: false }" action="{{ route('segmentations.store') }}" method="POST" class="mb-6 border p-4 rounded-lg bg-gray-50">
+                            <!-- Multi Segmentation Form -->
+                            <form id="multi-segmentation-form" action="{{ route('segmentations.store') }}" method="POST" class="mb-6 border p-4 rounded-lg bg-gray-50">
                                 @csrf
                                 <input type="hidden" name="kpi_id" value="{{ $kpi->id }}">
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div class="flex flex-col">
-                                        <label for="segmentation" class="text-gray-500">Segmentation <span class="font-bold text-red-500">*</span></label>
-                                        <input id="segmentation" class="rounded-lg w-full" name="segmentation" type="text" value="{{ old('segmentation') }}" required />
-                                    </div>
-                                    <div class="flex flex-col">
-                                        <label for="code" class="text-gray-500">Code</label>
-                                        <input id="code" class="rounded-lg w-full" name="code" type="text" value="{{ old('code') }}" />
-                                    </div>
-                                </div>
-                                <div class="mt-2 flex flex-col">
-                                    <label for="owner" class="text-gray-500">Owner</label>
-                                    <input id="owner" class="rounded-lg w-full" name="owner" type="text" value="{{ old('owner') }}" />
-                                </div>
-                                <div class="mt-2 flex gap-4">
-                                    <button type="button" @click="showTarget = !showTarget" class="text-maroon underline focus:outline-none">
-                                        <span x-show="!showTarget">Add Target Level</span>
-                                        <span x-show="showTarget">Hide Target Level</span>
-                                    </button>
-                                    <button type="button" @click="showGoal = !showGoal" class="text-maroon underline focus:outline-none">
-                                        <span x-show="!showGoal">Add Goal</span>
-                                        <span x-show="showGoal">Hide Goal</span>
-                                    </button>
-                                </div>
-                                <div x-show="showTarget" class="mt-2">
-                                    <div class="flex flex-col mb-2">
-                                        <label for="target_level" class="text-gray-500">Target Level</label>
-                                        <input id="target_level" class="rounded-lg w-full" name="target_level" type="text" value="{{ old('target_level') }}" />
-                                    </div>
-                                </div>
-                                <div x-show="showGoal" class="mt-2">
-                                    <div class="flex flex-col">
-                                        <label for="goal" class="text-gray-500">Goal</label>
-                                        <input id="goal" class="rounded-lg w-full" name="goal" type="text" value="{{ old('goal') }}" />
-                                    </div>
-                                </div>
+                                <div id="multi-segmentation-list" class="flex flex-col gap-4"></div>
                                 <div class="w-full flex justify-end py-2">
-                                    <button class="maroon text-white px-8 py-2 rounded-md" type="submit">Add Segmentation</button>
+                                    <button type="button" id="add-segmentation-row" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded text-xs font-semibold">+ Add Segmentation</button>
+                                    <button class="maroon text-white px-8 py-2 rounded-md ml-2" type="submit">Add All Segmentations</button>
                                 </div>
                             </form>
+                            <!-- Existing Segmentations Edit/Delete -->
                             @php
                                 $hasTargetLevel = $kpi->segmentations->contains(fn($seg) => !is_null($seg->target_level));
                                 $hasGoal = $kpi->segmentations->contains(fn($seg) => !is_null($seg->goal));
                             @endphp
                             @foreach($kpi->segmentations as $segmentation)
-                                <form x-data="{ showTarget: {{ $segmentation->target_level ? 'true' : 'false' }}, showGoal: {{ $segmentation->goal ? 'true' : 'false' }} }" action="{{ route('segmentations.update', $segmentation->id) }}" method="POST" class="mb-4">
+                                <form x-data="{ showTarget: {{ $segmentation->target_level ? 'true' : 'false' }}, showGoal: {{ $segmentation->goal ? 'true' : 'false' }} }" action="{{ route('segmentations.update', $segmentation->id) }}" method="POST" class="mb-4 border p-4 rounded-lg bg-gray-50">
                                     @csrf
                                     @method('PUT')
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -255,12 +233,12 @@
                                     </div>
                                     <div class="w-full flex justify-end py-2 gap-2">
                                         <button class="maroon text-white px-8 py-2 rounded-md" type="submit">Update</button>
-                                        <form action="{{ route('segmentations.destroy', $segmentation->id) }}" method="POST" onsubmit="return confirm('Delete this segmentation?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="bg-red-600 text-white px-6 py-2 rounded-md" onclick="return confirm('Are you sure you want to delete this segmentation?');">Delete</button>
-                                        </form>
+                                        <button type="button" class="bg-red-600 text-white px-6 py-2 rounded-md" onclick="if(confirm('Are you sure you want to delete this segmentation?')) { document.getElementById('delete-segmentation-{{ $segmentation->id }}').submit(); }">Delete</button>
                                     </div>
+                                </form>
+                                <form id="delete-segmentation-{{ $segmentation->id }}" action="{{ route('segmentations.destroy', $segmentation->id) }}" method="POST" style="display:none;">
+                                    @csrf
+                                    @method('DELETE')
                                 </form>
                             @endforeach
                         </div>
@@ -269,26 +247,19 @@
                     <!-- Dimensions Tab -->
                     <div x-show="tab === 'dimensions'">
                         <div class="px-8">
-                            <!-- Add New Dimension Form -->
-                            <form action="{{ route('dimensions.store') }}" method="POST" class="mb-6 border p-4 rounded-lg bg-gray-50">
+                            <!-- Multi Dimension Form -->
+                            <form id="multi-dimension-form" action="{{ route('dimensions.store') }}" method="POST" class="mb-6 border p-4 rounded-lg bg-gray-50">
                                 @csrf
                                 <input type="hidden" name="kpi_id" value="{{ $kpi->id }}">
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div class="flex flex-col">
-                                        <label for="dimensions" class="text-gray-500">Dimensions <span class="font-bold text-red-500">*</span></label>
-                                        <input id="dimensions" class="rounded-lg w-full" name="dimensions" type="text" value="{{ old('dimensions') }}" required />
-                                    </div>
-                                    <div class="flex flex-col">
-                                        <label for="dimension_description" class="text-gray-500">Description</label>
-                                        <input id="dimension_description" class="rounded-lg w-full" name="description" type="text" value="{{ old('description') }}" />
-                                    </div>
-                                </div>
+                                <div id="multi-dimension-list" class="flex flex-col gap-4"></div>
                                 <div class="w-full flex justify-end py-2">
-                                    <button class="maroon text-white px-8 py-2 rounded-md" type="submit">Add Dimension</button>
+                                    <button type="button" id="add-dimension-row" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded text-xs font-semibold">+ Add Dimension</button>
+                                    <button class="maroon text-white px-8 py-2 rounded-md ml-2" type="submit">Add All Dimensions</button>
                                 </div>
                             </form>
+                            <!-- Existing Dimensions Edit/Delete -->
                             @foreach($kpi->dimensions as $dimension)
-                                <form action="{{ route('dimensions.update', $dimension->id) }}" method="POST" class="mb-4">
+                                <form action="{{ route('dimensions.update', $dimension->id) }}" method="POST" class="mb-4 border p-4 rounded-lg bg-gray-50">
                                     @csrf
                                     @method('PUT')
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -298,17 +269,17 @@
                                         </div>
                                         <div class="flex flex-col">
                                             <label for="description_{{ $dimension->id }}" class="text-gray-500">Description</label>
-                                            <input id="description_{{ $dimension->id }}" class="rounded-lg w-full" name="description" type="text" value="{{ old('description', $dimension->description) }}" />
+                                            <textarea id="description_{{ $dimension->id }}" class="rounded-lg w-full" name="description" rows="5">{{ old('description', $dimension->description) }}</textarea>
                                         </div>
                                     </div>
                                     <div class="w-full flex justify-end py-2 gap-2">
                                         <button class="maroon text-white px-8 py-2 rounded-md" type="submit">Update</button>
-                                        <form action="{{ route('dimensions.destroy', $dimension->id) }}" method="POST" onsubmit="return confirm('Delete this dimension?');" style="display:inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="bg-red-600 text-white px-6 py-2 rounded-md" onclick="return confirm('Are you sure you want to delete this dimension?');">Delete</button>
-                                        </form>
+                                        <button type="button" class="bg-red-600 text-white px-6 py-2 rounded-md" onclick="if(confirm('Are you sure you want to delete this dimension?')) { document.getElementById('delete-dimension-{{ $dimension->id }}').submit(); }">Delete</button>
                                     </div>
+                                </form>
+                                <form id="delete-dimension-{{ $dimension->id }}" action="{{ route('dimensions.destroy', $dimension->id) }}" method="POST" style="display:none;">
+                                    @csrf
+                                    @method('DELETE')
                                 </form>
                             @endforeach
                         </div>
@@ -323,4 +294,82 @@
     .maroon {
         background-color: maroon;
     }
+    .remove-btn {
+        background-color: #fee2e2;
+        color: #b91c1c;
+        border-radius: 0.375rem;
+        padding: 0.25rem 0.75rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin-left: 0.5rem;
+        transition: background 0.2s;
+    }
+    .remove-btn:hover {
+        background-color: #fecaca;
+    }
 </style>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Multi Segmentation
+    const segList = document.getElementById('multi-segmentation-list');
+    document.getElementById('add-segmentation-row').onclick = function() {
+        const idx = segList.children.length;
+        const wrapper = document.createElement('div');
+        wrapper.className = 'flex flex-col gap-2 border p-2 rounded-lg bg-gray-50';
+        wrapper.innerHTML = `
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="flex flex-col">
+                    <label>Segmentation <span class="font-bold text-red-500">*</span></label>
+                    <input class="rounded-lg w-full" name="segmentations[${idx}][segmentation]" type="text" required />
+                </div>
+                <div class="flex flex-col">
+                    <label>Code</label>
+                    <input class="rounded-lg w-full" name="segmentations[${idx}][code]" type="text" />
+                </div>
+            </div>
+            <div class="mt-2 flex flex-col">
+                <label>Owner</label>
+                <input class="rounded-lg w-full" name="segmentations[${idx}][owner]" type="text" />
+            </div>
+            <div class="mt-2 flex flex-col">
+                <label>Target Level</label>
+                <input class="rounded-lg w-full" name="segmentations[${idx}][target_level]" type="text" />
+            </div>
+            <div class="mt-2 flex flex-col">
+                <label>Goal</label>
+                <input class="rounded-lg w-full" name="segmentations[${idx}][goal]" type="text" />
+            </div>
+            <button type="button" class="remove-btn mt-2">Remove</button>
+        `;
+        wrapper.querySelector('.remove-btn').onclick = function() {
+            segList.removeChild(wrapper);
+        };
+        segList.appendChild(wrapper);
+    };
+
+    // Multi Dimension
+    const dimList = document.getElementById('multi-dimension-list');
+    document.getElementById('add-dimension-row').onclick = function() {
+        const idx = dimList.children.length;
+        const wrapper = document.createElement('div');
+        wrapper.className = 'flex flex-col gap-2 border p-2 rounded-lg bg-gray-50';
+        wrapper.innerHTML = `
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="flex flex-col">
+                    <label>Dimensions <span class="font-bold text-red-500">*</span></label>
+                    <input class="rounded-lg w-full" name="dimensions[${idx}][dimensions]" type="text" required />
+                </div>
+                <div class="flex flex-col">
+                    <label>Description</label>
+                    <textarea class="rounded-lg w-full" name="dimensions[${idx}][description]" rows="5"></textarea>
+                </div>
+            </div>
+            <button type="button" class="remove-btn mt-2">Remove</button>
+        `;
+        wrapper.querySelector('.remove-btn').onclick = function() {
+            dimList.removeChild(wrapper);
+        };
+        dimList.appendChild(wrapper);
+    };
+});
+</script>

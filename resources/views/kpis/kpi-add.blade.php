@@ -56,7 +56,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                         <div class="flex flex-col">
                             <h1 class="text-gray-500">LEAD/LAG</h1>
-                            <select class="rounded-lg w-full" name="lead_lag" required>
+                            <select class="rounded-lg w-full" name="lead_lag">
                                 <option value="">Select</option>
                                 <option value="Lead">Lead</option>
                                 <option value="Lag">Lag</option>

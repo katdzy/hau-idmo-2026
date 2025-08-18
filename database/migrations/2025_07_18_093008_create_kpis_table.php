@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('measure_name');
             $table->text('description')->nullable();
             $table->string('measure_type');
-            $table->string('lead_lag');
+            $table->string('lead_lag')-> nullable();
             $table->text('formula')->nullable();
             $table->string('unit_type')->nullable();
             $table->string('polarity')->nullable();

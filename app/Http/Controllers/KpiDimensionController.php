@@ -23,13 +23,22 @@ class KpiDimensionController extends Controller
     // Store a new dimension
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $request->validate([
             'kpi_id' => 'required|exists:kpis,id',
-            'dimensions' => 'required|string|max:255',
-            'description' => 'nullable|string|max:1000',
+            'dimensions' => 'required|array',
+            'dimensions.*.dimensions' => 'required|string|max:255',
+            'dimensions.*.description' => 'nullable|string|max:1000',
         ]);
-        KpiDimensions::create($validated);
-        return redirect()->back()->with('success', 'Dimension added successfully.');
+
+        foreach ($request->dimensions as $dim) {
+            KpiDimensions::create([
+                'kpi_id' => $request->kpi_id,
+                'dimensions' => $dim['dimensions'] ?? null,
+                'description' => $dim['description'] ?? null,
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Dimensions added successfully.');
     }
 
     // Show form to edit a dimension
@@ -45,10 +54,7 @@ class KpiDimensionController extends Controller
         $dimension = KpiDimensions::findOrFail($id);
         $validated = $request->validate([
             'dimensions' => 'required|string|max:255',
-            'code' => 'nullable|string|max:255',
-            'owner' => 'nullable|string|max:255',
-            'target_level' => 'nullable|string|max:255',
-            'goal' => 'nullable|string|max:255',
+            'description' => 'nullable|string|max:255',
         ]);
         $dimension->update($validated);
         return redirect()->back()->with('success', 'Dimension updated successfully.');

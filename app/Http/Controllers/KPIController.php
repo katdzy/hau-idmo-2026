@@ -22,10 +22,13 @@ class KpiController extends Controller
 
         $kpis = Kpi::query()
             ->when($search, function ($query, $search) {
-                $query->where('measure_name', 'like', "%{$search}%")
-                      ->orWhere('measure_code', 'like', "%{$search}%")
-                      ->orWhere('perspective', 'like', "%{$search}%")
-                      ->orWhere('objective', 'like', "%{$search}%");
+                // Use word boundary regex for more precise matching
+                $query->whereRaw('measure_name REGEXP ?', ["\\b{$search}"])
+                      ->orWhereRaw('measure_code REGEXP ?', ["\\b{$search}"])
+                      ->orWhereRaw('perspective REGEXP ?', ["\\b{$search}"])
+                      ->orWhereRaw('objective REGEXP ?', ["\\b{$search}"])
+                      ->orWhereRaw('strategic_theme REGEXP ?', ["\\b{$search}"])
+                      ->orWhereRaw('description REGEXP ?', ["\\b{$search}"]);
             })
             ->when($sortBy === 'code', function ($query) {
                 $query->orderBy('measure_code', 'asc');
@@ -63,7 +66,7 @@ class KpiController extends Controller
             'measure_name' => 'required|string',
             'description' => 'nullable|string',
             'measure_type' => 'required|string',
-            'lead_lag' => 'required|string',
+            'lead_lag' => 'nullable|string',
             'formula' => 'nullable|string',
             'unit_type' => 'nullable|string|max:255',
             'polarity' => 'nullable|string|max:255',
@@ -180,11 +183,13 @@ class KpiController extends Controller
         $sortBy = $request->input('sort_by', 'id'); // Default to id
 
         $kpis = Kpi::when($search, function ($query, $search) {
-            return $query->where('measure_name', 'like', "%{$search}%")
-                         ->orWhere('measure_code', 'like', "%{$search}%")
-                         ->orWhere('perspective', 'like', "%{$search}%")
-                         ->orWhere('objective', 'like', "%{$search}%")
-                         ->orWhere('strategic_theme', 'like', "%{$search}%");
+            // Use word boundary regex for more precise matching
+            return $query->whereRaw('measure_name REGEXP ?', ["\\b{$search}"])
+                         ->orWhereRaw('measure_code REGEXP ?', ["\\b{$search}"])
+                         ->orWhereRaw('perspective REGEXP ?', ["\\b{$search}"])
+                         ->orWhereRaw('objective REGEXP ?', ["\\b{$search}"])
+                         ->orWhereRaw('strategic_theme REGEXP ?', ["\\b{$search}"])
+                         ->orWhereRaw('description REGEXP ?', ["\\b{$search}"]);
         })
         ->when($sortBy === 'perspective', function ($query) {
             $query->orderBy('perspective', 'asc');
@@ -206,7 +211,7 @@ class KpiController extends Controller
         })
         ->get();
 
-        return view('kpis.kpi-search', compact('kpis', 'search'));
+        return view('kpis.kpi-dashboard', compact('kpis', 'search'));
     }
 
     /**

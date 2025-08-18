@@ -3,7 +3,7 @@
         <div class="mb-4 flex gap-4 items-center">
             <a href="{{ route('kpis.dashboard') }}" class="inline-flex gap-1 items-center bg-red-900 hover:bg-red-700 px-6 py-1 text-white rounded-xl">
                 <img src="{{ asset('images/icons/back.png') }}" class="w-[20px] h-[20px]" alt="">
-                <span>Return to KPI Dashboard</span>
+                <span>Back to KPI Library</span>
             </a>
             <a href="{{ route('kpis.export', $kpi->measure_code) }}" class="inline-flex gap-1 items-center bg-green-600 hover:bg-green-700 px-6 py-1 text-white rounded-xl">
                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
