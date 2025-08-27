@@ -180,18 +180,18 @@ function highlightText($text, $search) {
                         All KPIs <span x-show="activeTab === 'all'" x-text="`(${filteredKpis.length})`" class="text-xs"></span>
                     </button>
                     <button 
-                        @click="activeTab = 'departmental'" 
-                        :class="activeTab === 'departmental' ? 'border-red-500 text-red-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
-                        class="whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm transition-colors"
-                    >
-                        Departmental <span x-show="activeTab === 'departmental'" x-text="`(${filteredKpis.length})`" class="text-xs"></span>
-                    </button>
-                    <button 
                         @click="activeTab = 'institutional'" 
                         :class="activeTab === 'institutional' ? 'border-red-500 text-red-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
                         class="whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm transition-colors"
                     >
                         Institutional <span x-show="activeTab === 'institutional'" x-text="`(${filteredKpis.length})`" class="text-xs"></span>
+                    </button>
+                    <button 
+                        @click="activeTab = 'departmental'" 
+                        :class="activeTab === 'departmental' ? 'border-red-500 text-red-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+                        class="whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm transition-colors"
+                    >
+                        Departmental <span x-show="activeTab === 'departmental'" x-text="`(${filteredKpis.length})`" class="text-xs"></span>
                     </button>
                     <button 
                         @click="activeTab = 'personnel'" 
