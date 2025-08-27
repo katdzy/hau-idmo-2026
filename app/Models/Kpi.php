@@ -41,6 +41,8 @@ class Kpi extends Model
         'comparator',
         'item_author',
         'date',
+        'strat_plan',
+        'category',
     ];
 
     public function getRouteKeyName()

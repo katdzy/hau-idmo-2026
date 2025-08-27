@@ -64,6 +64,7 @@ class KpiController extends Controller
             'measure_code' => 'required|string|unique:kpis',
             'measure_owner' => 'required|string',
             'measure_name' => 'required|string',
+            'category' => 'required|string|in:departmental,institutional,personnel',
             'description' => 'nullable|string',
             'measure_type' => 'required|string',
             'lead_lag' => 'nullable|string',

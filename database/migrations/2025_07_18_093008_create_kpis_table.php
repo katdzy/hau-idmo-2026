@@ -51,6 +51,9 @@ return new class extends Migration
             // Strategic Plan
             $table->string('strat_plan')->nullable();
 
+            // Category
+            $table->string('category');
+
             $table->timestamps();
         });
     }

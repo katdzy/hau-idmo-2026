@@ -44,7 +44,20 @@
                         </div>
                     </div>
 
-                    <!-- Row 3: Description -->
+                    <!-- Row 3: Category -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        <div class="flex flex-col">
+                            <h1 class="text-gray-500">CATEGORY <span class="font-bold text-red-500">*</span></h1>
+                            <select class="rounded-lg w-full" name="category" required>
+                                <option value="">Select Category</option>
+                                <option value="departmental">Departmental</option>
+                                <option value="institutional">Institutional</option>
+                                <option value="personnel">Personnel</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Row 4: Description -->
                     <div class="mt-4">
                         <div class="flex flex-col">
                             <h1 class="text-gray-500">DESCRIPTION</h1>
@@ -52,7 +65,7 @@
                         </div>
                     </div>
 
-                    <!-- Row 4: Lead/Lag & Polarity -->
+                    <!-- Row 5: Lead/Lag & Polarity -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                         <div class="flex flex-col">
                             <h1 class="text-gray-500">LEAD/LAG</h1>
@@ -72,7 +85,7 @@
                         </div>
                     </div>
 
-                    <!-- Row 5: Formula & Unit Type -->
+                    <!-- Row 6: Formula & Unit Type -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                         <div class="flex flex-col">
                             <h1 class="text-gray-500">FORMULA</h1>
@@ -84,7 +97,7 @@
                         </div>
                     </div>
 
-                    <!-- Row 6: Data Provider & Data Source -->
+                    <!-- Row 7: Data Provider & Data Source -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                         <div class="flex flex-col">
                             <h1 class="text-gray-500">DATA PROVIDER</h1>
@@ -96,7 +109,7 @@
                         </div>
                     </div>
 
-                    <!-- Row 7: Collection Frequency & Reporting Frequency -->
+                    <!-- Row 8: Collection Frequency & Reporting Frequency -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                         <div class="flex flex-col">
                             <h1 class="text-gray-500">COLLECTION FREQUENCY</h1>
@@ -108,7 +121,7 @@
                         </div>
                     </div>
 
-                    <!-- Row 8: Verified By & Validated By -->
+                    <!-- Row 9: Verified By & Validated By -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                         <div class="flex flex-col">
                             <h1 class="text-gray-500">VERIFIED BY</h1>
@@ -120,7 +133,7 @@
                         </div>
                     </div>
 
-                    <!-- Row 9: Baseline & Target -->
+                    <!-- Row 10: Baseline & Target -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                         <div class="flex flex-col">
                             <h1 class="text-gray-500">BASELINE</h1>
@@ -132,7 +145,7 @@
                         </div>
                     </div>
 
-                    <!-- Row 10: High Threshold & Low Threshold -->
+                    <!-- Row 11: High Threshold & Low Threshold -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                         <div class="flex flex-col">
                             <h1 class="text-gray-500">HIGH THRESHOLD</h1>
@@ -144,7 +157,7 @@
                         </div>
                     </div>
 
-                    <!-- Row 11: Target Rationale -->
+                    <!-- Row 12: Target Rationale -->
                     <div class="mt-4">
                         <div class="flex flex-col">
                             <h1 class="text-gray-500">TARGET RATIONALE</h1>
@@ -152,7 +165,7 @@
                         </div>
                     </div>
                      
-                    <!-- Row 12: Perspective & Strategic Theme -->
+                    <!-- Row 13: Perspective & Strategic Theme -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                         <div class="flex flex-col">
                             <h1 class="text-gray-500">PERSPECTIVE</h1>
@@ -164,7 +177,7 @@
                         </div>
                     </div>
 
-                    <!-- Row 13: Objective & Objective Owner -->
+                    <!-- Row 14: Objective & Objective Owner -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                         <div class="flex flex-col">
                             <h1 class="text-gray-500">OBJECTIVE</h1>
@@ -176,7 +189,7 @@
                         </div>
                     </div>
 
-                    <!-- Row 14: Strategic Initiatives -->
+                    <!-- Row 15: Strategic Initiatives -->
                     <div class="mt-4">
                         <div class="flex flex-col">
                             <h1 class="text-gray-500">STRATEGIC INITIATIVES</h1>
@@ -184,7 +197,7 @@
                         </div>
                     </div>
 
-                    <!-- Row 15: Intended Results -->
+                    <!-- Row 16: Intended Results -->
                     <div class="mt-4">
                         <div class="flex flex-col">
                             <h1 class="text-gray-500">INTENDED RESULTS</h1>
@@ -192,7 +205,7 @@
                         </div>
                     </div>
 
-                    <!-- Row 16: Comparator & Item Author -->
+                    <!-- Row 17: Comparator & Item Author -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                         <div class="flex flex-col">
                             <h1 class="text-gray-500">COMPARATOR</h1>
@@ -204,7 +217,7 @@
                         </div>
                     </div>
 
-                    <!-- Row 17: Date -->
+                    <!-- Row 18: Date -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                         <div class="flex flex-col">
                             <h1 class="text-gray-500">DATE</h1>
