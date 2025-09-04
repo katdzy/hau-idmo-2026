@@ -91,28 +91,6 @@
                   
                     </div>
                 </a>
-
-                <!-- A LINK NAVIGATION  -->
-                 <a href="{{ route('sharepoint-sites.dashboard') }}" class="{{ request()->routeIs('sharepoint-sites*') ? 'active' : '' }}">
-                    <div class="nav-link">
-                        
-                            <img src="{{ asset('images/icons/nav/sharepoint.svg') }}" class = "w-24 h-24"/>
-                        
-                            <h3>SharePoint Sites</h3>
-                      
-                    </div>
-                </a>
-
-                <!-- A LINK NAVIGATION  -->
-                 <a href="{{ route('kpis.dashboard') }}" class="{{ request()->routeIs('kpis*') ? 'active' : '' }}">
-                    <div class="nav-link">
-                        
-                            <img src="{{ asset('images/icons/nav/kpi.png') }}" class = "w-24 h-24"/>
-                        
-                            <h3>KPIs</h3>
-                      
-                    </div>
-                </a> 
                 @endif
 
                 @if(Auth::user()->role !== 'Employee')

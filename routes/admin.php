@@ -3,7 +3,11 @@
 use App\Http\Controllers\AdminOrgController;
 use App\Http\Controllers\DeptController;
 use App\Http\Controllers\HiringHistoryController;
+use App\Http\Controllers\KpiController;
+use App\Http\Controllers\KpiSegmentationController;
+use App\Http\Controllers\KpiDimensionController;
 use App\Http\Controllers\SemesterController;
+use App\Http\Controllers\SharepointController;
 use App\Http\Controllers\UserRecordsController;
 use App\Http\Controllers\UserTerminationController;
 use App\Models\Employee;
@@ -166,6 +170,52 @@ Route::middleware(['superAdmin','revalidate'])->group(function() {
      ************/
     Route::get('admin/records/organizations', [AdminOrgController::class, 'loadOrgs'])->name('admin.orgs'); 
     Route::get('admin/records/organizations/{id}', [AdminOrgController::class, 'loadOrganization'])->name('admin.orgs.view'); 
+
+
+    /******************** SHAREPOINT LINKS ********************/
+    // Add sharepoint link (form)
+    Route::get('sharepoint-sites/add', [SharepointController::class, 'create'])->name('sharepoint-sites.add');
+
+    // Store new sharepoint link
+    Route::post('sharepoint-sites/store', [SharepointController::class, 'store'])->name('sharepoint-sites.store');
+
+    // Edit sharepoint link (form)
+    Route::get('sharepoint-sites/edit/{id}', [SharepointController::class, 'edit'])->name('sharepoint-sites.edit'); 
+    Route::get('sharepoint-sites/edit', [SharepointController::class, 'editList'])->name('sharepoint-sites.edit-list'); 
+
+    // Select link to edit (optional if used separately)
+    Route::get('sharepoint-sites/select', [SharepointController::class, 'selectForm'])->name('sharepoint-sites.select-form');
+    Route::post('sharepoint-sites/select', [SharepointController::class, 'select'])->name('sharepoint-sites.select');
+
+    // Update sharepoint link
+    Route::put('sharepoint-sites/update/{id}', [SharepointController::class, 'update'])->name('sharepoint-sites.update');
+
+    // Delete sharepoint link
+    Route::delete('sharepoint-sites/delete/{id}', [SharepointController::class, 'destroy'])->name('sharepoint-sites.delete');
+
+
+    /******************** KPI Library ********************/
+    Route::get('/kpis/add', [KpiController::class, 'create'])->name('kpis.add');
+    Route::post('/kpis', [KpiController::class, 'store'])->name('kpis.store');
+    Route::get('/kpis/{kpi}/edit', [KpiController::class, 'edit'])->name('kpis.edit');
+    Route::put('/kpis/{kpi}', [KpiController::class, 'update'])->name('kpis.update');
+    Route::delete('/kpis/{kpi}', [KpiController::class, 'destroy'])->name('kpis.destroy');
+
+
+    // KPI Segmentation CRUD routes
+    Route::get('/segmentations/create', [KpiSegmentationController::class, 'create'])->name('segmentations.create');
+    Route::get('/segmentations/{id}/edit', [KpiSegmentationController::class, 'edit'])->name('segmentations.edit');
+    Route::post('/segmentations', [KpiSegmentationController::class, 'store'])->name('segmentations.store');
+    Route::put('/segmentations/{id}', [KpiSegmentationController::class, 'update'])->name('segmentations.update');
+    Route::delete('/segmentations/{id}', [KpiSegmentationController::class, 'destroy'])->name('segmentations.destroy');
+
+    // KPI Dimensions CRUD routes
+    Route::get('/dimensions/create/{kpi_id}', [KpiDimensionController::class, 'create'])->name('dimensions.create');
+    Route::post('/dimensions', [KpiDimensionController::class, 'store'])->name('dimensions.store');
+    Route::get('/dimensions/{id}/edit', [KpiDimensionController::class, 'edit'])->name('dimensions.edit');
+    Route::put('/dimensions/{id}', [KpiDimensionController::class, 'update'])->name('dimensions.update');
+    Route::delete('/dimensions/{id}', [KpiDimensionController::class, 'destroy'])->name('dimensions.destroy');
+
 
 }); })
 

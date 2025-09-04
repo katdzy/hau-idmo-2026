@@ -23,6 +23,7 @@ use App\Http\Controllers\DependencyController;
 use App\Http\Controllers\EducationalBGController;
 use App\Http\Controllers\EmploymentController;
 use App\Http\Controllers\FilingController;
+use App\Http\Controllers\KpiController;
 use App\Http\Controllers\LicenseController;
 use App\Http\Controllers\OrgController;
 use App\Http\Controllers\PendingController;
@@ -507,4 +508,18 @@ Route::middleware('auth','revalidate')->group(function () {
     | 17. SharePoint Sites
     |------------------------------------------------------------------*/
     Route::get('sharepoint-sites/dashboard', [SharepointController::class, 'index'])->name('sharepoint-sites.dashboard');
+
+    
+    /*------------------------------------------------------------------
+    | 17. KPI Library
+    |------------------------------------------------------------------*/
+    Route::get('/kpis/dashboard', [KpiController::class, 'dashboard'])->name('kpis.dashboard');
+    // AJAX search for KPI dashboard
+    Route::get('/kpis/ajax-search', [KpiController::class, 'ajaxSearch'])->name('kpis.ajax-search');
+    
+    // View individual KPI details
+    Route::get('/kpis/{kpi}', [KpiController::class, 'showKpiView'])->name('kpis.show');
+    
+    // Export KPI to Excel
+    Route::get('/kpis/{kpi}/export', [KpiController::class, 'export'])->name('kpis.export');
 });

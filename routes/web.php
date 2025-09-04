@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\UpdatesController;
+use App\Http\Controllers\SharepointController;
 use App\Models\Employee;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -43,8 +44,14 @@ Route::post('/reset-password', function (Request $request) {
 
 
 Route::get('/', function () {
-    return view('auth.login');
+    return view('homepage');
 }) -> name ('home');
+
+Route::get('/sharepoint', [SharepointController::class, 'publicIndex'])->name('sharepoint.public');
+
+Route::get('/org-chart', function () {
+    return view('home.orgchart');
+})->name('orgchart');
 
 Route::get('/forgot-password', function () {
     return view('auth.forgot-password');

@@ -6,10 +6,6 @@ use App\Http\Controllers\LoadsImportController;
 use App\Http\Controllers\PendingController;
 use App\Http\Controllers\SubjectsController;
 use App\Http\Controllers\ManageCertificateController;
-use App\Http\Controllers\SharepointController;
-use App\Http\Controllers\KpiController;
-use App\Http\Controllers\KpiSegmentationController;
-use App\Http\Controllers\KpiDimensionController;
 use App\Models\certifications;
 use App\Models\Departments;
 use App\Models\Employee;
@@ -182,60 +178,5 @@ Route::middleware(['admin','revalidate'])->group(function() {
     Route::put('manage-emps/certifications/update/{id}', [IssueCertController::class, 'update'])->name('admin.certs.update');
 
 
-   /******************** SHAREPOINT LINKS ********************/
-    // Add sharepoint link (form)
-    Route::get('sharepoint-sites/add', [SharepointController::class, 'create'])->name('sharepoint-sites.add');
-
-    // Store new sharepoint link
-    Route::post('sharepoint-sites/store', [SharepointController::class, 'store'])->name('sharepoint-sites.store');
-
-    // Edit sharepoint link (form)
-    Route::get('sharepoint-sites/edit/{id}', [SharepointController::class, 'edit'])->name('sharepoint-sites.edit'); 
-    Route::get('sharepoint-sites/edit', [SharepointController::class, 'editList'])->name('sharepoint-sites.edit-list'); 
-
-    // Select link to edit (optional if used separately)
-    Route::get('sharepoint-sites/select', [SharepointController::class, 'selectForm'])->name('sharepoint-sites.select-form');
-    Route::post('sharepoint-sites/select', [SharepointController::class, 'select'])->name('sharepoint-sites.select');
-
-    // Update sharepoint link
-    Route::put('sharepoint-sites/update/{id}', [SharepointController::class, 'update'])->name('sharepoint-sites.update');
-
-    // Delete sharepoint link
-    Route::delete('sharepoint-sites/delete/{id}', [SharepointController::class, 'destroy'])->name('sharepoint-sites.delete');
-
-
-    /******************** KPI Library ********************/
-    // Place specific routes before parameterized routes
-    Route::get('/kpis/add', [KpiController::class, 'create'])->name('kpis.add');
-    Route::post('/kpis', [KpiController::class, 'store'])->name('kpis.store');
-    Route::get('/kpis/{kpi}/edit', [KpiController::class, 'edit'])->name('kpis.edit');
-    Route::put('/kpis/{kpi}', [KpiController::class, 'update'])->name('kpis.update');
-    Route::delete('/kpis/{kpi}', [KpiController::class, 'destroy'])->name('kpis.destroy');
-    // Route::get('/kpis/search', [KpiController::class, 'search'])->name('kpis.search');
-    Route::get('/kpis/ajax-search', [KpiController::class, 'ajaxSearch'])->name('kpis.ajax-search');
-
-
-    // KPI Segmentation CRUD routes
-    Route::get('/segmentations/create', [KpiSegmentationController::class, 'create'])->name('segmentations.create');
-    Route::get('/segmentations/{id}/edit', [KpiSegmentationController::class, 'edit'])->name('segmentations.edit');
-    Route::post('/segmentations', [KpiSegmentationController::class, 'store'])->name('segmentations.store');
-    Route::put('/segmentations/{id}', [KpiSegmentationController::class, 'update'])->name('segmentations.update');
-    Route::delete('/segmentations/{id}', [KpiSegmentationController::class, 'destroy'])->name('segmentations.destroy');
-
-    // KPI Dimensions CRUD routes
-    Route::get('/dimensions/create/{kpi_id}', [KpiDimensionController::class, 'create'])->name('dimensions.create');
-    Route::post('/dimensions', [KpiDimensionController::class, 'store'])->name('dimensions.store');
-    Route::get('/dimensions/{id}/edit', [KpiDimensionController::class, 'edit'])->name('dimensions.edit');
-    Route::put('/dimensions/{id}', [KpiDimensionController::class, 'update'])->name('dimensions.update');
-    Route::delete('/dimensions/{id}', [KpiDimensionController::class, 'destroy'])->name('dimensions.destroy');
-
-    // Place catch-all route last
-    Route::get('/kpis/{kpi}', [KpiController::class, 'showKpiView'])->name('kpis.show');
-
-
-
+   
     });
-
-
-// KPI dashboard route for all users
-Route::get('/kpis/dashboard', [KpiController::class, 'dashboard'])->name('kpis.dashboard');

@@ -48,6 +48,7 @@ class KpiSeeder extends Seeder
            'comparator' => 'The external comparator comprises of the scores for four-year private HEIs in the United States on similar scales of the Noel-Levitz Student Satisfaction Survey.',
            'item_author' => 'ENGR. ANNE MARIE MANGILIMAN',
             'date' => '2021-03-04',
+            'category' => 'departmental',
         ]);
 
         Kpi::create([ // O1-M2
@@ -84,6 +85,7 @@ class KpiSeeder extends Seeder
            'comparator' => 'US National Center for Education Statistics (NCES) for full-time students in four-year private nonprofit institutions, limited to one year lag of published data',
            'item_author' => 'ENGR. ANNE MARIE MANGILIMAN',
             'date' => null,
+            'category' => 'departmental',
         ]);
 
         Kpi::create([ // O1-M2 -2
@@ -120,6 +122,7 @@ class KpiSeeder extends Seeder
            'comparator' => 'US National Center for Education Statistics (NCES) for full-time students in four-year private nonprofit institutions, limited to one year lag of published data',
            'item_author' => 'ENGR. ANNE MARIE MANGILIMAN',
             'date' => null,
+            'category' => 'departmental',
         ]);
 
         Kpi::create([ // G11-M1
@@ -154,7 +157,10 @@ class KpiSeeder extends Seeder
                                         • Satisfaction & engagement surveys',
 
             // Comparator & Meta
-           'comparator' => 'USA comparable Catholics Schools and HEIs on the Honor Roll of the US Great University to Work For.',
+            'comparator' => 'USA comparable Catholics Schools and HEIs on the Honor Roll of the US Great University to Work For.',
+            'item_author' => '',
+            'date' => null,
+            'category' => 'departmental',
         ]);
 
         Kpi::create([ // O2-M1
@@ -193,6 +199,7 @@ class KpiSeeder extends Seeder
             'comparator' => 'HAU\'s peer institutions include other schools offering the same program',
             'item_author' => 'ENGR. ANNE MARIE MANGILIMAN',
             'date' => '2021-03-25',
+            'category' => 'departmental',
         ]);
 
         Kpi::create([ // O2-M2
@@ -224,6 +231,12 @@ class KpiSeeder extends Seeder
             'objective_owner' => 'AAC, CPO',
             'intended_results' => 'ACHIEVEMENT OF GRADUATE ATTRIBUTES . Better performance in licensure examination, career placement, and employer satisfaction.',
             'strategic_initiatives' => 'SI1: STUDENT SERVICES JOB FAIR, MOCK INTERVIEW',
+
+            // Comparator & Meta
+            'comparator' => '',
+            'item_author' => '',
+            'date' => null,
+            'category' => 'departmental',
         ]);
 
         Kpi::create([ // O3-M1
@@ -260,6 +273,7 @@ class KpiSeeder extends Seeder
             'comparator' => 'HAU\'s peer institutions include other schools offering the same program',
             'item_author' => 'ENGR. ANNE MARIE MANGILIMAN',
             'date' => '2021-03-16',
+            'category' => 'departmental',
         ]);
 
         Kpi::create([ // G3-M3
@@ -296,6 +310,7 @@ class KpiSeeder extends Seeder
             'comparator' => 'In the absence of publicly available local comparative data in higher education, a Baldrige Award recipient in the service industry serves as comparator, with its 73% customer retention rate over the seven-year period prior the Baldrige Award.',
             'item_author' => 'ENGR. ANNE MARIE MANGILIMAN',
             'date' => '2021-03-29',
+            'category' => 'departmental',
         ]);
 
         Kpi::create([ // G3-M4
@@ -332,6 +347,7 @@ class KpiSeeder extends Seeder
             'comparator' => '',
             'item_author' => 'ENGR. ANNE MARIE MANGILIMAN',
             'date' => '2021-03-29',
+            'category' => 'departmental',
         ]);
 
         Kpi::create([ // G5-M1
@@ -368,6 +384,7 @@ class KpiSeeder extends Seeder
             'comparator' => '',
            'item_author' => 'ENGR. ANNE MARIE MANGILIMAN',
             'date' => null,
+            'category' => 'departmental',
         ]);
 
         Kpi::create([ // G4-M2
@@ -404,6 +421,7 @@ class KpiSeeder extends Seeder
             'comparator' => '',
             'item_author' => 'ENGR. ANNE MARIE MANGILIMAN',
             'date' => '2021-03-30',
+            'category' => 'departmental',
         ]);
 
         Kpi::create([ // G4-M1
@@ -440,6 +458,7 @@ class KpiSeeder extends Seeder
             'comparator' => '',
             'item_author' => 'ENGR. ANNE MARIE MANGILIMAN',
             'date' => '2021-03-30',
+            'category' => 'departmental',
         ]);
 
         Kpi::create([ // G6-M1
@@ -476,6 +495,7 @@ class KpiSeeder extends Seeder
             'comparator' => 'The industry benchmark for the CFI is 10. The comparative sources are the US National Association of College and University Business Officers (NACUBO) standards (minimum threshold and benchmark) and PQA Level II higher education recipient (private, publicly traded corporation).',
             'item_author' => 'ENGR. ANNE MARIE MANGILIMAN',
             'date' => '2021-03-30',
+            'category' => 'departmental',
         ]);
 
         Kpi::create([ // G1-M4
@@ -512,6 +532,7 @@ class KpiSeeder extends Seeder
             'comparator' => 'The industry benchmark for the CFI is 10. The comparative sources are the US National Association of College and University Business Officers (NACUBO) standards (minimum threshold and benchmark) and PQA Level II higher education recipient (private, publicly traded corporation).',
             'item_author' => 'ENGR. ANNE MARIE MANGILIMAN',
             'date' => '2021-03-30',
+            'category' => 'departmental',
         ]);
 
         Kpi::create([ // G3-M2
@@ -548,6 +569,7 @@ class KpiSeeder extends Seeder
             'comparator' => 'In the absence of publicly available local comparisons, HAU compares its market performance to US colleges and universities (2016). The American Freshman.',
             'item_author' => 'ENGR. ANNE MARIE MANGILIMAN',
             'date' => '2021-03-29',
+            'category' => 'departmental',
         ]);
 
         Kpi::create([ // G9-M1
@@ -584,6 +606,7 @@ class KpiSeeder extends Seeder
             'comparator' => 'PQA benchmark institution',
             'item_author' => 'ENGR. ANNE MARIE MANGILIMAN',
             'date' => '2021-05-11',
+            'category' => 'departmental',
         ]);
 
         Kpi::create([ // G8-M5
@@ -620,6 +643,7 @@ class KpiSeeder extends Seeder
             'comparator' => 'In the absence of publicly available local comparator, the most appropriate comparison is the US Bureau of Labor Statistics, which reports an average of 2 cases per 100 FTE employees in the private education services sector.',
             'item_author' => 'ENGR. ANNE MARIE MANGILIMAN',
             'date' => '2021-05-06',
+            'category' => 'departmental',
         ]);
 
         Kpi::create([ // G8-M6
@@ -656,6 +680,7 @@ class KpiSeeder extends Seeder
             'comparator' => '',
             'item_author' => 'ENGR. ANNE MARIE MANGILIMAN',
             'date' => '2021-05-07',
+            'category' => 'departmental',
         ]);
 
         Kpi::create([ // G9-M2
@@ -692,6 +717,7 @@ class KpiSeeder extends Seeder
             'comparator' => '',
            'item_author' => 'ENGR. ANNE MARIE MANGILIMAN',
             'date' => null,
+            'category' => 'departmental',
         ]);
 
         Kpi::create([ // G3-M1 (B)
@@ -728,6 +754,7 @@ class KpiSeeder extends Seeder
             'comparator' => '50% average participation rate reported in the education literature.',
             'item_author' => 'ENGR. ANNE MARIE MANGILIMAN',
             'date' => '2021-03-25',
+            'category' => 'departmental',
         ]);
 
         Kpi::create([ // O12-M1
@@ -764,6 +791,7 @@ class KpiSeeder extends Seeder
             'comparator' => '',
             'item_author' => 'ENGR. ANNE MARIE MANGILIMAN',
             'date' => '2021-05-11',
+            'category' => 'departmental',
         ]);
 
         Kpi::create([ // G10-M2
@@ -805,6 +833,7 @@ class KpiSeeder extends Seeder
             'comparator' => '',
             'item_author' => 'LORNA TYSON',
             'date' => '2020-07-12',
+            'category' => 'departmental',
         ]);
 
         Kpi::create([ // G11-M2
@@ -846,6 +875,7 @@ class KpiSeeder extends Seeder
             'comparator' => '',
             'item_author' => 'ENGR. ANNE MARIE MANGILIMAN',
             'date' => '2021-05-12',
+            'category' => 'departmental',
         ]);
 
         Kpi::create([ // G12-M1
@@ -887,6 +917,7 @@ class KpiSeeder extends Seeder
             'comparator' => '',
             'item_author' => 'ENGR. ANNE MARIE MANGILIMAN',
             'date' => '2021-05-12',
+            'category' => 'departmental',
         ]);
     }
 }

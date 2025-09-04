@@ -1,49 +1,37 @@
-<!-- This is the Sharepoint Sites dashboard -->
-<x-app-layout>
-    <div class="min-h-screen bg-gray-50">
-        <div class="w-full flex justify-center py-8">
-            <div class="w-[95%] flex flex-col bg-white rounded-lg px-8 py-8 shadow-lg">
-                <div class="flex justify-between items-center mb-6">
-                    <h1 class="text-2xl font-bold text-red-900">Dashboard</h1>
-                    @if(Auth::user()->role === 'SuperAdmin')
-                        <div class="relative inline-block text-left">
-                            <button id="adminDropdownBtn" type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-red-900 hover:bg-gray-100 focus:outline-none">
-                                Options
-                                <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                                </svg>
-                            </button>
-                            <div id="adminDropdownMenu" class="origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden z-20">
-                                <div class="py-1">
-                                    <a href="{{ route('sharepoint-sites.add') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Add Link</a>
-                                    <a href="{{ route('sharepoint-sites.edit-list') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Edit Link</a>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-                </div>
-                <hr class="opacity-100 my-4">
+@extends('layouts.main')
 
-                <!-- Tabs -->
-                <div class="mb-6">
-                    <ul class="flex border-b" id="tabs">
-                        <li class="-mb-px mr-2">
-                            <button class="tab-btn active" data-tab="tab-iso">
-                                ISO
-                            </button>
-                        </li>
-                        <li class="-mb-px mr-2">
-                            <button class="tab-btn" data-tab="tab-planning">
-                                Planning and Review
-                            </button>
-                        </li>
-                        <li class="-mb-px mr-2">
-                            <button class="tab-btn" data-tab="tab-quality">
-                                Quality Assurance
-                            </button>
-                        </li>
-                    </ul>
-                </div>
+@section('title', 'SharePoint Sites')
+
+@section('content')
+<div class="max-w-3xl mx-auto py-10 px-4">
+    <!-- Header -->
+    <div class="text-center mb-6">
+        <img src="{{ asset('images/logo-circle.png') }}" class="mx-auto mb-4" alt="Logo Circle" style="width: 180px; height: 180px; object-fit: contain;" />
+        <h1 class="text-2xl font-bold text-red-900">SharePoint Sites</h1>
+        <p class="text-gray-600 mt-2">Access institutional SharePoint sites and resources</p>
+    </div>
+    <hr class="opacity-100 my-4">
+
+    <!-- Tabs -->
+    <div class="mb-6">
+        <ul class="flex border-b justify-start" id="tabs">
+            <li class="-mb-px mr-2">
+                <button class="tab-btn active" data-tab="tab-iso">
+                    ISO
+                </button>
+            </li>
+            <li class="-mb-px mr-2">
+                <button class="tab-btn" data-tab="tab-planning">
+                    Planning and Review
+                </button>
+            </li>
+            <li class="-mb-px mr-2">
+                <button class="tab-btn" data-tab="tab-quality">
+                    Quality Assurance
+                </button>
+            </li>
+        </ul>
+    </div>
 
                 <!-- Search Bar -->
                 <div class="mb-6">
@@ -51,7 +39,7 @@
                         <input
                             type="text"
                             id="sharepoint-search"
-                            placeholder="Search SharePoint links..."
+                            placeholder="Search SharePoint Sites..."
                             class="w-full border border-red-300 rounded-lg px-4 py-3 pr-16 shadow-sm text-sm focus:outline-none focus:ring-2 focus:ring-red-500"
                             autocomplete="off"
                         >
@@ -207,26 +195,16 @@
                     </div>
                 </div>
 
-            </div>
-        </div>
+    <!-- Login Link -->
+    <div class="mt-8 text-center">
+        <a href="{{ route('login') }}" class="login-btn inline-block px-6 py-3 rounded-md text-white hover:bg-red-600 transition">
+            Login to Access Full System
+        </a>
     </div>
-</x-app-layout>
+</div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Initialize dropdown functionality
-        const dropdownBtn = document.getElementById('adminDropdownBtn');
-        const dropdownMenu = document.getElementById('adminDropdownMenu');
-        if(dropdownBtn) {
-            dropdownBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                dropdownMenu.classList.toggle('hidden');
-            });
-            document.addEventListener('click', function() {
-                dropdownMenu.classList.add('hidden');
-            });
-        }
-
         // Initialize tabs functionality
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', function () {
@@ -403,6 +381,11 @@
 </script>
 
 <style>
+    /* Custom CSS for consistency with login page */
+    .login-btn {
+        background-color: #70121D;
+    }
+
     .tab-btn {
         background-color: white;
         padding: 0.5rem 1rem;
@@ -437,3 +420,8 @@
         background-color: #A84655;
     }
 </style>
+@endsection
+
+@php
+$useWhiteOverlay = true;
+@endphp
