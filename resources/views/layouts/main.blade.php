@@ -90,17 +90,53 @@
         }
         @media (max-width: 768px) {
             .nav-mobile {
-                flex-direction: column;
+                flex-direction: row;
+                flex-wrap: wrap;
                 gap: 0.5rem;
                 padding: 1rem;
             }
             .nav-mobile .ml-auto {
-                margin-left: 0;
-                margin-top: 0.5rem;
+                margin-left: auto;
+                margin-top: 0;
             }
             .bg-image {
                 background-size: cover;
                 opacity: 0.05;
+            }
+            .main-navigation {
+                display: none;
+            }
+            .mobile-menu {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                z-index: 1000;
+            }
+            .mobile-menu.show {
+                display: block;
+            }
+            .mobile-menu-btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .logo-mobile {
+                max-width: 180px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .nav-mobile {
+                padding: 0.75rem;
+            }
+            .logo-mobile {
+                max-width: 160px;
+            }
+            .mobile-menu-btn {
+                padding: 0.5rem;
             }
         }
     </style>
@@ -117,19 +153,19 @@
         <!-- Enhanced Navigation Bar -->
         <nav class="w-full bg-white nav-shadow" style="position:sticky;top:0;z-index:50;">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex items-center justify-between h-16 nav-mobile">
+                <div class="flex items-center justify-between h-20 nav-mobile">
                     <!-- Left Side: Logo + Navigation -->
                     <div class="flex items-center space-x-8">
                         <!-- Logo Section -->
                         <div class="flex items-center">
                             <a href="/" class="logo-hover">
                                 <img src="{{ asset('images/logo-long.png') }}" alt="HAU Logo" 
-                                     class="h-12 object-contain">
+                                     class="h-16 object-contain logo-mobile">
                             </a>
                         </div>
                         
                         <!-- Main Navigation -->
-                        <div class="hidden md:flex items-center space-x-1">
+                        <div class="hidden md:flex items-center space-x-1 main-navigation")>
                             <a href="/" class="nav-link {{ Request::is('/') ? 'active' : '' }} px-4 py-2 rounded-lg text-sm font-medium text-red-900 hover:bg-red-50 transition-all duration-200">
                                 <i class="fas fa-home mr-1"></i>Home
                             </a>
@@ -145,31 +181,36 @@
                     <!-- Right Side Actions -->
                     <div class="flex items-center space-x-3">
                         <!-- User Menu / Login -->
-                        <a href="{{ route('login') }}" class="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 shadow-sm hover:shadow-md">
-                            <i class="fas fa-sign-in-alt mr-1"></i>Login
+                        <a href="{{ route('login') }}" class="bg-red-700 hover:bg-red-800 text-white px-3 py-2 md:px-4 rounded-lg text-xs md:text-sm font-medium transition-all duration-200 shadow-sm hover:shadow-md">
+                            <i class="fas fa-sign-in-alt mr-1"></i><span class="hidden sm:inline">Login</span><span class="sm:hidden">Login</span>
                         </a>
-                    </div>
-                    
-                    <!-- Mobile menu button -->
-                    <div class="md:hidden">
-                        <button type="button" class="mobile-menu-btn text-red-900 hover:bg-red-50 p-2 rounded-lg">
-                            <i class="fas fa-bars"></i>
+                        
+                        <!-- Mobile menu button -->
+                        <button type="button" class="md:hidden mobile-menu-btn text-red-900 hover:bg-red-50 p-2 rounded-lg transition-colors duration-200">
+                            <i class="fas fa-bars text-lg"></i>
                         </button>
                     </div>
                 </div>
                 
                 <!-- Mobile Navigation Menu -->
-                <div class="md:hidden mobile-menu hidden border-t border-gray-200 bg-white">
-                    <div class="px-2 pt-2 pb-3 space-y-1">
-                        <a href="/" class="block px-3 py-2 rounded-md text-base font-medium text-red-900 hover:bg-red-50">
-                            <i class="fas fa-home mr-2"></i>Home
+                <div class="md:hidden mobile-menu hidden border-t border-gray-200 bg-white shadow-lg">
+                    <div class="px-4 pt-3 pb-4 space-y-2">
+                        <a href="/" class="block px-4 py-3 rounded-lg text-base font-medium text-red-900 hover:bg-red-50 transition-colors duration-200 {{ Request::is('/') ? 'bg-red-50 border-l-4 border-red-600' : '' }}">
+                            <i class="fas fa-home mr-3 w-4"></i>Home
                         </a>
-                        <a href="{{ route('sharepoint.public') }}" class="block px-3 py-2 rounded-md text-base font-medium text-red-900 hover:bg-red-50">
-                            <i class="fas fa-folder-open mr-2"></i>SharePoint
+                        <a href="{{ route('sharepoint.public') }}" class="block px-4 py-3 rounded-lg text-base font-medium text-red-900 hover:bg-red-50 transition-colors duration-200 {{ Request::is('sharepoint*') ? 'bg-red-50 border-l-4 border-red-600' : '' }}">
+                            <i class="fas fa-folder-open mr-3 w-4"></i>SharePoint Sites
                         </a>
-                        <a href="{{ route('orgchart') }}" class="block px-3 py-2 rounded-md text-base font-medium text-red-900 hover:bg-red-50">
-                            <i class="fas fa-sitemap mr-2"></i>Org Chart
+                        <a href="{{ route('orgchart') }}" class="block px-4 py-3 rounded-lg text-base font-medium text-red-900 hover:bg-red-50 transition-colors duration-200 {{ Request::is('org-chart*') ? 'bg-red-50 border-l-4 border-red-600' : '' }}">
+                            <i class="fas fa-sitemap mr-3 w-4"></i>Organizational Chart
                         </a>
+                        
+                        <!-- Mobile Login Button -->
+                        <div class="pt-3 border-t border-gray-200 mt-3">
+                            <a href="{{ route('login') }}" class="block bg-red-700 hover:bg-red-800 text-white px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 text-center">
+                                <i class="fas fa-sign-in-alt mr-2"></i>Login
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -201,12 +242,46 @@
         document.addEventListener('DOMContentLoaded', function() {
             const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
             const mobileMenu = document.querySelector('.mobile-menu');
+            const mobileMenuIcon = mobileMenuBtn?.querySelector('i');
             
             if (mobileMenuBtn && mobileMenu) {
-                mobileMenuBtn.addEventListener('click', function() {
+                mobileMenuBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
                     mobileMenu.classList.toggle('hidden');
+                    
+                    // Toggle icon between hamburger and X
+                    if (mobileMenu.classList.contains('hidden')) {
+                        mobileMenuIcon.className = 'fas fa-bars text-lg';
+                    } else {
+                        mobileMenuIcon.className = 'fas fa-times text-lg';
+                    }
+                });
+                
+                // Close menu when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (!mobileMenuBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
+                        mobileMenu.classList.add('hidden');
+                        mobileMenuIcon.className = 'fas fa-bars text-lg';
+                    }
+                });
+                
+                // Close menu when clicking on a link
+                const mobileLinks = mobileMenu.querySelectorAll('a');
+                mobileLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        mobileMenu.classList.add('hidden');
+                        mobileMenuIcon.className = 'fas fa-bars text-lg';
+                    });
                 });
             }
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                if (window.innerWidth >= 768) {
+                    mobileMenu?.classList.add('hidden');
+                    if (mobileMenuIcon) mobileMenuIcon.className = 'fas fa-bars text-lg';
+                }
+            });
         });
     </script>
 </body>

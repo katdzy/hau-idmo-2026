@@ -32,15 +32,23 @@
             d3.select("#orgchart").selectAll("*").remove();
 
             const width = document.getElementById('orgchart').offsetWidth;
-            const height = 600;
+            
+            // Calculate responsive scale factor
+            const baseWidth = 1200; // Reference width for scaling
+            const scaleFactor = Math.max(0.5, Math.min(1.2, width / baseWidth));
+            
+            // Dynamic height based on scale factor
+            const height = Math.max(400, 600 * scaleFactor);
 
-            // Create SVG
+            // Create SVG with viewBox for better scaling
             const svg = d3.select("#orgchart")
                 .append("svg")
                 .attr("width", width)
-                .attr("height", height);
+                .attr("height", height)
+                .attr("viewBox", `0 0 ${width} ${height}`)
+                .attr("preserveAspectRatio", "xMidYMid meet");
 
-            // Define the organizational data with exact positions
+            // Define the organizational data with scaled positions
             const orgData = [
                 // Top level - Director
                 {
@@ -48,7 +56,7 @@
                     name: "Engr. Anne Marie A. Mangiliman",
                     title: "OIC - Director, Institutional Effectiveness",
                     x: width / 2,
-                    y: 100,
+                    y: 80 * scaleFactor,
                     image: "{{ asset('images/profiles/director.jpg') }}"
                 },
                 // Second level - Department heads
@@ -56,8 +64,8 @@
                     id: "qa",
                     name: "Dr. Alma Theresa D. Manaloto",
                     title: "Head, Quality Assurance",
-                    x: width * 0.2,
-                    y: 300,
+                    x: width * 0.170,
+                    y: 300 * scaleFactor,
                     parent: "director",
                     image: "{{ asset('images/profiles/qa.jpg') }}"
                 },
@@ -65,8 +73,8 @@
                     id: "planning",
                     name: "Engr. Anne Marie A. Mangiliman",
                     title: "Head, Institutional Planning, Research and Publications Office",
-                    x: width * 0.4,
-                    y: 300,
+                    x: width * 0.40,
+                    y: 300 * scaleFactor,
                     parent: "director",
                     image: "{{ asset('images/profiles/planning.jpg') }}"
                 },
@@ -74,8 +82,8 @@
                     id: "database",
                     name: "Engr. Maria Elena Y. Timbang",
                     title: "Head, Database Management Office",
-                    x: width * 0.6,
-                    y: 300,
+                    x: width * 0.630,
+                    y: 300 * scaleFactor,
                     parent: "director",
                     image: "{{ asset('images/profiles/database.jpg') }}"
                 },
@@ -83,8 +91,8 @@
                     id: "document",
                     name: "Ms. Corazon Q. Mallari",
                     title: "Institutional Document Controller",
-                    x: width * 0.8,
-                    y: 300,
+                    x: width * 0.860,
+                    y: 300 * scaleFactor,
                     parent: "director",
                     image: "{{ asset('images/profiles/document.jpg') }}"
                 },
@@ -93,81 +101,78 @@
                     id: "staff1",
                     name: "Ms. Bianca Ysabel L. Navarro",
                     title: "Staff, Institutional Planning, Research and Publications Office",
-                    x: width * 0.4,
-                    y: 500,
+                    x: width * 0.40,
+                    y: 500 * scaleFactor,
                     parent: "planning",
                     image: "{{ asset('images/profiles/staff1.jpg') }}"
                 },
                 {
                     id: "staff2",
-                    name: "Staff",
+                    name: "Ms. Angela Joy D. Villar",
                     title: "Staff, Institutional Document Controller",
-                    x: width * 0.8,
-                    y: 500,
+                    x: width * 0.860,
+                    y: 500 * scaleFactor,
                     parent: "document",
                     image: "{{ asset('images/profiles/staff2.jpg') }}"
                 }
             ];
 
-            // Create connections - we need to draw them in a specific order
-            const midY1 = 220; // First horizontal line for QA, Planning, Database (lower)
-            const midY2 = 180; // Second horizontal line for IDC (higher/above)
+            // Create connections with scaled dimensions
+            const midY1 = 200 * scaleFactor; // First horizontal line for QA, Planning, Database
+            const midY2 = 175 * scaleFactor; // Second horizontal line for IDC
+            const lineWidth = Math.max(2, 3 * scaleFactor); // Scaled line width
             
             // Main vertical line from director
             svg.append("path")
                 .attr("class", "connection main-vertical")
-                .attr("d", `M ${width / 2} ${100 + 60} L ${width / 2} ${midY2 + 40}`) // Extended to go past IDC branch
+                .attr("d", `M ${width / 2} ${80 * scaleFactor + 60 * scaleFactor} L ${width / 2} ${midY2 + 25 * scaleFactor}`)
                 .attr("stroke", "#5c542c")
-                .attr("stroke-width", 3)
+                .attr("stroke-width", lineWidth)
                 .attr("fill", "none");
             
             // First horizontal line for QA, Planning, Database (3 departments)
             svg.append("path")
                 .attr("class", "connection horizontal-line-1")
-                .attr("d", `M ${width / 2} ${midY1} L ${width * 0.6} ${midY1}`) // From center to Database position
+                .attr("d", `M ${width / 2} ${midY1} L ${width * 0.631} ${midY1}`) // From center to Database position
                 .attr("stroke", "#5c542c")
-                .attr("stroke-width", 3)
+                .attr("stroke-width", lineWidth)
                 .attr("fill", "none");
                 
             // Extend first horizontal line to the left for QA and Planning
             svg.append("path")
                 .attr("class", "connection horizontal-line-1-left")
-                .attr("d", `M ${width / 2} ${midY1} L ${width * 0.2} ${midY1}`) // From center to QA position
+                .attr("d", `M ${width / 2} ${midY1} L ${width * 0.169} ${midY1}`) // From center to QA position
                 .attr("stroke", "#5c542c")
-                .attr("stroke-width", 3)
+                .attr("stroke-width", lineWidth)
                 .attr("fill", "none");
             
             // Second horizontal line for IDC
             svg.append("path")
                 .attr("class", "connection horizontal-line-2")
-                .attr("d", `M ${width / 2} ${midY2} L ${width * 0.8} ${midY2}`) // From center to IDC position
+                .attr("d", `M ${width / 2} ${midY2} L ${width * 0.861} ${midY2}`) // From center to IDC position
                 .attr("stroke", "#5c542c")
-                .attr("stroke-width", 3)
+                .attr("stroke-width", lineWidth)
                 .attr("fill", "none");
             
             // Vertical lines down to first 3 departments
-            const firstThreeDepts = [
-                { x: width * 0.201, y: midY1 },      // QA
-                { x: width * 0.4, y: midY1 },      // Planning
-                { x: width * 0.599, y: midY1 }       // Database
+            // Vertical lines down to all 4 department squares (centered)
+            const deptCenters = [
+                { x: width * 0.17, y: midY1 },      // QA
+                { x: width * 0.40, y: midY1 },      // Planning
+                { x: width * 0.63, y: midY1 },      // Database
+                { x: width * 0.86, y: midY2 }       // Document Controller (uses midY2)
             ];
-            
-            firstThreeDepts.forEach(dept => {
+
+            deptCenters.forEach((dept, i) => {
+                // QA, Planning, Database use midY1, Document uses midY2
+                const targetY = (300 - 60) * scaleFactor;
                 svg.append("path")
-                    .attr("class", "connection vertical-to-dept-1")
-                    .attr("d", `M ${dept.x} ${dept.y} L ${dept.x} ${300 - 60}`)
+                    .attr("class", "connection vertical-to-dept")
+                    .attr("d", `M ${dept.x} ${dept.y} L ${dept.x} ${targetY}`)
                     .attr("stroke", "#5c542c")
-                    .attr("stroke-width", 3)
+                    .attr("stroke-width", lineWidth)
                     .attr("fill", "none");
             });
-            
-            // Vertical line down to IDC
-            svg.append("path")
-                .attr("class", "connection vertical-to-idc")
-                .attr("d", `M ${width * 0.799} ${midY2} L ${width * 0.8} ${300 - 60}`)
-                .attr("stroke", "#5c542c")
-                .attr("stroke-width", 3)
-                .attr("fill", "none");
             
             // Draw connections from departments to their staff
             const staffConnections = [
@@ -179,9 +184,9 @@
                 const midStaffY = conn.from.y + (conn.to.y - conn.from.y) / 2;
                 svg.append("path")
                     .attr("class", "connection staff-connection")
-                    .attr("d", `M ${conn.from.x} ${conn.from.y + 60} L ${conn.from.x} ${midStaffY} L ${conn.to.x} ${midStaffY} L ${conn.to.x} ${conn.to.y - 60}`)
+                    .attr("d", `M ${conn.from.x} ${conn.from.y + 60 * scaleFactor} L ${conn.from.x} ${midStaffY} L ${conn.to.x} ${midStaffY} L ${conn.to.x} ${conn.to.y - 60 * scaleFactor}`)
                     .attr("stroke", "#5c542c")
-                    .attr("stroke-width", 3)
+                    .attr("stroke-width", lineWidth)
                     .attr("fill", "none");
             });
 
@@ -193,41 +198,52 @@
                 .attr("class", "node")
                 .attr("transform", d => `translate(${d.x}, ${d.y})`);
 
+            // Scaled sizes for responsive design
+            const boxWidth = 250 * scaleFactor;
+            const boxHeight = 150 * scaleFactor;
+            const circleRadius = 30 * scaleFactor;
+            const fontSize = {
+                name: Math.max(10, 12 * scaleFactor),
+                title: Math.max(8, 10 * scaleFactor),
+                initials: Math.max(14, 18 * scaleFactor)
+            };
+
             // Add main rectangles
             nodes.append("rect")
-                .attr("x", -100)
-                .attr("y", -60)
-                .attr("width", 200)
-                .attr("height", 120)
-                .attr("rx", 8)
+                .attr("x", -boxWidth/2)
+                .attr("y", -boxHeight/2)
+                .attr("width", boxWidth)
+                .attr("height", boxHeight)
+                .attr("rx", 8 * scaleFactor)
                 .attr("fill", "#a39372")
                 .attr("stroke", "#5c542c")
-                .attr("stroke-width", 2);
+                .attr("stroke-width", lineWidth);
 
             // Add profile circles with clipping path for images
+
             nodes.append("defs")
                 .append("clipPath")
                 .attr("id", d => `clip-${d.id}`)
                 .append("circle")
                 .attr("cx", 0)
-                .attr("cy", -25)
-                .attr("r", 25);
+                .attr("cy", -25 * scaleFactor)
+                .attr("r", circleRadius);
 
             // Add profile circle backgrounds
             nodes.append("circle")
                 .attr("cx", 0)
-                .attr("cy", -25)
-                .attr("r", 25)
+                .attr("cy", -25 * scaleFactor)
+                .attr("r", circleRadius)
                 .attr("fill", "white")
                 .attr("stroke", "#5c542c")
-                .attr("stroke-width", 3);
+                .attr("stroke-width", lineWidth);
 
             // Add profile images
             nodes.append("image")
-                .attr("x", -25)
-                .attr("y", -50)
-                .attr("width", 50)
-                .attr("height", 50)
+                .attr("x", -circleRadius)
+                .attr("y", -55 * scaleFactor)
+                .attr("width", circleRadius * 2)
+                .attr("height", circleRadius * 2)
                 .attr("clip-path", d => `url(#clip-${d.id})`)
                 .attr("href", d => d.image)
                 .on("error", function(event, d) {
@@ -240,10 +256,10 @@
             nodes.append("text")
                 .attr("class", "initials-text")
                 .attr("x", 0)
-                .attr("y", -20)
+                .attr("y", -18.6 * scaleFactor)
                 .attr("text-anchor", "middle")
                 .attr("font-family", "Inter, sans-serif")
-                .attr("font-size", "14px")
+                .attr("font-size", `${fontSize.initials}px`)
                 .attr("font-weight", "bold")
                 .attr("fill", "#a39372")
                 .style("display", "none") // Hidden by default, shown if image fails
@@ -258,10 +274,10 @@
             // Add names
             nodes.append("text")
                 .attr("x", 0)
-                .attr("y", 15)
+                .attr("y", 25 * scaleFactor)
                 .attr("text-anchor", "middle")
                 .attr("font-family", "Inter, sans-serif")
-                .attr("font-size", "12px")
+                .attr("font-size", `${fontSize.name}px`)
                 .attr("font-weight", "bold")
                 .attr("fill", "white")
                 .each(function(d) {
@@ -277,7 +293,7 @@
                         if (line.join(' ').length > 20 || words.indexOf(word) === words.length - 1) {
                             text.append('tspan')
                                 .attr('x', 0)
-                                .attr('dy', lineNumber === 0 ? 0 : '1.1em')
+                                .attr('dy', lineNumber === 0 ? 0 : `${1.1 * scaleFactor}em`)
                                 .text(line.join(' '));
                             line = [];
                             lineNumber++;
@@ -288,10 +304,10 @@
             // Add titles
             nodes.append("text")
                 .attr("x", 0)
-                .attr("y", 40)
+                .attr("y", 40 * scaleFactor)
                 .attr("text-anchor", "middle")
                 .attr("font-family", "Inter, sans-serif")
-                .attr("font-size", "10px")
+                .attr("font-size", `${fontSize.title}px`)
                 .attr("fill", "rgba(255,255,255,0.9)")
                 .each(function(d) {
                     const text = d3.select(this);
@@ -306,7 +322,7 @@
                         if (line.join(' ').length > 25 || words.indexOf(word) === words.length - 1) {
                             text.append('tspan')
                                 .attr('x', 0)
-                                .attr('dy', lineNumber === 0 ? 0 : '1.1em')
+                                .attr('dy', lineNumber === 0 ? 0 : `${1.1 * scaleFactor}em`)
                                 .text(line.join(' '));
                             line = [];
                             lineNumber++;
