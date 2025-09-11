@@ -108,12 +108,6 @@
                     </div>
                 </a> 
 
-
-              
-
-                
-              
-
                 <a href="{{ route('portal.certifications') }}" class="{{ request()->routeIs('portal.certifications*') ? 'font-semibold' : '' }}">
                     <div class="nav-link">
                         
@@ -125,10 +119,6 @@
                 </a> 
 
         
-
-
-
-                
                 <a href="{{ route('portal.training') }}" class="{{ request()->routeIs('portal.training*') ? 'font-semibold' : '' }}">
                     <div class="nav-link">
                         
@@ -221,6 +211,18 @@
                     
                      
                             <h3>SharePoint Sites</h3>
+                     
+                    </div>
+                </a> 
+
+                <!-- A LINK NAVIGATION  -->
+                 <a href="{{ route('kpis.dashboard') }}" class="{{ request()->routeIs('kpis*') ? 'font-semibold' : '' }}">
+                    <div class="nav-link">
+                        
+                            <img src="{{ asset('images/icons/nav/kpi.png') }}" />
+                    
+                     
+                            <h3>KPIs</h3>
                      
                     </div>
                 </a> 

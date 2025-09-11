@@ -9,6 +9,20 @@ use App\Models\SharepointLinks;
 class SharepointController extends Controller
 {
     /**
+     * Display the public SharePoint dashboard (no authentication required).
+     */
+    public function publicIndex()
+    {
+        $allLinks = SharepointLinks::orderBy('id')->get();
+
+        return view('home.sharepoint-home', [
+            'isoLinks'      => $allLinks->where('category', 'ISO')->groupBy('department'),
+            'planningLinks' => $allLinks->where('category', 'Planning and Review')->groupBy('department'),
+            'qaLinks'       => $allLinks->where('category', 'Quality Assurance')->groupBy('department'),
+        ]);
+    }
+
+    /**
      * Display the SharePoint dashboard grouped by categories and departments.
      */
     public function index()
