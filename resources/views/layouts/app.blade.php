@@ -250,9 +250,9 @@
                         </div>
                         <!-- Logout Option -->
                         <div class="dt-row">
-                            <form method="POST" action="{{ route('logout') }}">
+                            <form method="POST" action="{{ route('logout') }}" onsubmit="handleLogout(event)">
                                 @csrf
-                                <button type="submit" onclick="event.preventDefault(); this.closest('form').submit();">
+                                <button type="submit">
                                     <img src="{{ asset('images/icons/icon-logout.png') }}" alt="Logout Icon">
                                     <span> Logout </span>
                                 </button>
@@ -292,6 +292,27 @@
                     dropdownBox.classList.add('hide');
                 }
             });
+
+            // Handle logout and redirect to main page
+            function handleLogout(event) {
+                event.preventDefault();
+                
+                // Submit the logout form
+                fetch(event.target.action, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: new URLSearchParams(new FormData(event.target))
+                }).then(() => {
+                    // Redirect to main page after logout
+                    window.location.href = '/';
+                }).catch(() => {
+                    // Fallback: redirect to main page even if fetch fails
+                    window.location.href = '/';
+                });
+            }
         </script>
     </body>
 </html>

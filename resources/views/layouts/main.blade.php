@@ -91,6 +91,25 @@
         .main-navigation {
             margin-left: 3rem !important;
         }
+
+        .mobile-menu-btn {
+            display: none;
+        }
+        .main-navigation {
+            display: flex;
+            align-items: center;
+        }
+        
+        /* Remove yellow background from SharePoint navigation link */
+        .nav-link[href*="sharepoint"].active {
+            background-color: transparent !important;
+            background: transparent !important;
+        }
+        
+        .nav-link[href*="sharepoint"]:hover {
+            background-color: #fef2f2 !important;
+        }
+        
         @media (max-width: 768px) {
             .nav-mobile {
                 flex-direction: row;
@@ -154,7 +173,7 @@
     @endif
     <div class="content-wrapper">
         <!-- Enhanced Navigation Bar -->
-        <nav class="w-full bg-white nav-shadow" style="position:sticky;top:0;z-index:50;">
+        <nav class="w-full bg-white nav-shadow" style="position:sticky;top:0;z-index:50;border-bottom: 3px solid #70121D;">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-20 nav-mobile">
                     <!-- Left Side: Logo + Navigation -->
@@ -225,7 +244,7 @@
         </div>
         
         <!-- Footer -->
-        <footer class="bg-gray-800 text-white py-8 mt-auto">
+        <footer class="text-white py-8 mt-auto" style="background-color: #70121D;">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center">
                     <div class="flex items-center justify-center mb-4">
@@ -233,7 +252,7 @@
                         <span class="font-semibold">Holy Angel University</span>
                     </div>
                     <p class="text-gray-300 text-sm">
-                        © {{ date('Y') }} Office of Institutional Effectiveness - Institutional Database Management Office
+                        © {{ date('Y') }} Office of Institutional Effectiveness
                     </p>
                 </div>
             </div>

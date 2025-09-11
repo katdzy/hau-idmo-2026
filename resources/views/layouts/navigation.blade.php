@@ -3,7 +3,7 @@
     <aside class="bg-white dark:bg-gray-900 w-64 md:w-80 border-r border-gray-200 dark:border-gray-700 flex-shrink-0 main flex flex-col">
 
     <div class="w-full flex flex-col items-center mb-4 pt-4 justify-center">
-        <img src="{{asset('images/logo-circle.png')}}" alt="" class="w-[130px] h-[130px]">
+    <img src="{{asset('images/logo-circle.png')}}" alt="" style="width: 150px; height: 150px;" class="w-[80px] h-[80px]">
 
         <h1 class="font-bold text-md truncate">Office of Institutional Effectiveness</h1>
         <!-- <h1 class="font-thin text-sm truncate">Institution Database Management Office</h1> -->

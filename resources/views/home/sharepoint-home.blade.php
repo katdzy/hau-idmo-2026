@@ -3,12 +3,13 @@
 @section('title', 'SharePoint Sites')
 
 @section('content')
-<div class="max-w-3xl mx-auto py-10 px-4">
+<div style="background-image: url('{{ asset('images/hau-side.jpg') }}'); background-size: cover; background-position: center; background-repeat: no-repeat; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.3;"></div>
+<div class="max-w-3xl mx-auto py-10 px-4" style="position: relative; z-index: 1; background-color: rgba(255, 255, 255, 0.9); border-radius: 1rem; backdrop-filter: blur(10px); margin-top: 2rem;">
     <!-- Header -->
     <div class="text-center mb-6">
         <img src="{{ asset('images/logo-circle.png') }}" class="mx-auto mb-4" alt="Logo Circle" style="width: 180px; height: 180px; object-fit: contain;" />
-        <h1 class="text-2xl font-bold text-red-900">SharePoint Sites</h1>
-        <p class="text-gray-600 mt-2">Access institutional SharePoint sites and resources</p>
+        <h1 class="text-2xl font-bold" style="color: #70121D;">SharePoint Sites</h1>
+        <p class="mt-2" style="color: #5c5c5c;">Access institutional SharePoint sites and resources</p>
     </div>
     <hr class="opacity-100 my-4">
 
@@ -33,31 +34,32 @@
         </ul>
     </div>
 
-                <!-- Search Bar -->
-                <div class="mb-6">
+    <!-- Search Bar -->
+    <div class="mb-6">
                     <div class="relative">
                         <input
                             type="text"
                             id="sharepoint-search"
                             placeholder="Search SharePoint Sites..."
-                            class="w-full border border-red-300 rounded-lg px-4 py-3 pr-16 shadow-sm text-sm focus:outline-none focus:ring-2 focus:ring-red-500"
+                            class="w-full rounded-lg px-4 py-3 pr-16 shadow-sm text-sm focus:outline-none"
+                            style="border: 2px solid #70121D; focus:ring: 2px solid #8B1538;"
                             autocomplete="off"
                         >
-                        <button type="button" id="clear-sharepoint-search" class="absolute right-2 top-1/2 -translate-y-1/2 bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1 rounded-lg text-xs font-semibold transition">Clear</button>
+                        <button type="button" id="clear-sharepoint-search" class="absolute right-2 px-3 py-1 rounded-lg text-xs font-semibold transition" style="top: 50%; transform: translateY(-50%); background-color: #ffe066; color: #70121D; hover:background-color: #ffd700;">Clear</button>
                     </div>
                     <div id="search-results" class="hidden mt-4">
-                        <h3 class="text-lg font-semibold text-gray-700 mb-3">Search Results:</h3>
+                        <h3 class="text-lg font-semibold mb-3" style="color: #70121D;">Search Results:</h3>
                         <div id="search-results-content" class="space-y-2"></div>
                     </div>
                 </div>
 
                 <!-- ISO Tab -->
-                <div id="tab-iso" class="tab-content overflow-y-auto" style="max-height: 70vh;">
+                <div id="tab-iso" class="tab-content" style="border: 2px solid #70121D; border-radius: 0.75rem; padding: 1rem;">
                     <div class="w-full flex flex-col gap-8">
                         <ul id="departments-list" class="space-y-4">
                             @foreach ($isoLinks as $department => $deptLinks)
                                 <li>
-                                    <button type="button" class="department-btn w-full text-left font-bold text-red-900 px-4 py-2 bg-gray-100 rounded hover:bg-gray-200">
+                                    <button type="button" class="department-btn w-full text-left font-bold px-4 py-2 rounded transition">
                                         {{ $department ?? 'Uncategorized Department' }}
                                     </button>
                                     @php $offices = $deptLinks->groupBy('office'); @endphp
@@ -65,15 +67,14 @@
                                         @foreach ($offices as $office => $officeLinks)
                                             <li>
                                                 @if ($office)
-                                                    <button type="button" class="office-btn w-full text-left font-semibold text-gray-800 px-3 py-1 bg-gray-50 rounded hover:bg-gray-100">
+                                                    <button type="button" class="office-btn w-full text-left font-semibold px-3 py-1 rounded">
                                                         {{ $office }}
                                                     </button>
                                                     <ul class="ml-6 mt-1 hidden file-list">
                                                         @foreach ($officeLinks as $link)
                                                             <li class="mb-2">
                                                                 <a href="{{ $link->url }}" target="_blank" title="{{ $link->description }}" 
-                                                                    class="inline-block bg-blue-100 px-3 py-1 rounded hover:bg-blue-200"
-                                                                    style="color: #2563eb !important;">
+                                                                    class="inline-block px-3 py-1 rounded transition">
                                                                     {{ $link->label }}
                                                                 </a>
                                                             </li>
@@ -83,8 +84,7 @@
                                                     @foreach ($officeLinks as $link)
                                                         <li class="mb-2">
                                                             <a href="{{ $link->url }}" target="_blank" title="{{ $link->description }}" 
-                                                                class="inline-block bg-blue-100 px-3 py-1 rounded hover:bg-blue-200"
-                                                                style="color: #2563eb !important;">
+                                                                class="inline-block px-3 py-1 rounded transition">
                                                                 {{ $link->label }}
                                                             </a>
                                                         </li>
@@ -100,12 +100,12 @@
                 </div>
 
                 <!-- Planning and Review Tab -->
-                <div id="tab-planning" class="tab-content hidden overflow-y-auto" style="max-height: 70vh;">
+                <div id="tab-planning" class="tab-content hidden" style="border: 2px solid #70121D; border-radius: 0.75rem; padding: 1rem;">
                     <div class="w-full flex flex-col gap-8">
                         <ul class="space-y-4">
                             @foreach ($planningLinks as $department => $deptLinks)
                                 <li>
-                                    <button type="button" class="department-btn w-full text-left font-bold text-red-900 px-4 py-2 bg-gray-100 rounded hover:bg-gray-200">
+                                    <button type="button" class="department-btn w-full text-left font-bold px-4 py-2 rounded transition">
                                         {{ $department ?? 'Uncategorized Department' }}
                                     </button>
                                     @php $offices = $deptLinks->groupBy('office'); @endphp
@@ -113,15 +113,15 @@
                                         @foreach ($offices as $office => $officeLinks)
                                             <li>
                                                 @if ($office)
-                                                    <button type="button" class="office-btn w-full text-left font-semibold text-gray-800 px-3 py-1 bg-gray-50 rounded hover:bg-gray-100">
+                                                    <button type="button" class="office-btn w-full text-left font-semibold px-3 py-1 rounded">
                                                         {{ $office }}
                                                     </button>
                                                     <ul class="ml-6 mt-1 hidden file-list">
                                                         @foreach ($officeLinks as $link)
                                                             <li class="mb-2">
                                                                 <a href="{{ $link->url }}" target="_blank" title="{{ $link->description }}" 
-                                                                    class="inline-block bg-blue-100 px-3 py-1 rounded hover:bg-blue-200"
-                                                                    style="color: #2563eb !important;">
+                                                                    class="inline-block px-3 py-1 rounded transition"
+                                                                    >
                                                                     {{ $link->label }}
                                                                 </a>
                                                             </li>
@@ -131,8 +131,8 @@
                                                     @foreach ($officeLinks as $link)
                                                         <li class="mb-2">
                                                             <a href="{{ $link->url }}" target="_blank" title="{{ $link->description }}" 
-                                                                class="inline-block bg-blue-100 px-3 py-1 rounded hover:bg-blue-200"
-                                                                style="color: #2563eb !important;">
+                                                                class="inline-block px-3 py-1 rounded transition"
+                                                                >
                                                                 {{ $link->label }}
                                                             </a>
                                                         </li>
@@ -148,7 +148,7 @@
                 </div>
 
                 <!-- Quality Assurance Tab -->
-                <div id="tab-quality" class="tab-content hidden overflow-y-auto" style="max-height: 70vh;">
+                <div id="tab-quality" class="tab-content hidden" style="border: 2px solid #70121D; border-radius: 0.75rem; padding: 1rem;">
                     <div class="w-full flex flex-col gap-8">
                         <ul class="space-y-4">
                             @foreach ($qaLinks as $department => $deptLinks)
@@ -161,15 +161,15 @@
                                         @foreach ($offices as $office => $officeLinks)
                                             <li>
                                                 @if ($office)
-                                                    <button type="button" class="office-btn w-full text-left font-semibold text-gray-800 px-3 py-1 bg-gray-50 rounded hover:bg-gray-100">
+                                                    <button type="button" class="office-btn w-full text-left font-semibold px-3 py-1 rounded">
                                                         {{ $office }}
                                                     </button>
                                                     <ul class="ml-6 mt-1 hidden file-list">
                                                         @foreach ($officeLinks as $link)
                                                             <li class="mb-2">
                                                                 <a href="{{ $link->url }}" target="_blank" title="{{ $link->description }}" 
-                                                                    class="inline-block bg-blue-100 px-3 py-1 rounded hover:bg-blue-200"
-                                                                    style="color: #2563eb !important;">
+                                                                    class="inline-block px-3 py-1 rounded transition"
+                                                                    >
                                                                     {{ $link->label }}
                                                                 </a>
                                                             </li>
@@ -179,8 +179,8 @@
                                                     @foreach ($officeLinks as $link)
                                                         <li class="mb-2">
                                                             <a href="{{ $link->url }}" target="_blank" title="{{ $link->description }}" 
-                                                                class="inline-block bg-blue-100 px-3 py-1 rounded hover:bg-blue-200"
-                                                                style="color: #2563eb !important;">
+                                                                class="inline-block px-3 py-1 rounded transition"
+                                                                >
                                                                 {{ $link->label }}
                                                             </a>
                                                         </li>
@@ -366,8 +366,40 @@
 
     function highlightText(text, searchTerm) {
         if (!searchTerm) return text;
+        
+        // Create a temporary div to safely process the text
+        const tempDiv = document.createElement('div');
+        tempDiv.textContent = text;
+        
+        // Get the plain text and create highlighted version
+        const plainText = tempDiv.textContent;
         const regex = new RegExp(`(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-        return text.replace(regex, '<span class="bg-yellow-200 text-gray-900 px-1 rounded">$1</span>');
+        
+        // Split the text and rebuild with highlights
+        const parts = plainText.split(regex);
+        const fragment = document.createDocumentFragment();
+        
+        parts.forEach((part, index) => {
+            if (index % 2 === 1) {
+                // This is a matched part, create highlighted span
+                const span = document.createElement('span');
+                span.className = 'bg-yellow-200 text-gray-900 px-1 rounded';
+                span.style.backgroundColor = '#fef3c7';
+                span.style.color = '#111827';
+                span.style.padding = '0.25rem';
+                span.style.borderRadius = '0.25rem';
+                span.textContent = part;
+                fragment.appendChild(span);
+            } else {
+                // Regular text
+                fragment.appendChild(document.createTextNode(part));
+            }
+        });
+        
+        // Return the HTML string
+        const container = document.createElement('div');
+        container.appendChild(fragment);
+        return container.innerHTML;
     }
 
     // Event listeners
@@ -381,7 +413,40 @@
 </script>
 
 <style>
-    /* Custom CSS for consistency with login page */
+    /* HAU Colors */
+    .department-btn {
+        background-color: #f5f5f5 !important;
+        color: #70121D !important;
+        transition: all 0.3s ease;
+    }
+    
+    .department-btn:hover {
+        background-color: #e5e5e5 !important;
+    }
+    
+    .office-btn {
+        background-color: #f5f5f5 !important;
+        color: #70121D !important;
+        transition: all 0.3s ease;
+    }
+    
+    .office-btn:hover {
+        background-color: #e5e5e5 !important;
+    }
+
+    /* SharePoint Links with HAU gold */
+    a[href*="sharepoint"], a[href*="onedrive"] {
+        background-color: #ffe066 !important;
+        color: #70121D !important;
+        transition: all 0.3s ease;
+    }
+    
+    a[href*="sharepoint"]:hover, a[href*="onedrive"]:hover {
+        background-color: #ffd700 !important;
+        color: #70121D !important;
+    }
+
+    /* Custom CSS for consistency with HAU branding */
     .login-btn {
         background-color: #70121D;
     }
@@ -391,16 +456,21 @@
         padding: 0.5rem 1rem;
         font-weight: 600;
         color: #70121D;
-        border: 1px solid #e5e7eb;
+        border: 1px solid #70121D;
         border-bottom: none;
         border-top-left-radius: 0.5rem;
         border-top-right-radius: 0.5rem;
+        transition: all 0.3s ease;
     }
 
     .tab-btn.active {
-        background-color: #f3f4f6;
+        background-color: #ffe066;
         border-bottom: 2px solid #70121D;
         color: #70121D;
+    }
+
+    .tab-btn:hover:not(.active) {
+        background-color: #f9f9f9;
     }
 
     .tab-content {
@@ -412,16 +482,53 @@
         to { opacity: 1; }
     }
 
-    .maroon {
-        transition: 300ms;
+    /* Search results styling */
+    #search-results-content .text-blue-600 {
+        color: #70121D !important;
+    }
+    
+    #search-results-content .text-blue-600:hover {
+        color: #8B1538 !important;
     }
 
-    .maroon:hover {
-        background-color: #A84655;
+    /* Custom Scrollbar Styles for Tab Content Areas - No Track Background */
+    .tab-content::-webkit-scrollbar {
+        width: 12px;
+    }
+
+    .tab-content::-webkit-scrollbar-track {
+        background: transparent;
+        border: none;
+    }
+
+    .tab-content::-webkit-scrollbar-thumb {
+        background: linear-gradient(180deg, #70121D, #8B1538);
+        border-radius: 10px;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .tab-content::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(180deg, #8B1538, #70121D);
+    }
+
+    .tab-content::-webkit-scrollbar-corner {
+        background: transparent;
+    }
+
+    /* Hide scrollbar arrow buttons */
+    .tab-content::-webkit-scrollbar-button {
+        display: none;
+    }
+
+    /* For Firefox */
+    .tab-content {
+        scrollbar-width: thin;
+        scrollbar-color: #70121D transparent;
     }
 </style>
 @endsection
 
 @php
-$useWhiteOverlay = true;
+$useWhiteOverlay = false;
 @endphp

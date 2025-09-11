@@ -9,7 +9,6 @@
         <div class="mb-6">
             <img src="{{ asset('images/logo-circle.png') }}" class="login-logo-circle mx-auto" alt="Logo Circle" /> 
             <h2>Office of Institutional Effectiveness</h2> 
-            <h5>Institutional Database Management Office</h5>
         </div>
 
         <!-- Email Address -->

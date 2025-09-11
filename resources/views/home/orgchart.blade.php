@@ -18,9 +18,9 @@
     </div>
 
     <!-- Organizational Chart -->
-    <div style="background-image: url('{{ asset('images/bg-white.png') }}'); background-size: cover; background-position: center; background-attachment: fixed; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1;"></div>
+    <div style="background-image: url('{{ asset('images/hau-main.jpg') }}'); background-size: cover; background-position: center; background-attachment: fixed; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; opacity: 0.3;"></div>
     <div class="max-w-7xl mx-auto px-4 py-12" style="position: relative; z-index: 1; min-height: calc(100vh - 256px);">
-        <div id="orgchart" style="width: 100%; height: 600px; position: relative;"></div>
+        <div id="orgchart" style="width: 100%; height: 810px; position: relative;"></div>
     </div>
 
     <!-- D3.js Script -->
@@ -30,14 +30,22 @@
             // Clear any existing chart
             d3.select("#orgchart").selectAll("*").remove();
 
-            const width = document.getElementById('orgchart').offsetWidth;
-            
-            // Calculate responsive scale factor
+            const chartEl = document.getElementById('orgchart');
+            const width = chartEl.offsetWidth;
+            const containerHeight = chartEl.offsetHeight || window.innerHeight;
+
+            // Calculate responsive scale factor using both width and height so text scales down on
+            // narrow/narrow-and-short viewports (mobile). baseWidth/baseHeight are reference sizes.
             const baseWidth = 1200; // Reference width for scaling
-            const scaleFactor = Math.max(0.5, Math.min(1.2, width / baseWidth));
-            
-            // Dynamic height based on scale factor
-            const height = Math.max(400, 600 * scaleFactor);
+            const baseHeight = 900; // Reference height for scaling
+            const widthRatio = width / baseWidth;
+            const heightRatio = containerHeight / baseHeight;
+
+            // Use the smaller ratio to ensure content fits; allow a slightly smaller minimum for tighter screens.
+            const scaleFactor = Math.max(0.35, Math.min(1.2, Math.min(widthRatio, heightRatio)));
+
+            // Dynamic height based on scale factor - increased to accommodate all moved boxes
+            const height = Math.max(500, 900 * scaleFactor);
 
             // Create SVG with viewBox for better scaling
             const svg = d3.select("#orgchart")
@@ -48,23 +56,36 @@
                 .attr("preserveAspectRatio", "xMidYMid meet");
 
             // Define the organizational data with scaled positions
+            // Shift all elements down by 200 pixels to create more vertical space
+            const verticalShift = 200 * scaleFactor;
+            
             const orgData = [
-                // Top level - Director
+                // Top level - President
+                {
+                    id: "president",
+                    name: "Mr. Leopoldo Jaime N. Valdes",
+                    title: "OIC - President",
+                    x: width / 2,
+                    y: 80 * scaleFactor,
+                    image: "{{ asset('images/profiles/president.jpg') }}"
+                },
+                // Second level - Director (moved down further)
                 {
                     id: "director",
                     name: "Engr. Anne Marie A. Mangiliman",
                     title: "OIC - Director, Institutional Effectiveness",
                     x: width / 2,
-                    y: 80 * scaleFactor,
+                    y: 80 * scaleFactor + verticalShift,
+                    parent: "president",
                     image: "{{ asset('images/profiles/director.jpg') }}"
                 },
-                // Second level - Department heads
+                // Second level - Department heads (moved down further)
                 {
                     id: "qa",
                     name: "Dr. Alma Theresa D. Manaloto",
                     title: "Head, Quality Assurance",
                     x: width * 0.170,
-                    y: 300 * scaleFactor,
+                    y: 300 * scaleFactor + verticalShift,
                     parent: "director",
                     image: "{{ asset('images/profiles/qa.jpg') }}"
                 },
@@ -73,7 +94,7 @@
                     name: "Engr. Anne Marie A. Mangiliman",
                     title: "Head, Institutional Planning, Research and Publications Office",
                     x: width * 0.40,
-                    y: 300 * scaleFactor,
+                    y: 300 * scaleFactor + verticalShift,
                     parent: "director",
                     image: "{{ asset('images/profiles/planning.jpg') }}"
                 },
@@ -82,7 +103,7 @@
                     name: "Engr. Maria Elena Y. Timbang",
                     title: "Head, Database Management Office",
                     x: width * 0.630,
-                    y: 300 * scaleFactor,
+                    y: 300 * scaleFactor + verticalShift,
                     parent: "director",
                     image: "{{ asset('images/profiles/database.jpg') }}"
                 },
@@ -91,17 +112,17 @@
                     name: "Ms. Corazon Q. Mallari",
                     title: "Institutional Document Controller",
                     x: width * 0.860,
-                    y: 300 * scaleFactor,
+                    y: 300 * scaleFactor + verticalShift,
                     parent: "director",
                     image: "{{ asset('images/profiles/document.jpg') }}"
                 },
-                // Third level - Staff
+                // Third level - Staff (moved down further)
                 {
                     id: "staff1",
                     name: "Ms. Bianca Ysabel L. Navarro",
                     title: "Staff, Institutional Planning, Research and Publications Office",
                     x: width * 0.40,
-                    y: 500 * scaleFactor,
+                    y: 500 * scaleFactor + verticalShift,
                     parent: "planning",
                     image: "{{ asset('images/profiles/staff1.jpg') }}"
                 },
@@ -110,21 +131,29 @@
                     name: "Ms. Angela Joy D. Villar",
                     title: "Staff, Institutional Document Controller",
                     x: width * 0.860,
-                    y: 500 * scaleFactor,
+                    y: 500 * scaleFactor + verticalShift,
                     parent: "document",
                     image: "{{ asset('images/profiles/staff2.jpg') }}"
                 }
             ];
 
-            // Create connections with scaled dimensions
-            const midY1 = 200 * scaleFactor; // First horizontal line for QA, Planning, Database
-            const midY2 = 175 * scaleFactor; // Second horizontal line for IDC
+            // Create connections with scaled dimensions (adjusted for vertical shift)
+            const midY1 = 200 * scaleFactor + verticalShift; // First horizontal line for QA, Planning, Database
+            const midY2 = 175 * scaleFactor + verticalShift; // Second horizontal line for IDC
             const lineWidth = Math.max(2, 3 * scaleFactor); // Scaled line width
             
-            // Main vertical line from director
+            // Vertical line from president to director
+            svg.append("path")
+                .attr("class", "connection president-to-director")
+                .attr("d", `M ${width / 2} ${50 * scaleFactor + 60 * scaleFactor} L ${width / 2} ${80 * scaleFactor + verticalShift - 60 * scaleFactor}`)
+                .attr("stroke", "#5c542c")
+                .attr("stroke-width", lineWidth)
+                .attr("fill", "none");
+            
+            // Main vertical line from director (adjusted for vertical shift)
             svg.append("path")
                 .attr("class", "connection main-vertical")
-                .attr("d", `M ${width / 2} ${80 * scaleFactor + 60 * scaleFactor} L ${width / 2} ${midY2 + 25 * scaleFactor}`)
+                .attr("d", `M ${width / 2} ${80 * scaleFactor + 60 * scaleFactor + verticalShift} L ${width / 2} ${midY2 + 25 * scaleFactor}`)
                 .attr("stroke", "#5c542c")
                 .attr("stroke-width", lineWidth)
                 .attr("fill", "none");
@@ -154,7 +183,7 @@
                 .attr("fill", "none");
             
             // Vertical lines down to first 3 departments
-            // Vertical lines down to all 4 department squares (centered)
+            // Vertical lines down to all 4 department squares (centered, adjusted for vertical shift)
             const deptCenters = [
                 { x: width * 0.17, y: midY1 },      // QA
                 { x: width * 0.40, y: midY1 },      // Planning
@@ -164,7 +193,7 @@
 
             deptCenters.forEach((dept, i) => {
                 // QA, Planning, Database use midY1, Document uses midY2
-                const targetY = (300 - 60) * scaleFactor;
+                const targetY = (300 - 60) * scaleFactor + verticalShift;
                 svg.append("path")
                     .attr("class", "connection vertical-to-dept")
                     .attr("d", `M ${dept.x} ${dept.y} L ${dept.x} ${targetY}`)
@@ -201,10 +230,12 @@
             const boxWidth = 250 * scaleFactor;
             const boxHeight = 150 * scaleFactor;
             const circleRadius = 30 * scaleFactor;
+            // Font sizes scale with the scaleFactor. Minimums lowered to allow smaller screens to shrink text
+            // while still remaining legible.
             const fontSize = {
-                name: Math.max(10, 12 * scaleFactor),
-                title: Math.max(8, 10 * scaleFactor),
-                initials: Math.max(14, 18 * scaleFactor)
+                name: Math.max(9, 12 * scaleFactor),
+                title: Math.max(7, 10 * scaleFactor),
+                initials: Math.max(10, 18 * scaleFactor)
             };
 
             // Add main rectangles
@@ -214,8 +245,8 @@
                 .attr("width", boxWidth)
                 .attr("height", boxHeight)
                 .attr("rx", 8 * scaleFactor)
-                .attr("fill", "#a39372")
-                .attr("stroke", "#5c542c")
+                .attr("fill", d => d.id === "president" ? "#8B1538" : "#a39372") // Lighter maroon for president, gold for others
+                .attr("stroke", d => d.id === "president" ? "#70121D" : "#5c542c") // Dark maroon outline for president, brown for others
                 .attr("stroke-width", lineWidth);
 
             // Add profile circles with clipping path for images
@@ -234,7 +265,7 @@
                 .attr("cy", -25 * scaleFactor)
                 .attr("r", circleRadius)
                 .attr("fill", "white")
-                .attr("stroke", "#5c542c")
+                .attr("stroke", d => d.id === "president" ? "#70121D" : "#5c542c") // Dark maroon stroke for president, brown for others
                 .attr("stroke-width", lineWidth);
 
             // Add profile images
@@ -260,7 +291,7 @@
                 .attr("font-family", "Inter, sans-serif")
                 .attr("font-size", `${fontSize.initials}px`)
                 .attr("font-weight", "bold")
-                .attr("fill", "#a39372")
+                .attr("fill", d => d.id === "president" ? "#8B1538" : "#a39372") // Light maroon for president, brown for others
                 .style("display", "none") // Hidden by default, shown if image fails
                 .text(d => {
                     const names = d.name.split(' ');
@@ -278,26 +309,35 @@
                 .attr("font-family", "Inter, sans-serif")
                 .attr("font-size", `${fontSize.name}px`)
                 .attr("font-weight", "bold")
-                .attr("fill", "white")
+                .attr("fill", "white") // White text for all positions for visibility
                 .each(function(d) {
                     const text = d3.select(this);
                     const words = d.name.split(' ');
                     text.text('');
                     
-                    let line = [];
-                    let lineNumber = 0;
-                    
-                    words.forEach(word => {
-                        line.push(word);
-                        if (line.join(' ').length > 20 || words.indexOf(word) === words.length - 1) {
-                            text.append('tspan')
-                                .attr('x', 0)
-                                .attr('dy', lineNumber === 0 ? 0 : `${1.1 * scaleFactor}em`)
-                                .text(line.join(' '));
-                            line = [];
-                            lineNumber++;
-                        }
-                    });
+                    // Special case for president - display name in single line
+                    if (d.id === "president") {
+                        text.append('tspan')
+                            .attr('x', 0)
+                            .attr('dy', 0)
+                            .text(d.name);
+                    } else {
+                        // Regular text wrapping for other nodes
+                        let line = [];
+                        let lineNumber = 0;
+                        
+                        words.forEach(word => {
+                            line.push(word);
+                            if (line.join(' ').length > 20 || words.indexOf(word) === words.length - 1) {
+                                text.append('tspan')
+                                    .attr('x', 0)
+                                    .attr('dy', lineNumber === 0 ? 0 : `${1.1 * scaleFactor}em`)
+                                    .text(line.join(' '));
+                                line = [];
+                                lineNumber++;
+                            }
+                        });
+                    }
                 });
 
             // Add titles
@@ -335,13 +375,13 @@
                     d3.select(this).select("rect")
                         .transition()
                         .duration(200)
-                        .attr("fill", "#5c542c");
+                        .attr("fill", d.id === "president" ? "#70121D" : "#5c542c"); // Dark maroon hover for president, brown for others
                 })
                 .on("mouseout", function(event, d) {
                     d3.select(this).select("rect")
                         .transition()
                         .duration(200)
-                        .attr("fill", "#a39372");
+                        .attr("fill", d.id === "president" ? "#8B1538" : "#a39372"); // Restore to light maroon for president, original for others
                 });
         }
 
