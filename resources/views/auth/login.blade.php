@@ -17,8 +17,6 @@
 
         </div>
 
-    
-
         <!-- Password -->
         <div class="mb-4">
             <input id="password" class="block mt-1 w-full bg-gray-200 rounded-md p-2 border border-gray-100" type="password" name="password" required autocomplete="current-password" placeholder="Password" />

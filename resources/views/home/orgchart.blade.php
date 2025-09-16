@@ -41,8 +41,8 @@
             const widthRatio = width / baseWidth;
             const heightRatio = containerHeight / baseHeight;
 
-            // Use the smaller ratio to ensure content fits; allow a slightly smaller minimum for tighter screens.
-            const scaleFactor = Math.max(0.35, Math.min(1.2, Math.min(widthRatio, heightRatio)));
+            // Use the smaller ratio to ensure content fits; allow a smaller minimum so text can shrink on tight screens.
+            const scaleFactor = Math.max(0.25, Math.min(1.2, Math.min(widthRatio, heightRatio)));
 
             // Dynamic height based on scale factor - increased to accommodate all moved boxes
             const height = Math.max(500, 900 * scaleFactor);
@@ -232,9 +232,10 @@
             const circleRadius = 30 * scaleFactor;
             // Font sizes scale with the scaleFactor. Minimums lowered to allow smaller screens to shrink text
             // while still remaining legible.
+            // Font sizes scale with the scaleFactor. Minimums lowered so labels can shrink on small screens.
             const fontSize = {
-                name: Math.max(9, 12 * scaleFactor),
-                title: Math.max(7, 10 * scaleFactor),
+                name: Math.max(9, 14 * scaleFactor),
+                title: Math.max(7, 12 * scaleFactor),
                 initials: Math.max(10, 18 * scaleFactor)
             };
 
@@ -417,6 +418,16 @@
         .node text {
             pointer-events: none;
             user-select: none;
+        }
+        /* Improve SVG text rendering */
+        #orgchart svg text {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            shape-rendering: geometricPrecision;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        @media (max-width: 420px) {
+            #orgchart { height: 520px !important; }
         }
     </style>
 @endsection
