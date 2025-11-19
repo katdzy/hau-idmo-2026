@@ -292,7 +292,9 @@ class pagetitle
             case 'kpis.show':
                 $curr_page = 'KPIs';
                 break;
-
+            // ISO Document Management
+            case 'iso.document':
+                $curr_page = 'ISO Document Management';
 
 
         

@@ -6,7 +6,7 @@ $mname = '';
 
 <!-- 
     This is the employee dashboard.
-    This is different from the dean, hr, and super. 
+    This is different from the dean, hr, and super.
 -->
 
     <x-app-layout>
@@ -228,7 +228,21 @@ $mname = '';
             <!-- end of card slot  -->
 
         </div> 
-    </div> 
+    </div>
+    
+    <div class = "navigation-cards">
+        <div class = "navigation-cards-box-5">
+            <!-- a card slot  -->
+            <a href = "{{route('iso.document')}}">
+                <div class = "nav-card"> 
+                    <div class = "nav-card-icon"> <img src = "{{asset('images/icons/portal_nav/iso.svg')}}" class = "w-24 h-24"/> </div>
+                    <div class  = "nav-card-title"> <h3> ISO Document Handling</h3> </div> 
+                </div> 
+            </a> 
+
+            <!-- end of card slot  -->
+        </div> 
+    </div>
 
     
   

@@ -33,6 +33,7 @@ use App\Http\Controllers\certificationController;
 use App\Http\Controllers\UpdatesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SharepointController;
+use App\Http\Controllers\IsoDocumentController;
 
 //
 // All routes are protected by the "auth" middleware.
@@ -511,7 +512,7 @@ Route::middleware('auth','revalidate')->group(function () {
 
     
     /*------------------------------------------------------------------
-    | 17. KPI Library
+    | 18. KPI Library
     |------------------------------------------------------------------*/
     Route::get('/kpis/dashboard', [KpiController::class, 'dashboard'])->name('kpis.dashboard');
     // AJAX search for KPI dashboard
@@ -522,4 +523,11 @@ Route::middleware('auth','revalidate')->group(function () {
     
     // Export KPI to Excel
     Route::get('/kpis/{kpi}/export', [KpiController::class, 'export'])->name('kpis.export');
+
+
+    /*------------------------------------------------------------------
+    | 19. ISO Document Handling
+    |------------------------------------------------------------------*/
+    Route::get('/iso/document', [IsoDocumentController::class, 'loadDocument'])
+        ->name('iso.document');
 });
