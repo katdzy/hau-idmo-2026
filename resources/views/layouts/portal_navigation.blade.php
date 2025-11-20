@@ -227,6 +227,18 @@
                     </div>
                 </a> 
 
+                <!-- A LINK NAVIGATION  -->
+                 <a href="{{ route('iso.document') }}" class="{{ request()->routeIs('iso*') ? 'font-semibold' : '' }}">
+                    <div class="nav-link">
+                        
+                            <img src="{{ asset('images/icons/portal_nav/iso.svg') }}" />
+                    
+                     
+                            <h3>Iso Document Handling</h3>
+                     
+                    </div>
+                </a> 
+
          @if(Auth::user()->role !== 'Employee')
         <!-- A LINK NAVIGATION  -->
         <div class="w-full flex justify-center my-4">
