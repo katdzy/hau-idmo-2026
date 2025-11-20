@@ -80,107 +80,92 @@
         </div>
         <form id="ticket_form" action="#" method="POST" class="modal-body">
             @csrf
-            <!-- Ticket Classification -->
-             <div class="form-group">
-                <label class="form-label">Ticket Classification <span class="text-red-500">*</span></label>
-                <select name="classification" class="form-input" required>
-                    <option value="">Select Classification</option>
-                    <option value="revision">For Revision</option>
-                    <option value="addition">Addition</option>
-                    <option value="deletion">Deletion</option>
-                </select>
-             </div>
-        
-
             <!-- Originating Section -->
             <div class="form-group">
                 <label class="form-label">Originating Section (Department) <span class="text-red-500">*</span></label>
                 <input type="text" name="originating_section" class="form-input" placeholder="e.g., Human Resources, IT Department" required>
             </div>
 
-            <!-- Source Document / Manual -->
-            <div class="form-group">
-                <label class="form-label">Source Document / Manual <span class="text-red-500">*</span></label>
-                <select id="source_type" name="source_type" class="form-input" required>
-                    <option value="">Select Document Type</option>
-                    <option value="eoms">EOMS Manual</option>
-                    <option value="procedures">Procedures</option>
-                    <option value="forms">Forms</option>
-                    <option value="records">Records Management Manual</option>
-                    <option value="others">Others</option>
-                </select>
-            </div>
+            <hr class="my-4">
 
-            <!-- EOMS Manual Options -->
-            <div id="eoms_section" class="form-group conditional-section">
-                <label class="form-label">EOMS Manual Type</label>
-                <select name="eoms_type" class="form-input">
-                    <option value="">Select EOMS Type</option>
-                    <option value="4.1">4.1 Interested Parties</option>
-                    <option value="4.2">4.2 Risk Assessment</option>
-                    <option value="7.4">7.4 Communication</option>
-                    <option value="8.1">8.1 EOMS Plan</option>
-                </select>
-            </div>
+            <!-- Add Document Section -->
+            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                <h3 class="font-semibold mb-3 text-gray-700">Add Documents to Ticket.</h3>
+                <div class="grid grid-cols-2 gap-3">
+                    <!-- Document Code -->
+                    <div class="form-group mb-2">
+                        <label class="form-label text-sm">Document Code</label>
+                        <input type="text" id="doc_code" class="form-input" placeholder="Enter Document Code">
+                    </div>
+                    <!-- Document Title -->
+                    <div class="form-group mb-2">
+                        <label class="form-label text-sm">Document Title</label>
+                        <input type="text" id="doc_title" class="form-input" placeholder="Enter Document Title">
+                    </div>
+                    <!-- Classification -->
+                    <div class="form-group mb-2">
+                        <label class="form-label text-sm">Classification</label>
+                        <select id="doc_classification" class="form-input">
+                            <option value="">Select...</option>
+                            <option value="revision">For revision</option>
+                            <option value="addition">Addition</option>
+                            <option value="deletion">Deletion</option>
+                        </select>
+                    </div>
 
-            <!-- Procedures Section -->
-            <div id="procedures_section" class="conditional-section">
-                <div class="form-group">
-                    <label class="form-label">Document Code</label>
-                    <input type="text" name="procedures_code" class="form-input" placeholder="Enter Document Code">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Document Title</label>
-                    <input type="text" name="procedures_title" class="form-input" placeholder="Enter Document Title">
-                </div>
-            </div>
-
-            <!-- Forms Section -->
-            <div id="forms_section" class="conditional-section">
-                <div class="form-group">
-                    <label class="form-label">Document Code</label>
-                    <input type="text" name="forms_code" class="form-input" placeholder="Enter Document Code">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Document Title</label>
-                    <input type="text" name="forms_title" class="form-input" placeholder="Enter Document Title">
-                </div>
-            </div>
-
-            <!-- Records Management Plan -->
-            <div id="records_section" class="form group conditional-section">
-            <label class="form-label">Records Management Type</label>
-                <select name="records_type" class="form-input">
-                    <option value="">Select records type</option>
-                    <option value="3.0">3.0 Records Retention Schedule</option>
-                    <option value="4.0">4.0 Definition and Records Series Title</option>
-                </select>
-            </div>
-
-            <!-- Others Section -->
-            <div id="others_section" class="conditional-section">
-                <div class="form-group">
-                    <label class="form-label">Other Document Types</label>
-                    <div class="flex items-center space-x-4 mb-2">
-                        <label class="flex items-center">
-                            <input type="checkbox" name="others_types[]" value="brochure" class="mr-2">
-                            Brochure
-                        </label>
-                        <label class="flex items-center">
-                            <input type="checkbox" name="others_types[]" value="handbook" class="mr-2">
-                            Handbook
-                        </label>
-                        <label class="flex items-center">
-                            <input type="checkbox" name="others_types[]" value="manual" class="mr-2">
-                            Manual
-                        </label>
+                    <!-- Source Document Type -->
+                    <div class="form-group mb-2">
+                        <label class="form-label text-sm">Source Document</label>
+                        <select id="doc_source" class="form-input">
+                            <option value="">Select...</option>
+                            <option value="eoms">EOMS Manual</option>
+                            <option value="procedures">Procedures</option>
+                            <option value="forms">Forms</option>
+                            <option value="records">Records Management Manual</option>
+                            <option value="others">Others</option>
+                        </select>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Specify Other Details</label>
-                    <input type="text" name="others_specify" class="form-input" placeholder="Please specify other document type or details.">
+                <!-- Specific Type (conditional) -->
+                <div id="specific_type_section" class="form-group mb-2" style="display: none;">
+                    <label class="form-label text-sm">Specific Type</label>
+                    <select id="doc_specific_type" class="form-input">
+                        <option value="">Select...</option>
+                    </select>
+                </div>
+
+                <button type="button" id="add_document_btn" class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 mt-2">
+                    + Add Document to List
+                </button>
+            </div>
+
+            <!-- Documents List Table -->
+            <div class="mb-4">
+                <h3 class="font-semibold mb-2 text-gray-700">Documents in this Ticket (<span id="doc_count">0</span>)</h3>
+                <div class="border border-gray-300 rounded-lg overflow-hidden">
+                    <table class="w-full text-sm">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="px-3 py-2 text-left">Code</th>
+                                <th class="px-3 py-2 text-left">Title</th>
+                                <th class="px-3 py-2 text-left">Classification</th>
+                                <th class="px-3 py-2 text-left">Source</th>
+                                <th class="px-3 py-2 text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="documents_list">
+                            <tr id="empty_row">
+                                <td colspan="5" class="text-center py-4 text-gray-400 italic">No documents added yet.</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
+
+            <!-- Hidden input to store documents JSON-->
+            <input type="hidden" name="documents" id="documents_json">
+
+            <hr class="my-4">
 
             <!-- SharePoint Folder Link -->
             <div class="form-group">
@@ -262,7 +247,7 @@
         background: white;
         border-radius: 10px;
         width: 90%;
-        max-width: 700px;
+        max-width: 800px;
         max-height: 90vh;
         overflow-y: auto;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -281,7 +266,7 @@
     }
 
     .form-group {
-        margin-bottom: 1.5rem;
+        margin-bottom: 1rem;
     }
 
     .form-label {
@@ -303,14 +288,6 @@
         outline: none;
         border-color: #3b82f6;
         box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-    }
-
-    .conditional-section {
-        display: none;
-    }
-
-    .conditional-section.active {
-        display: block;
     }
 </style>
 
@@ -334,12 +311,18 @@
         });
 
         [mytickets_tbl, submitted_tbl, qmr_tbl, approved_tbl, onhold_tbl].forEach(tbl =>{
-            tbl.classList.remove('inactive_link');
-        });
+        tbl.classList.add('inactive_link');
+    });
 
         activeBtn.classList.add('active_link');
         activeTbl.classList.remove('inactive_link');
     }
+
+    mytickets_btn.addEventListener("click", () => switchTab(mytickets_btn, mytickets_tbl));
+    submitted_btn.addEventListener("click", () => switchTab(submitted_btn, submitted_tbl));
+    qmr_btn.addEventListener("click", () => switchTab(qmr_btn, qmr_tbl));
+    approved_btn.addEventListener("click", () => switchTab(approved_btn, approved_tbl));
+    onhold_btn.addEventListener("click", () => switchTab(onhold_btn, onhold_tbl));
 
     // Modal Handling
     const modal = document.getElementById('ticket_modal');
@@ -360,30 +343,174 @@
         }
     });
 
-    // Conditional form section
-    const sourceType = document.getElementById('source_type');
-    const eomsSection = document.getElementById('eoms_section');
-    const proceduresSection = document.getElementById('procedures_section');
-    const formsSection = document.getElementById('forms_section');
-    const recordsSection = document.getElementById('records_section');
-    const otherSection = document.getElementById('others_section');
+    // Document Management
+    let documents = [];
+    const docSource = document.getElementById('doc_source');
+    const specificTypeSection = document.getElementById('specific_type_section');
+    const specificTypeSelect = document.getElementById('doc_specific_type');
 
-    sourceType.addEventListener('change', () =>{
-        // Hide all sections first
-        [eomsSection, proceduresSection, formsSection, recordsSection, otherSection].forEach(section =>{
-            section.classList.remove('active');
-        });
+    // Source Type options
+    const sourceTypeOptions = {
+        eoms: [
+            { value: '4.1', label: '4.1 Interested Parties'},
+            { value: '4.2', label: '4.2 Risk Assessment'},
+            { value: '7.4', label: '7.4 Communication'},
+            { value: '8.1', label: '8.1 EOMS Plan'}
+        ],
+        records: [
+            { value: '3.0', label: '3.0 Records Retention Schedule'},
+            { value: '4.0', label: '4.0 Definition and Records Series Title'}
+        ]
+    };
 
-        // Show relevant section
-        const value = sourceType.value;
-        if(value === 'eoms') eomsSection.classList.add('active');
-        if(value === 'procedures') proceduresSection.classList.add('active');
-        if(value === 'forms')formsSection.classList.add('active');
-        if(value === 'records')recordsSection.classList.add('active');
-        if(value === 'others')otherSection.classList.add('active');
+    // Show/hide specific type dropdown
+    docSource.addEventListener('change', () => {
+        const source = docSource.value;
+
+        if (source === 'eoms' || source === 'records'){
+            specificTypeSection.style.display = 'block';
+            specificTypeSelect.innerHTML = `<option value="">Select... </option>`;
+
+            const options = sourceTypeOptions[source];
+            options.forEach(opt => {
+                const option = document.createElement('option');
+                option.value = opt.value;
+                option.textContent = opt.label;
+                specificTypeSelect.appendChild(option);
+            });
+        } else {
+            specificTypeSection.style.display = 'none';
+            specificTypeSelect.value = '';
+        }
     });
 
-    // Auto-hide messages in 5 seconds or 5000 miliseconds
+    // Add Document to List
+    document.getElementById('add_document_btn').addEventListener('click', () => {
+        const code = document.getElementById('doc_code').value.trim();
+        const title = document.getElementById('doc_title').value.trim();
+        const classification = document.getElementById('doc_classification').value;
+        const source = document.getElementById('doc_source').value;
+        const specificType = document.getElementById('doc_specific_type').value;
+
+        // Validation
+        if (!code || !title || !classification || !source){
+            alert('Please select a specific type');
+            return;
+        }
+
+        if ((source === 'eoms' || source === 'records') && !specificType){
+            alert('Please select a specific type');
+            return;
+        }
+
+        // Create document object
+        const doc = {
+            code,
+            title,
+            classification,
+            source,
+            specificType: specificType || null,
+            id: Date.now() //Give a unique ID for removal
+        };
+        documents.push(doc);
+        updateDocumentsList();
+        clearDocumentForm();
+    });
+
+    function updateDocumentsList() {
+        const tbody = document.getElementById('documents_list');
+        const emptyRow = document.getElementById('empty_row');
+        const docCount = document.getElementById('doc_count');
+
+        // Update docCount
+        docCount.textContent = documents.length;
+
+        // Update hidden input
+        document.getElementById('documents_json').value = JSON.stringify(documents);
+
+        if (documents.length === 0){
+            emptyRow.style.display = 'table-row';
+            return;
+        }
+
+        emptyRow.style.display = 'none';
+
+        // Clear and rebuild table
+        tbody.innerHTML = '';
+        documents.forEach(doc => {
+            const row = document.createElement('tr');
+            row.className = "border-t";
+
+            const sourceLabel = getSourceLabel(doc.source, doc.specificType);
+            const classLabel = doc.classification.charAt(0).toUpperCase() + doc.classification.slice(1);
+
+            row.innerHTML = `
+                <td class="px-3 py-2">${doc.code}</td>
+                <td class="px-3 py-2">${doc.title}</td>
+                <td class="px-3 py-2">
+                    <span class="inline-block px-2 py-1 text-xs rounded ${getClassificationColor(doc.classification)}">
+                        ${classLabel}
+                    </span>
+                </td>
+                <td class="px-3 py-2">${sourceLabel}</td>
+                <td class="px-3 py-2 text-center">
+                    <button type="button" onclick="removeDocument(${doc.id})" class="text-red-600 hover:text-red-800 text-sm">
+                        Remove
+                    </button>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    function getSourceLabel(source, specificType){
+        const labels = {
+            eoms: 'EOMS Manual',
+            procedures: 'Procedures',
+            forms: 'Forms',
+            records: 'Records Management',
+            others: 'Others'
+        };
+        let label = labels[source] || source;
+        if (specificType) {
+            label += ` (${specificType})`;
+        }
+        return label;
+    }
+
+    function getClassificationColor(classification){
+        const colors = {
+            revision: 'bg-yellow-200 text-yellow-800',
+            addition: 'bg-green-200 text-green-800',
+            deletion: 'bg-red-200 text-red-800'
+        };
+        return colors[classification] || 'bg-gray-200 text-gray-800';
+    }
+
+    function removeDocument(id){
+        documents = documents.filter(doc => doc.id !== id);
+        updateDocumentsList();
+    }
+
+    function clearDocumentForm(){
+        document.getElementById('doc_code').value = '';
+        document.getElementById('doc_title').value = '';
+        document.getElementById('doc_classification').value = '';
+        document.getElementById('doc_source').value = '';
+        document.getElementById('doc_specific_type').value = '';
+        specificTypeSection.style.display = 'none';
+    }
+
+    //Form submission Validation
+    document.getElementById('ticket_form').addEventListener('submit', (e) => {
+        if (documents.length === 0){
+            e.preventDefault();
+            alert('Please add at least one document to the ticket');
+            return false;
+        }
+    })
+
+    // Auto-hide messages in 5 seconds or 5000 milliseconds
     setTimeout(() =>{
         const msgElement = document.getElementById('msg');
         if(msgElement) msgElement.style.display = 'none';
