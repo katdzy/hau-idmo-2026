@@ -21,7 +21,7 @@ return new class extends Migration
             $table->timestamps();
 
             // // Foregin key to link to tbl_login
-            // $table->foreign('created_by')->references('id')->on('tbl_login')->onDelete('cascade');
+            // $table->foreign('created_by')->references('id')->on('tbl_login')->onDelete('restrict');
         });
     }
 

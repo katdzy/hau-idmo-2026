@@ -1,7 +1,26 @@
 <x-app-layout>
+@php
+function getStatusColor($status){
+    $colors = [
+        'pending' => 'bg-yellow-100 text-yellow 800',
+        'submitted_to_idc' => 'bg-blue-100 text-blue-800',
+        'with_qmr' => 'bg-purple-100 text-purple-800',
+        'approved'=> 'bg-green-100 text-green-800',
+        'on_hold' => 'bg-red-100 text-red-800'
+    ];
+    return $colors[$status] ?? 'bg-gray-100 text-gray-800';
+}
+@endphp
+
 <div class="min-h-screen">
 <div class="container mx-auto">
     <div class="con-box">
+        @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> 
+        </div>
+        @endif
         @if (session('msg'))
             <div class="w-full bg-green-600 text-white rounded-xl px-4 py-2 mb-4" id ="msg">
                 {{ session('msg') }}
@@ -33,12 +52,66 @@
          <hr class="mb-2 opacity-90 w-full">
 
          <!-- My Tickets Table -->
-          <div id="mytickets" class="w-full flex flex-col border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-            <div class="w-full items-center justify-center text-sm text-gray-400 pt-4 pb-12">
-                <span class="italic">No tickets found.</span>
-            </div>
-            <!-- TODO: Ticket List goes here -->
-          </div>
+<div id="mytickets" class="w-full flex flex-col border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+    @if(count($tickets) > 0)
+        <table class="w-full">
+            <thead class="bg-gray-100 border-b">
+                <tr>
+                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Ticket ID</th>
+                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Originating Section</th>
+                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Documents</th>
+                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Status</th>
+                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Created</th>
+                    <th class="px-4 py-3 text-center text-sm font-semibold text-gray-700">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($tickets as $ticket)
+                    <tr class="border-b hover:bg-gray-50 cursor-pointer">
+                        <td class="px-4 py-3 text-sm font-mono text-blue-600">
+                            #{{ $ticket->id }}
+                        </td>
+                        <td class="px-4 py-3 text-sm">
+                            {{ $ticket->originating_section }}
+                        </td>
+                        <td class="px-4 py-3 text-sm">
+                            <span class="inline-block px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">
+                                {{ $ticket->documents_count }} document(s)
+                            </span>
+                        </td>
+                        <td class="px-4 py-3 text-sm">
+                            <span class="inline-block px-2 py-1 rounded text-xs {{ getStatusColor($ticket->status) }}">
+                                {{ ucfirst(str_replace('_', ' ', $ticket->status)) }}
+                            </span>
+                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-600">
+                            {{ $ticket->created_at->format('M d, Y') }}
+                        </td>
+                        <td class="px-4 py-3 text-center">
+                            <button 
+                                class="view-details-btn text-blue-600 hover:text-blue-800 text-sm font-semibold"
+                                data-ticket-id="{{ $ticket->id }}"
+                                data-ticket-section="{{ $ticket->originating_section }}"
+                                data-ticket-status="{{ $ticket->status }}"
+                                data-ticket-created="{{ $ticket->created_at->format('M d, Y h:i A') }}"
+                                data-ticket-creator="{{ $ticket->creator->name ?? 'Unknown' }}"
+                                data-ticket-sharepoint="{{ $ticket->sharepoint_link }}"
+                                data-ticket-message="{{ $ticket->message_to_idc }}"
+                                data-ticket-documents="{{ json_encode($ticket->documents) }}"
+                            >
+                                View Details
+                            </button>
+                        </td> 
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    @else
+        <div class="w-full flex items-center justify-center text-sm text-gray-400 pt-4 pb-12">
+            <span class="italic">No tickets found.</span>
+        </div>
+    @endif
+</div>
 
           <!-- Submitted to IDC table -->
            <div id="submitted" class="w-full flex-col border border-gray-200 rounded-lg shadow-sm overflow-hidden inactive_link">
@@ -78,7 +151,65 @@
             <h2 class="text-xl font-bold">Create New DMCN Ticket</h2>
             <button id="close_modal" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
         </div>
-        <form id="ticket_form" action="#" method="POST" class="modal-body">
+
+        <div class="modal-body">
+            <!-- Ticket Information -->
+            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                <h3 class="font-semibold mb-3 text-gray-700">Ticket Information</h3>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="text-sm text-gray-600">Originating Section:</label>
+                        <p class="font-medium" id="detail_section"></p>
+                    </div>
+                    <div>
+                        <label class="text-sm text-gray-600">Status:</label>
+                        <p class="font-medium" id="detail_status"></p>
+                    </div>
+                    <div>
+                        <label class="text-sm text-gray-600">Created:</label>
+                        <p class="font-medium" id="detail_created"></p>
+                    </div>
+                    <div>
+                        <label class="text-sm text-gray-600">Created By:</label>
+                        <p class="font-medium" id="detail_creator"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sharepoint Link -->
+            <div class="bg-blue-50 p-4 rounded-lg mb-4">
+                <label class="text-sm text-gray-600 block mb-2">SharePoint Folder:</label>
+                <a id="detail_sharepoint" href="#" target="_blank" class="text-blue-600 hover:text-blue-800 font-medium break-all">
+                    <!-- TODO: Link over here -->
+                </a>
+            </div>
+
+            <!-- Documents List -->
+            <div class="mb-4">
+                <h3 class="font-semibold mb-2 text-gray-700">Documents in this Ticket</h3>
+                <div class="border border-gray-300 rounded-lg overflow-hidden">
+                    <table class="bg-gray-100">
+                        <thead class="bg-gray-100">
+                            <th class="px-3 py-2 text-left">Code</th>
+                            <th class="px-3 py-2 text-left">Title</th>
+                            <th class="px-3 py-2 text-left">Classification</th>
+                            <th class="px-3 py-2 text-left">Source</th>
+                        </thead>
+                        <tbody id="detail_documents_list">
+                            <!-- TODO: Documents will be housed here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Message to IDC -->
+             <div class="bg-gray-50 p-4 rounded-lg">
+                <label class="text-sm text-gray-600 block mb-2">Message to IDC:</label>
+                <p class="text-gray-800 whitespace-pre-wrap" id="detail_message"></p>
+             </div>
+        </div>
+
+        <form id="ticket_form" action="{{ route('iso.document.store') }}" method="POST" class="modal-body">
             @csrf
             <!-- Originating Section -->
             <div class="form-group">
@@ -529,4 +660,99 @@
         const errorElement = document.getElementById('error-msg');
         if(errorElement) errorElement.style.display = 'none';
     }, 5000);
+
+    // ============================================
+    // VIEW TICKET DETAILS MODAL
+    // ============================================
+
+    const detailsModal = document.getElementById('details_modal');
+    const closeDetailsBtn = document.getElementById('close_details_modal');
+
+    // Close details modal
+    closeDetailsBtn.addEventListener('click', () => {
+        detailsModal.classList.remove('active');
+    });
+
+    // Close when clicking outside
+    detailsModal.addEventListener('click', (e) => {
+        if (e.target === detailsModal) {
+            detailsModal.classList.remove('active');
+        }
+    });
+
+    // Handle all "View Details" button clicks
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('view-details-btn')) {
+            // Get the ticket data from the button's data attributes
+            const ticketId = e.target.dataset.ticketId;
+            const section = e.target.dataset.ticketSection;
+            const status = e.target.dataset.ticketStatus;
+            const created = e.target.dataset.ticketCreated;
+            const creator = e.target.dataset.ticketCreator;
+            const sharepoint = e.target.dataset.ticketSharepoint;
+            const message = e.target.dataset.ticketMessage;
+            const documentsJson = e.target.dataset.ticketDocuments;
+            
+            // Parse the documents JSON string into an array
+            const documents = JSON.parse(documentsJson);
+            
+            // Fill the modal with the data
+            document.getElementById('detail_ticket_id').textContent = '#' + ticketId;
+            document.getElementById('detail_section').textContent = section;
+            document.getElementById('detail_created').textContent = created;
+            document.getElementById('detail_creator').textContent = creator;
+            document.getElementById('detail_message').textContent = message;
+            
+            // Set the SharePoint link
+            const sharepointLink = document.getElementById('detail_sharepoint');
+            sharepointLink.href = sharepoint;
+            sharepointLink.textContent = sharepoint;
+            
+            // Format and display status with color
+            const statusElement = document.getElementById('detail_status');
+            const statusText = status.replace(/_/g, ' ');
+            const statusFormatted = statusText.charAt(0).toUpperCase() + statusText.slice(1);
+            statusElement.innerHTML = `<span class="inline-block px-2 py-1 rounded text-xs ${getStatusColorJS(status)}">${statusFormatted}</span>`;
+            
+            // Fill the documents table
+            const documentsList = document.getElementById('detail_documents_list');
+            documentsList.innerHTML = ''; // Clear existing rows
+            
+            documents.forEach(doc => {
+                const row = document.createElement('tr');
+                row.className = 'border-t';
+                
+                const classLabel = doc.classification.charAt(0).toUpperCase() + doc.classification.slice(1);
+                const sourceLabel = getSourceLabel(doc.source_type, doc.specific_type);
+                
+                row.innerHTML = `
+                    <td class="px-3 py-2">${doc.document_code}</td>
+                    <td class="px-3 py-2">${doc.document_title}</td>
+                    <td class="px-3 py-2">
+                        <span class="inline-block px-2 py-1 text-xs rounded ${getClassificationColor(doc.classification)}">
+                            ${classLabel}
+                        </span>
+                    </td>
+                    <td class="px-3 py-2">${sourceLabel}</td>
+                `;
+                
+                documentsList.appendChild(row);
+            });
+            
+            // Show the modal
+            detailsModal.classList.add('active');
+        }
+    });
+
+    // Helper function for status colors in JavaScript
+    function getStatusColorJS(status) {
+        const colors = {
+            'pending': 'bg-yellow-100 text-yellow-800',
+            'submitted_to_idc': 'bg-blue-100 text-blue-800',
+            'with_qmr': 'bg-purple-100 text-purple-800',
+            'approved': 'bg-green-100 text-green-800',
+            'on_hold': 'bg-red-100 text-red-800',
+        };
+        return colors[status] || 'bg-gray-100 text-gray-800';
+    }
 </script>

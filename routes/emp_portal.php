@@ -530,4 +530,6 @@ Route::middleware('auth','revalidate')->group(function () {
     |------------------------------------------------------------------*/
     Route::get('/iso/document', [IsoDocumentController::class, 'loadDocument'])
         ->name('iso.document');
+    Route::post('/iso/document/store', [IsoDocumentController::class,'storeDocument'])
+        ->name('iso.document.store');
 });
