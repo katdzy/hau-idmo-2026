@@ -366,7 +366,7 @@ function getStatusColor($status){
 <!-- EDIT TICKET MODAL -->
 <!-- ============================================ -->
 <div id="edit_modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-    <div class="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-scroll m-4">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] m-4">
         <!-- Modal Header -->
         <div class="sticky top-0 bg-white border-b px-6 py-4 flex justify-between items-center">
             <h2 class="text-xl font-bold text-gray-800">Edit Ticket</h2>
@@ -614,7 +614,7 @@ function getStatusColor($status){
 </style>
 
 <script>
-    // Modal Handling
+    // Modal Handling - Creation of ticket
     const modal = document.getElementById('ticket_modal');
     const createBtn = document.getElementById('create_ticket_btn');
     const closeBtn = document.getElementById('close_modal');
@@ -947,25 +947,28 @@ function getStatusColor($status){
 
     // Close edit modal
     closeEditBtn.addEventListener('click', ()=> {
-        editModal.classList.add('hidden');
-        editModal.classList.remove('flex');
-        resetEditForm();
+        editModalClose();
     });
 
     cancelEditBtn.addEventListener('click', ()=> {
-        editModal.classList.add('hidden');
-        editModal.classList.remove('flex');
-        resetEditForm();
+        editModalClose();
     });
 
     // Close when clicking outside
     editModal.addEventListener('click', (e)=> {
         if (e.target === editModal){
-            editModal.classList.add('hidden');
-            editModal.classList.remove('flex');
-            resetEditForm();
+            editModalClose();
         }
     });
+
+    function editModalClose(){
+        editModal.classList.add('hidden');
+        editModal.classList.remove('flex');
+        resetEditForm();
+
+        // Re-enable scrolling on the main page body
+        document.body.classList.remove('overflow-hidden');
+    }
 
     // Handle Source Type Change (for Edit Modal)
     editDocSource.addEventListener('change', () => {
@@ -1055,6 +1058,9 @@ function getStatusColor($status){
                 // Show modal
                 editModal.classList.remove('hidden');
                 editModal.classList.add('flex');
+
+                // Disable scrolling on the main page Body
+                document.body.classList.add('overflow-hidden');
             })
             .catch(error => {
                 console.error('Error: ', error);
