@@ -682,16 +682,7 @@ function getStatusColor($status){
         const source = document.getElementById('doc_source').value;
         const specificType = document.getElementById('doc_specific_type').value;
 
-        // Validation
-        if (!code || !title || !classification || !source){
-            alert('Please select a specific type');
-            return;
-        }
-
-        if ((source === 'eoms' || source === 'records') && !specificType){
-            alert('Please select a specific type');
-            return;
-        }
+        validationForm();
 
         // Create document object
         const doc = {
@@ -999,15 +990,9 @@ function getStatusColor($status){
         const source = document.getElementById('edit_doc_source').value;
         const specificType = document.getElementById('edit_doc_specific_type').value;
 
-        // Validation
-        if (!code || !title || !classification || !source){
-            alert('Please fill in all Document details (Code, Title, Classification, and Source).')
-            return;
-        }
-        if((source === 'eoms' || source === 'records') && !specificType){
-            alert('Please select a specific type');
-            return;
-        }
+        validationForm();
+
+
         // Create document object
         const doc = {
             code,
@@ -1177,4 +1162,18 @@ function getStatusColor($status){
             form.submit();
         }
     }
+
+    // Validation function - both on edit and creating ticket
+    function validationForm(){
+        // Validation/Make sure the user has an input, no blank answers
+        if (!code || !title || !classification || !source){
+            alert('Please fill in all Document details (Code, Title, Classification, and Source).')
+            return;
+        }
+        if((source === 'eoms' || source === 'records') && !specificType){
+            alert('Please select a specific type');
+            return;
+        }
+    }
+
 </script>
