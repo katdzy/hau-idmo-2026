@@ -43,28 +43,67 @@ function getStatusColor($status){
 
         <!-- Status Tabs -->
          <div class="w-full flex">
-            <a href="{{ route('iso.document', ['status' => 'all']) }}"
+            <a href="{{ route('iso.document', ['status' => 'all', 'search' => $search ?? null]) }}"
                 class="hover:bg-gray-100 text-gray-400 font-semibold px-8 py-2 {{ ($statusFilter ?? 'all') === 'all' ? 'active_link' : '' }}">
                 My Tickets
             </a>
-            <a href="{{ route('iso.document', ['status' => 'submitted_to_idc']) }}"
+            <a href="{{ route('iso.document', ['status' => 'submitted_to_idc', 'search' => $search ?? null]) }}"
                 class="hover:bg-gray-100 text-gray-400 font-semibold px-8 py-2 {{ ($statusFilter ?? 'all') === 'submitted_to_idc' ? 'active_link' : '' }}">
                 Submitted to IDC
             </a>
-            <a href="{{ route('iso.document', ['status' => 'with_qmr']) }}"
+            <a href="{{ route('iso.document', ['status' => 'with_qmr', 'search' => $search ?? null]) }}"
                 class="hover:bg-gray-100 text-gray-400 font-semibold px-8 py-2 {{ ($statusFilter ?? 'all') === 'with_qmr' ? 'active_link' : '' }}">
                 With QMR
             </a>
-            <a href="{{ route('iso.document', ['status' => 'approved']) }}"
+            <a href="{{ route('iso.document', ['status' => 'approved', 'search' => $search ?? null]) }}"
                 class="hover:bg-gray-100 text-gray-400 font-semibold px-8 py-2 {{ ($statusFilter ?? 'all') === 'approved' ? 'active_link' : '' }}">
                 Approved
             </a>
-            <a href="{{ route('iso.document', ['status' => 'on_hold']) }}"
+            <a href="{{ route('iso.document', ['status' => 'on_hold', 'search' => $search ?? null]) }}"
                 class="hover:bg-gray-100 text-gray-400 font-semibold px-8 py-2 {{ ($statusFilter ?? 'all') === 'on_hold' ? 'active_link' : '' }}">
                 On-hold
             </a>
          </div>
          <hr class="mb-2 opacity-90 w-full">
+
+        <!-- Search Box -->
+        <div class="w-full px-4 py-3 bg-gray-50 rounded-lg mb-4">
+            <form method="GET" action="{{ route('iso.document') }}" class="flex gap-3 items-center">
+                <!-- Preserve status filter -->
+                <input type="hidden" name="status" value="{{ $statusFilter ?? 'all' }}">
+
+                <!-- Search input -->
+                <div class="flex-1">
+                    <input type="text"
+                        name="search"
+                        value="{{ $search ?? '' }}"
+                        placeholder="Search by ticket ID, section, document code, or title..."
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <!-- Search button -->
+                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold">
+                    Search
+                </button>
+
+                <!-- Clear Button (only show if searching) -->
+                @if($search ?? false)
+                    <a href="{{ route('iso.document', ['status' => $statusFilter ?? 'all']) }}"
+                    class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg font-semibold">
+                    Clear
+                </a>
+                @endif
+            </form>
+        </div>
+
+        <!-- Search results info -->
+        @if($search ?? false)
+            <div class="w-full px-4 py-2 bg-blue-50 border-l-4 border-blue-500 mb-4">
+                <p class="text-sm text-blue-800">
+                    <strong>Searching for:</strong> "{{ $search }}"
+                    <span class="text-blue-600">({{ count($tickets) }} result{{ count($tickets) != 1 ? 's': '' }} found)</span>
+                </p>
+            </div>
+        @endif
 
         <!-- My Tickets Table -->
         <div id="mytickets" class="w-full flex flex-col border border-gray-200 rounded-lg shadow-sm overflow-hidden">
@@ -127,6 +166,11 @@ function getStatusColor($status){
                                             <button onclick="confirmDelete({{ $ticket->id }})"
                                                 class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm">
                                                 Delete
+                                            </button>
+                                            <!-- Submit to IDC -->
+                                            <button onclick="confirmSubmit({{ $ticket->id }})"
+                                                    class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm">
+                                                Submit to IDC
                                             </button>
                                          @endif
                                     </div>
@@ -511,6 +555,10 @@ function getStatusColor($status){
     @csrf
     @method('DELETE')
 </form>
+<form id="submit_form" method="POST" style="display:none;">
+    @csrf
+    @method('PATCH')
+</form>
 </x-app-layout>
 
 <style>
@@ -682,7 +730,9 @@ function getStatusColor($status){
         const source = document.getElementById('doc_source').value;
         const specificType = document.getElementById('doc_specific_type').value;
 
-        validationForm();
+        if (!validationCheckForm(code, title, classification, source, specificType)) {
+            return;
+        }
 
         // Create document object
         const doc = {
@@ -745,8 +795,8 @@ function getStatusColor($status){
                     </span>
                 </td>
                 <td class="px-2 py-2">${sourceLabel}</td>
-                <td class="px-2 py-2" text-center">
-                    <button type="button" onclick="removeDocument(${doc.id})" class="text-red-600" hover:text-red-800 text-sm">
+                <td class="px-2 py-2 text-center">
+                    <button type="button" onclick="removeDocument(${doc.id})" class="text-red-600 hover:text-red-800 text-sm">
                      Remove
                     </button>
                 </td>
@@ -990,7 +1040,9 @@ function getStatusColor($status){
         const source = document.getElementById('edit_doc_source').value;
         const specificType = document.getElementById('edit_doc_specific_type').value;
 
-        validationForm();
+        if (!validationCheckForm(code, title, classification, source, specificType)) {
+            return;
+        }
 
 
         // Create document object
@@ -1098,7 +1150,7 @@ function getStatusColor($status){
                 </td>
                 <td class="px-2 py-2">${sourceLabel}</td>
                 <td class="px-2 py-2 text-center">
-                    <button type="button" onclick="removeEditDocument(${doc.id})" class="text-red-600 hover:text-red-800 text-sm">
+                    <button type="button" onclick="removeEditDocument('${doc.id}')" class="text-red-600 hover:text-red-800 text-sm">
                         Remove
                     </button>
                 </td>
@@ -1162,18 +1214,34 @@ function getStatusColor($status){
             form.submit();
         }
     }
+    // ============================================
+    // SUBMIT TO IDC FUNCTIONALITY
+    // ============================================
+    function confirmSubmit(ticketId){
+        const confirmed = confirm(
+            'Submit this ticket to IDC?\n\n' +
+            'Once submitted, you will no longer be able to edit or delete this ticket.'
+        );
+
+        if(confirmed){
+            const form = document.getElementById('submit_form');
+            form.action = `/iso/document/${ticketId}/submit`;
+            form.submit();
+        }
+    }
 
     // Validation function - both on edit and creating ticket
-    function validationForm(){
+    function validationCheckForm(code, title, classification, source, specificType){
         // Validation/Make sure the user has an input, no blank answers
         if (!code || !title || !classification || !source){
-            alert('Please fill in all Document details (Code, Title, Classification, and Source).')
-            return;
+            alert('Please fill in all Document details (Code, Title, Classification, and Source).');
+            return false;
         }
         if((source === 'eoms' || source === 'records') && !specificType){
             alert('Please select a specific type');
-            return;
+            return false;
         }
+        return true;
     }
 
 </script>

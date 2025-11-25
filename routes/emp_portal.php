@@ -541,4 +541,7 @@ Route::middleware('auth','revalidate')->group(function () {
 
     Route::delete('/iso/document/{ticket}', [isoDocumentController::class,'destroyDocument'])
         ->name('iso.document.destroy');
+
+    Route::patch('/iso/document/{ticket}/submit', [isoDocumentController::class,'submitToIDC'])
+        ->name('iso.document.submit');
 });

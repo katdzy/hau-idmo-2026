@@ -8,6 +8,17 @@ use Illuminate\Http\Request;
 
 class IsoDocumentController extends Controller 
 {
+    public function authTicketCheck(IsoTicket $ticket){
+        // Auth check: Make sure ticket belongs to the current user
+        if($ticket->created_by !== auth()->id()){
+            abort(403, 'Unauthorized action.');
+        }
+
+        // Auth Check: Only allow edit on pending tickets
+        if($ticket->status !=='pending'){
+            abort(403, 'Cannot edit tickets that are not pending.');
+        }
+    }
     public function loadDocument(Request $request){
         // Make the query - get the tickets for the current user
         $query = IsoTicket::where('created_by', auth()->id());
@@ -20,6 +31,22 @@ class IsoDocumentController extends Controller
             $query->where('status', $statusFilter);
         }
 
+        // Search filter
+        $search = $request->query('search');
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                // Search in ticket fields
+                                $q->where('id', '=',  $search)
+                                    ->orWhere('originating_section', 'like', "%{$search}%")
+
+                                //   Search in related documents
+                                    ->orWhereHas('documents', function($docQuery) use ($search) {
+                                            $docQuery->where('document_code', 'like', "%{$search}%")
+                                                             ->orWhere('document_title', 'like', "%{$search}%");
+                                    });
+            });
+        }
+
         // Execute the query with document count and ordering
         $tickets = $query->with('documents')
             ->withCount('documents')
@@ -28,21 +55,12 @@ class IsoDocumentController extends Controller
 
             
         // Pass tickets to the view and the current filter to the view
-        return view('iso.document', compact('tickets', 'statusFilter'));
-
-        //TODO: More Logic Here in the future
+        return view('iso.document', compact('tickets', 'statusFilter', 'search'));
     }
 
     public function editDocument(IsoTicket $ticket){
-        // Auth check: Make sure ticket belongs to the current user
-        if($ticket->created_by !== auth()->id()){
-            abort(403, 'Unauthorized action.');
-        }
-
-        // Auth Check: Only allow edit on pending tickets
-        if($ticket->status !=='pending'){
-            abort(403, 'Cannot edit tikets that are not pending.');
-        }
+        // Auth Check
+        $this->authTicketCheck($ticket);
 
         // Load the ticket with its documents relationship
         $ticket -> load('documents');
@@ -52,14 +70,8 @@ class IsoDocumentController extends Controller
     }
 
     public function updateDocument(Request $request, IsoTicket $ticket){
-        // Auth check: Make sure ticket belongs to the current user
-        if($ticket->created_by !== auth()->id()){
-            abort(403, 'Unauthorized Action');
-        }
-        // Auth check: Only allow editing pending tickets
-        if($ticket->status !== 'pending'){
-            abort(403, 'Cannot edit tickets that are not pending');
-        }
+        // Auth Check
+        $this->authTicketCheck($ticket);
 
         // Validate incoming data
         $validated = $request->validate([
@@ -148,8 +160,16 @@ class IsoDocumentController extends Controller
                 'specific_type' => $document['specificType']
             ]);
         }
-        
-        // TODO: Adding more logic here
         return redirect()->route('iso.document')->with('success', 'Ticket created successfully!');
+    }
+    public function submitToIDC(IsoTicket $ticket){
+        // Auth check
+        $this->authTicketCheck($ticket);
+
+        // Update ticket Status
+        $ticket->update([
+            'status' => 'submitted_to_idc'
+        ]);
+        return redirect()->route('iso.document')->with('success','Ticket submitted to IDC successfully!');
     }
 }
