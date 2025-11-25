@@ -539,9 +539,15 @@ Route::middleware('auth','revalidate')->group(function () {
     Route::put('/iso/document/{ticket}', [IsoDocumentController::class,'updateDocument'])
         ->name('iso.document.update');
 
-    Route::delete('/iso/document/{ticket}', [isoDocumentController::class,'destroyDocument'])
+    Route::delete('/iso/document/{ticket}', [IsoDocumentController::class,'destroyDocument'])
         ->name('iso.document.destroy');
-
-    Route::patch('/iso/document/{ticket}/submit', [isoDocumentController::class,'submitToIDC'])
+    // PATCH route updates the ticket status (Meant only for partial updates on the ticket)
+    Route::patch('/iso/document/{ticket}/submit', [IsoDocumentController::class,'submitToIDC'])
         ->name('iso.document.submit');
+
+    // IDC Management Routes
+    Route::get('/iso/idc/dashboard', [IsoDocumentController::class,'loadIdcDashboard'])
+        ->name('iso.idc.dashboard');
+    Route::patch('iso/idc/{ticket}/update-status', [IsoDocumentController::class,'updateTicketStatus'])
+        ->name('iso.idc.-update-status');
 });

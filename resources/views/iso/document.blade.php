@@ -38,6 +38,10 @@ function getStatusColor($status){
                 <h1 class="text-[1.5rem] font-bold leading-tight">ISO Document Management System</h1>
                 <span class="text-gray-500 text-sm"> Document Modification / Creation Notice (DMCN) Tracking</span>
             </div>
+            <!-- DEBUG PURPOSES TODO: REMOVE IN THE FUTURE -->
+            <a href="{{ route('iso.idc.dashboard') }}" class="bg-purple-500 hover:bg-purple-600 text-gray-400 px-4 py-2 rounded-lg font-semibold">
+                Switch to IDC view
+            </a>
         </div>
         <hr class="w-full opacity-100">
 

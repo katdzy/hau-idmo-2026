@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\IsoTicketDocument;
 use App\Models\IsoTicket;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Http\Request;
 
 class IsoDocumentController extends Controller 
@@ -25,27 +26,15 @@ class IsoDocumentController extends Controller
 
         // Status from URL (?status=something)
         $statusFilter = $request->query('status');
+        
+        $search = $request->query('search');
 
         // If a status filter was provided AND it's not 'all'
         if($statusFilter && $statusFilter !== 'all'){
             $query->where('status', $statusFilter);
         }
 
-        // Search filter
-        $search = $request->query('search');
-        if ($search) {
-            $query->where(function($q) use ($search) {
-                // Search in ticket fields
-                                $q->where('id', '=',  $search)
-                                    ->orWhere('originating_section', 'like', "%{$search}%")
-
-                                //   Search in related documents
-                                    ->orWhereHas('documents', function($docQuery) use ($search) {
-                                            $docQuery->where('document_code', 'like', "%{$search}%")
-                                                             ->orWhere('document_title', 'like', "%{$search}%");
-                                    });
-            });
-        }
+        $this->searchFilter($query, $search);
 
         // Execute the query with document count and ordering
         $tickets = $query->with('documents')
@@ -56,6 +45,22 @@ class IsoDocumentController extends Controller
             
         // Pass tickets to the view and the current filter to the view
         return view('iso.document', compact('tickets', 'statusFilter', 'search'));
+    }
+
+    public function searchFilter($query, $search){
+        // Search filter
+        if ($search) {
+            $query->where(function($q) use ($search) {
+            // Search in ticket fields
+            $q->where('id', '=',  $search)
+                ->orWhere('originating_section', 'like', "%{$search}%")
+            //Search in related documents
+                ->orWhereHas('documents', function($docQuery) use ($search) {
+                        $docQuery->where('document_code', 'like', "%{$search}%")
+                        ->orWhere('document_title', 'like', "%{$search}%");
+                });
+            });
+        }
     }
 
     public function editDocument(IsoTicket $ticket){
@@ -171,5 +176,34 @@ class IsoDocumentController extends Controller
             'status' => 'submitted_to_idc'
         ]);
         return redirect()->route('iso.document')->with('success','Ticket submitted to IDC successfully!');
+    }
+
+    public function loadIdcDashboard(Request $request){
+        // Get status filter
+        $statusFilter = $request->query('status','pending');
+
+        // Must define search
+        $search = $request->query('search');
+
+        // Start building the query - IDC should see all the tickets
+        $query = IsoTicket::with(['documents', 'creator']);
+
+        // Build query
+        if ($statusFilter !== 'all'){
+            $query->where('status', $statusFilter);
+        }
+
+        // Apply search if present
+        $this->searchFilter($query, $request);
+
+        // Exclude 'pending' tickets (IDC only sees submitted ones)
+        $query->where('status', '!=', 'pending');
+
+        // Order by newest first and get results
+        $tickets = $query->withCount('documents')
+                        ->orderBy('created_at', 'desc')
+                        ->get();
+
+        return view('iso.idc-dashboard', compact('tickets', 'statusFilter', 'search'));
     }
 }
