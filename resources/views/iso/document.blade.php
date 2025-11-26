@@ -163,7 +163,7 @@ function getStatusColor($status){
                                         <!-- Edit Button - Only show for pending tickets -->
                                          @if ($ticket-> status === 'pending')
                                             <button onclick="openEditModal({{ $ticket->id }})"
-                                                class="bg-yellow-500 hover:bg-yellow-600 text-gray px-3 py-1 rounded text-sm">
+                                                class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm">
                                                 Edit
                                             </button>
                                             <!-- Delete Buton -->
@@ -191,11 +191,11 @@ function getStatusColor($status){
         </div>
 
         <!-- Submitted to IDC table -->
-           <div id="submitted" class="w-full flex-col border border-gray-200 rounded-lg shadow-sm overflow-hidden inactive_link">
-                <div class="w-full flex items-center justify-center text-sm text-gray-400 pt-4 pb-12">
-                    <span class="italic">No tickets with QMR.</span>
-                </div>
-           </div>
+        <div id="submitted" class="w-full flex-col border border-gray-200 rounded-lg shadow-sm overflow-hidden inactive_link">
+            <div class="w-full flex items-center justify-center text-sm text-gray-400 pt-4 pb-12">
+                <span class="italic">No tickets with QMR.</span>
+            </div>
+        </div>
 
         <!-- Submitted to QMR table -->
         <div id="qmr" class="w-full flex flex-col border border-gray-200 rounded-lg shadow-sm overflow-hidden inactive_link">
@@ -204,18 +204,18 @@ function getStatusColor($status){
             </div>
         </div>
         <!-- Approved Table -->
-            <div id="onhold" class="w-full flex flex-col border border-gray-200 rounded-lg shadow-sm overflow-hidden inactive_link">
+        <div id="onhold" class="w-full flex flex-col border border-gray-200 rounded-lg shadow-sm overflow-hidden inactive_link">
             <div class="w-full flex items-center justify-center text-sm text-gray-400 pt-4 pb-12">
                 <span class="italic">No tickets on-hold</span>
             </div>
-            </div>
+        </div>
 
         <!-- Action buttons -->
         <section class="py-4 w-full flex justify-center items-center space-x-4">
-        <button id="create_ticket_btn" class="flex items-center justify-center bg-blue-500 text-white py-2 px-6 rounded hover:bg-blue-600">
-            <img src="{{ asset('images/icons/add.png') }}" alt="Add Icon" class="w-6 h-6 mr-6"/>
-            <span>Create new Ticket</span>
-        </button>
+            <button id="create_ticket_btn" class="flex items-center justify-center bg-blue-500 text-white py-2 px-6 rounded hover:bg-blue-600">
+                <img src="{{ asset('images/icons/add.png') }}" alt="Add Icon" class="w-6 h-6 mr-6"/>
+                <span>Create new Ticket</span>
+            </button>
         </section>
     </div>
 </div>
