@@ -180,9 +180,9 @@ class IsoDocumentController extends Controller
 
     public function loadIdcDashboard(Request $request){
         // Get status filter
-        $statusFilter = $request->query('status','pending');
+        $statusFilter = $request->query('status','submitted_to_idc');
 
-        // Must define search
+        // Must define search here instead of the extracted method
         $search = $request->query('search');
 
         // Start building the query - IDC should see all the tickets
@@ -191,10 +191,14 @@ class IsoDocumentController extends Controller
         // Build query
         if ($statusFilter !== 'all'){
             $query->where('status', $statusFilter);
+        } else{
+            // When showing "All Tickets", exclude pending ones
+            // IDC Should never see the pending tickets
+            $query->where('status', '!=', 'pending');
         }
 
         // Apply search if present
-        $this->searchFilter($query, $request);
+        $this->searchFilter($query, $search);
 
         // Exclude 'pending' tickets (IDC only sees submitted ones)
         $query->where('status', '!=', 'pending');

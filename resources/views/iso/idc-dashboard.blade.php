@@ -43,12 +43,48 @@ function getStatusColor($status){
             </div>
             <hr class="w-full opacity-100">
 
+            <!-- Search Box  (Same as the one on the document blade) -->
+            <div class="w-full px-4 py-3 bg-gray-50 rounded-lg mb-b">
+                <form method="GET" action="{{ route('iso.idc.dashboard') }}" class="flex gap-3 items-center">
+                    <!-- Preserve status filter -->
+                    <input type="hidden" name="status" value="{{ $statusFilter ?? 'submitted_to_idc' }}">
+
+                    <!-- Search Input -->
+                    <div class="flex-1">
+                        <input type="text"
+                            name="search"
+                            value="{{ $search ?? '' }}"
+                            placeholder="Search by Ticket ID, Section, Document Code, or document Title..."
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+                    </div>
+
+                    <!-- Search button -->
+                    <button type="submit" class="bg-purple-500 hover:bg-purple-600 text-white px-6 py-2 rounded-lg font-semibold">
+                        Search
+                    </button>
+
+                    <!-- Clear Button (only show if searching) -->
+                    @if ($search ?? false)
+                        <a href="{{ route('iso.idc.dashboard', ['status' => $statusFilter ?? 'submitted_to_idc']) }}"
+                            class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg font-semibold">
+                            Clear
+                        </a>
+                    @endif
+                </form>
+            </div>
+
+            <!-- Search results info -->
+            @if($search ?? false)
+                <div class="w-full px-4 py-2 bg-blue-50 border-l-4 border-blue-500 mb-4">
+                    <p class="text-sm text-blue-800">
+                        <strong>Searching for:</strong> "{{ $search }}"
+                        <span class="text-blue-600">({{ count($tickets) }} result{{ count($tickets) != 1 ? 's': '' }} found)</span>
+                    </p>
+                </div>
+            @endif
+
             <!-- TODO: Status tabs will go here next -->
             <div class="w-full flex">
-                <a href="{{ route('iso.idc.dashboard', ['status' => 'all', 'search' => $search ?? null]) }}"
-                    class="hover:bg-gray-100 text-gray-400 font-semibold px-8 py-2 {{ ($statusFilter ?? 'all') === 'all' ? 'active_link' : '' }}">
-                    All Tickets
-                </a>
                 <a href="{{ route('iso.idc.dashboard', ['status' => 'submitted_to_idc', 'search' => $search ?? null]) }}"
                     class="hover:bg-gray-100 text-gray-400 font-semibold px-8 py-2 {{ ($statusFilter ?? 'submitted_to_idc') === 'submitted_to_idc' ? 'active_link' : '' }}">
                     Submitted to IDC
@@ -64,6 +100,10 @@ function getStatusColor($status){
                 <a href="{{ route('iso.idc.dashboard', ['status' => 'on_hold', 'search' => $search ?? null]) }}"
                     class="hover:bg-gray-100 text-gray-400 font-semibold px-8 py-2 {{ ($statusFilter ?? 'on_hold') === 'on_hold' ? 'active_link' : '' }}">
                     On Hold
+                </a>
+                <a href="{{ route('iso.idc.dashboard', ['status' => 'all', 'search' => $search ?? null]) }}"
+                    class="hover:bg-gray-100 text-gray-400 font-semibold px-8 py-2 {{ ($statusFilter ?? 'all') === 'all' ? 'active_link' : '' }}">
+                    All Tickets
                 </a>
             </div>
             <!-- TODO: Tickets table will go here -->

@@ -39,7 +39,7 @@ function getStatusColor($status){
                 <span class="text-gray-500 text-sm"> Document Modification / Creation Notice (DMCN) Tracking</span>
             </div>
             <!-- DEBUG PURPOSES TODO: REMOVE IN THE FUTURE -->
-            <a href="{{ route('iso.idc.dashboard') }}" class="bg-purple-500 hover:bg-purple-600 text-gray-400 px-4 py-2 rounded-lg font-semibold">
+            <a href="{{ route('iso.idc.dashboard') }}" class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg font-semibold">
                 Switch to IDC view
             </a>
         </div>
