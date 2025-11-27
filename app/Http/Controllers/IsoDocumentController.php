@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\IsoTicketDocument;
 use App\Models\IsoTicket;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\TicketStatusChanged;
 
 class IsoDocumentController extends Controller 
 {
@@ -221,11 +224,30 @@ class IsoDocumentController extends Controller
             'notes' => ['nullable', 'string', 'max:1000']
         ]);
 
+        // Store old status before updating
+        $oldStatus = $ticket->status;
+
         // Update the ticket status
         $ticket->update([
             'status' => $validated['status']
         ]);
-        // TODO: Add save notes to comments
+
+        // Get IDC member who made the change
+        $changedBy = auth()->user()->name;
+
+        // Email the Document Handler (Ticket Creator)
+        Mail::to($ticket->creator->email)
+            ->send(new TicketStatusChanged($ticket, $oldStatus, $changedBy));
+
+        // Email all IDC Admins
+        $idcAdmins = User::where('role', 'IDC Admin')->get();
+
+        foreach ($idcAdmins as $admin){
+            Mail::to($admin->email)
+            ->send(new TicketStatusChanged($ticket,$oldStatus, $changedBy));
+        }
+
+        // TODO: Ask if they want to add save notes to comments
 
         return redirect()->route('iso.idc.dashboard')
             ->with('msg','Ticket Status updated successfully!');
