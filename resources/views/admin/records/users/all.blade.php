@@ -108,6 +108,8 @@
                                 <option value="HR Admin"     @if(!empty($roleSelected) && $roleSelected == 'HR Admin') selected @endif>HR Admin</option>
                                 <option value="Dean"         @if(!empty($roleSelected) && $roleSelected == 'Dean') selected @endif>Dean</option>
                                 <option value="SuperAdmin"   @if(!empty($roleSelected) && $roleSelected == 'SuperAdmin') selected @endif>SuperAdmin</option>
+                                <option value="IDC Admin"    @if(!empty($roleSelected) && $roleSelected == 'IDC Admin') selected @endif>IDC Admin</option>
+                                <option value="IDC Admin"    @if(!empty($roleSelected) && $roleSelected == 'IDC Document Handler') selected @endif>IDC Document Handler</option>
                             </select>
                         </div>
 

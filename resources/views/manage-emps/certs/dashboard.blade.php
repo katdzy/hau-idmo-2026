@@ -10,7 +10,7 @@
                         <strong class="font-bold">Success!</strong>
                         <span class="block sm:inline">{{ $msg }}</span>
                     </div>
-                    {{Session::forget('msg'); }}
+                    {{ Session::forget('msg') }}
 
                     <script>
                         // Hide the success message after 5000 milliseconds (5 seconds)

@@ -92,7 +92,7 @@ class tags extends Seeder {
 
         ]; 
 
-        $roles = ['Employee', 'SuperAdmin', 'HR Admin', 'Dean'];
+        $roles = ['Employee', 'SuperAdmin', 'HR Admin', 'Dean', 'IDC Admin', 'IDC Document Handler'];
 
         foreach ($roles as $role) {
             tagmodel::create([
