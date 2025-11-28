@@ -894,7 +894,7 @@ class UserRecordsController extends Controller
             $role = trim($rowData['I'] ?? '');
             if (empty($role)) {
                 $rowErrors[] = "Row {$currentRow}, Column I (Role) is required.";
-            } elseif (!in_array($role, ['Employee', 'SuperAdmin', 'HR Admin', 'Dean'])) {
+            } elseif (!in_array($role, ['Employee', 'SuperAdmin', 'HR Admin', 'Dean', 'IDC Admin', 'IDC Document Handler'])) {
                 $rowErrors[] = "Row {$currentRow}, Column I (Role) must be either Employee, SuperAdmin, HR Admin, or Dean.";
             }
 
