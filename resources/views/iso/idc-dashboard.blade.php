@@ -87,30 +87,44 @@ function getStatusColor($status){
                 </div>
             @endif
 
-            <!-- TODO: Status tabs will go here next -->
+            <!-- Status Tabs -->
             <div class="w-full flex">
                 <a href="{{ route('iso.idc.dashboard', ['status' => 'submitted_to_idc', 'search' => $search ?? null]) }}"
                     class="hover:bg-gray-100 text-gray-400 font-semibold px-8 py-2 {{ ($statusFilter ?? 'submitted_to_idc') === 'submitted_to_idc' ? 'active_link' : '' }}">
                     Submitted to IDC
+                    <span class="ml-2 text-xs bg-purple-500 text-white px-2 py-1 rounded-full">
+                        {{ $statusCounts['submitted_to_idc'] ?? 0 }} Docs
+                    </span>
                 </a>
                 <a href="{{ route('iso.idc.dashboard', ['status' => 'with_qmr', 'search' => $search ?? null]) }}"
                     class="hover:bg-gray-100 text-gray-400 font-semibold px-8 py-2 {{ ($statusFilter ?? 'with_qmr') === 'with_qmr' ? 'active_link' : '' }}">
                     With QMR
+                    <span class="ml-2 text-xs bg-purple-500 text-white px-2 py-1 rounded-full">
+                        {{ $statusCounts['with_qmr'] ?? 0 }} Docs
+                    </span>
                 </a>
                 <a href="{{ route('iso.idc.dashboard', ['status' => 'approved', 'search' => $search ?? null]) }}"
                     class="hover:bg-gray-100 text-gray-400 font-semibold px-8 py-2 {{ ($statusFilter ?? 'approved') === 'approved' ? 'active_link' : '' }}">
                     Approved
+                    <span class="ml-2 text-xs bg-purple-500 text-white px-2 py-1 rounded-full">
+                        {{ $statusCounts['approved'] ?? 0 }} Docs
+                    </span>
                 </a>
                 <a href="{{ route('iso.idc.dashboard', ['status' => 'on_hold', 'search' => $search ?? null]) }}"
                     class="hover:bg-gray-100 text-gray-400 font-semibold px-8 py-2 {{ ($statusFilter ?? 'on_hold') === 'on_hold' ? 'active_link' : '' }}">
                     On Hold
+                    <span class="ml-2 text-xs bg-purple-500 text-white px-2 py-1 rounded-full">
+                        {{ $statusCounts['on_hold'] ?? 0 }} Docs
+                    </span>
                 </a>
                 <a href="{{ route('iso.idc.dashboard', ['status' => 'all', 'search' => $search ?? null]) }}"
                     class="hover:bg-gray-100 text-gray-400 font-semibold px-8 py-2 {{ ($statusFilter ?? 'all') === 'all' ? 'active_link' : '' }}">
                     All Tickets
+                    <span class="ml-2 text-xs bg-purple-500 text-white px-2 py-1 rounded-full">
+                        {{ $statusCounts['all'] ?? 0 }} Docs
+                    </span>
                 </a>
             </div>
-            <!-- TODO: Tickets table will go here -->
             <!-- Tickets Table -->
             <div class="w-full flex flex-col border border-gray-200 rounded-lg shadow-sm overflow-hidden">
                 @if(count($tickets) > 0)

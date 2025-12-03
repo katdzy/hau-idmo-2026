@@ -188,6 +188,29 @@ class IsoDocumentController extends Controller
         // Must define search here instead of the extracted method
         $search = $request->query('search');
 
+        // Start of Calculating Document Counts by status
+        $statusCounts = IsoTicket::where('status', '!=', 'pending')
+            ->selectRaw('status, SUM(
+                (SELECT COUNT(*)
+                FROM iso_ticket_documents
+                WHERE iso_ticket_documents.ticket_id = iso_tickets.id)
+                ) as document_count')
+            ->groupBy('status')
+            ->pluck('document_count', 'status')
+            ->toArray();
+
+        // Calculate total for "All Tickets" (all non-pending)
+        $statusCounts['all'] = array_sum($statusCounts);
+
+        // Make sure all statuses have a count (even if 0)
+        $statusCounts = array_merge([
+            'submitted_to_idc' => 0,
+            'with_qmr' => 0,
+            'approved' => 0,
+            'on_hold' => 0,
+            'all' => 0
+        ], $statusCounts);
+
         // Start building the query - IDC should see all the tickets
         $query = IsoTicket::with(['documents', 'creator']);
 
@@ -211,7 +234,7 @@ class IsoDocumentController extends Controller
                         ->orderBy('created_at', 'desc')
                         ->get();
 
-        return view('iso.idc-dashboard', compact('tickets', 'statusFilter', 'search'));
+        return view('iso.idc-dashboard', compact('tickets', 'statusFilter', 'search', 'statusCounts'));
     }
 
     /**
