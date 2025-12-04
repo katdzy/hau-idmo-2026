@@ -442,7 +442,7 @@ function getStatusColor($status){
             const statusFormatted = statusText.charAt(0).toUpperCase() + statusText.slice(1);
             statusElement.innerHTML = `<span class="inline-block px-2 py-1 rounded text-xs ${getStatusColorJS(status)}"> ${statusFormatted}</span>`;
 
-            // FIll documents table
+            // Fill documents table
             const documentsList = document.getElementById('detail_documents_list');
             documentsList.innerHTML = '';
 
@@ -456,7 +456,7 @@ function getStatusColor($status){
                 row.innerHTML = `
                     <td class="px-3 py-2">${doc.document_code}</td>
                     <td class="px-3 py-2">${doc.document_title}</td>
-                    <td class="px-3 py-2">$
+                    <td class="px-3 py-2">
                         <span class="inline-block px-2 py-1 text-xs rounded ${getClassificationColor(doc.classification)}">
                             ${classLabel}
                         </span>

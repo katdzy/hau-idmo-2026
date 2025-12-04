@@ -45,6 +45,17 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
+    // public function getNameAttribute(){
+    //     // Combine first, middle, last name
+    //     $fullName = $this->emp_fname;
+    //     if($this->emp_mname){
+    //         $fullName .= ' '.$this->emp_mname;
+    //     }
+
+    //     $fullName .= ' '.$this->emp_lname;
+    //     return $fullName;
+    // }
+
     // Relationship to IDC Document Handling Tickets
     public function tickets(){
         return $this->hasMany(IsoTicket::class, 'created_by');
