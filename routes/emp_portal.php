@@ -517,6 +517,9 @@ Route::middleware('auth','revalidate')->group(function () {
     Route::get('/kpis/dashboard', [KpiController::class, 'dashboard'])->name('kpis.dashboard');
     // AJAX search for KPI dashboard
     Route::get('/kpis/ajax-search', [KpiController::class, 'ajaxSearch'])->name('kpis.ajax-search');
+
+    // Advanced search for KPI library
+    Route::get('/kpis/advanced-search', [KpiController::class, 'advancedSearch'])->name('kpis.advanced-search');
     
     // View individual KPI details
     Route::get('/kpis/{kpi}', [KpiController::class, 'showKpiView'])->name('kpis.show');

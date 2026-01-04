@@ -16,9 +16,9 @@
         <div class="flex justify-center items-center w-full py-8">
             <div class="flex-col w-[95%] bg-white rounded-lg py-8">
                 <div class="px-8 pb-4">
-                    <a href="{{ route('kpis.dashboard') }}" class="inline-flex gap-1 items-center bg-red-900 hover:bg-red-700 px-6 py-1 text-white rounded-xl">
+                    <a href="{{ url()->previous() }}" class="inline-flex gap-1 items-center bg-red-900 hover:bg-red-700 px-6 py-1 text-white rounded-xl">
                         <img src="{{ asset('images/icons/back.png') }}" class="w-[20px] h-[20px]" alt="">
-                        <span>Back to KPI Library</span>
+                        <span>Back to KPI</span>
                     </a>
                 </div>
                 <div class="w-full flex flex-col items-center justify-center px-8 py-4 leading-tight">

@@ -19,6 +19,8 @@ class KpiController extends Controller
     {
         $search = $request->input('search');
         $sortBy = $request->input('sort_by', 'id'); // Default to id
+        $advancedSearch = $request->hasAny(['name', 'objective', 'theme', 'perspective', 'code', 'category']);
+        $searchParams = $request->only(['name', 'objective', 'theme', 'perspective', 'code', 'category']);
 
         $kpis = Kpi::query()
             ->when($search, function ($query, $search) {
@@ -30,20 +32,49 @@ class KpiController extends Controller
                       ->orWhereRaw('strategic_theme REGEXP ?', ["\\b{$search}"])
                       ->orWhereRaw('description REGEXP ?', ["\\b{$search}"]);
             })
+            // Advanced search filters (from advanced search form)
+            /*
+            ->when($request->filled('name'), function ($query) use ($request) {
+                $query->where('measure_name', 'LIKE', '%' . $request->name . '%');
+            })*/
+            ->when($request->filled('objective'), function ($query) use ($request) {
+                $query->where('objective', 'LIKE', '%' . $request->objective . '%');
+            })
+            ->when($request->filled('theme'), function ($query) use ($request) {
+                $query->where('strategic_theme', 'LIKE', '%' . $request->theme . '%');
+            })
+            ->when($request->filled('perspective'), function ($query) use ($request) {
+                $query->where('perspective', 'LIKE', '%' . $request->perspective . '%');
+            })
+            ->when($request->filled('code'), function ($query) use ($request) {
+                $query->where('measure_code', 'LIKE', '%' . $request->code . '%');
+            })
+            ->when($request->filled('category'), function ($query) use ($request) {
+                $query->where('category', $request->category);
+            })
+            // Sorting
             ->when($sortBy === 'code', function ($query) {
                 $query->orderBy('measure_code', 'asc');
             })
             ->when($sortBy === 'name', function ($query) {
                 $query->orderBy('measure_name', 'asc');
             })
+            ->when($sortBy === 'objective', function ($query) {
+                $query->orderBy('objective', 'asc');
+            })
+            ->when($sortBy === 'theme', function ($query) {
+                $query->orderBy('strategic_theme', 'asc');
+            })
+            ->when($sortBy === 'perspective', function ($query) {
+                $query->orderBy('perspective', 'asc');
+            })
             ->when($sortBy === 'id', function ($query) {
                 $query->orderBy('id', 'asc');
             })
             ->get();
 
-        return view('kpis.kpi-dashboard', compact('kpis', 'sortBy', 'search'));
+        return view('kpis.kpi-dashboard', compact('kpis', 'sortBy', 'search', 'advancedSearch', 'searchParams'));
     }
-
     /**
      * Show details for a single KPI.
      */
@@ -556,5 +587,9 @@ class KpiController extends Controller
         
         return $currentRow;
     }
-
+    
+    public function advancedSearch()
+    {
+        return view('kpis.kpi-advanced-search');
+    }
 }
