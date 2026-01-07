@@ -253,7 +253,7 @@ function getStatusColor($status){
                         </select>
                     </div>
                     <!-- New Originating Section (Office) (Conditional) -->
-                    <!-- Based from the doc_cluster id -->
+                    <!-- Based from the ticket_cluster id -->
                     <div class="form-group">
                         <label class="form-label text-sm">Specific Office<span class="text-red-500">*</span></label>
                         <select id="ticket_office" name="originating_section" class="form-input" required disabled>
@@ -1201,6 +1201,35 @@ function getStatusColor($status){
     const editCustomSourceSection = document.getElementById('edit_custom_source_section');
     const editSpecificTypeSelect = document.getElementById('edit_doc_specific_type');
     const editCustomSourceInput = document.getElementById('edit_doc_custom_source');
+    const editTicketClusterDropdown = document.getElementById('edit_ticket_cluster');
+    const editTicketOfficeDropdown = document.getElementById('edit_ticket_office');
+
+    // Start of New Originating Section Edit function
+    editTicketClusterDropdown.addEventListener('change', ()=> {
+        const selectedCluster = editTicketClusterDropdown.value;
+
+        // Reset office dropdown
+        editTicketOfficeDropdown.innerHTML = '<option value="">Select Office... </option>';
+        editTicketOfficeDropdown.disabled = true;
+
+        if(selectedCluster && specificOfficeOptions[selectedCluster]){
+            const offices = specificOfficeOptions[selectedCluster];
+
+            offices.forEach(office => {
+                const option = document.createElement('option');
+                option.value = office;
+                option.textContent = office;
+                editTicketOfficeDropdown.appendChild(option);
+            });
+
+            editTicketOfficeDropdown.disabled = false;
+            // Auto Select if only one office
+            if(offices.length === 1){
+                editTicketOfficeDropdown.value = offices[0];
+            }
+        }
+    })
+    // End of New Originating Section Edit function
 
     // Close edit modal
     closeEditBtn.addEventListener('click', ()=> {
@@ -1298,8 +1327,25 @@ function getStatusColor($status){
                 return response.json();
             })
             .then(ticket=> {
-                // Fill form with existing data
-                document.getElementById('edit_originating_section').value = ticket.originating_section;
+                // Fill form with existing data                
+                // Start of new Originating section Logic
+                // Find which cluster the office belongs to
+                const currentOffice = ticket.originating_section;
+                const currentCluster = findClusterByOffice(currentOffice);
+                if (currentCluster){
+                    // Set the cluster dropdown
+                    editTicketClusterDropdown.value = currentCluster;
+
+                    // Trigger the change event to populate offices
+                    editTicketClusterDropdown.dispatchEvent(new Event('change'));
+                    setTimeout(() =>{
+                        // Important to wait a tiny moment for the change event to run
+                        // Set the office dropdown value
+                        editTicketOfficeDropdown.value = currentOffice;
+                    }, 10)
+                }
+                // End of new Originating section logic
+
                 document.getElementById('edit_sharepoint_link').value = ticket.sharepoint_link;
                 document.getElementById('edit_message_to_idc').value = ticket.message_to_idc;
 
