@@ -548,9 +548,13 @@ Route::middleware('auth','revalidate')->group(function () {
     Route::patch('/iso/document/{ticket}/submit', [IsoDocumentController::class,'submitToIDC'])
         ->name('iso.document.submit');
 
-    // IDC Management Routes
+    /*------------------------------------------------------------------
+    | 20. ISO IDC Document Handling
+    |------------------------------------------------------------------*/
     Route::get('/iso/idc/dashboard', [IsoDocumentController::class,'loadIdcDashboard'])
         ->name('iso.idc.dashboard');
     Route::patch('iso/idc/{ticket}/update-status', [IsoDocumentController::class,'updateTicketStatus'])
-        ->name('iso.idc.-update-status');
+        ->name('iso.idc.update-status');
+    Route::patch('/iso/idc/{documentId}/status', [IsoDocumentController::class, 'updateDocumentStatus'])
+        ->name('iso.idc.status.update');
 });

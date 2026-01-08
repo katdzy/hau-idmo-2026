@@ -243,16 +243,20 @@ class IsoDocumentController extends Controller
     public function updateTicketStatus(Request $request, IsoTicket $ticket){
         // Validate incoming data
         $validated = $request->validate([
-            'status' => ['required', 'in:submitted_to_idc,with_qmr,approved,on_hold'],
+            'status' => ['required', 'in:submitted_to_idc,with_qmr'],
             'notes' => ['nullable', 'string', 'max:1000']
         ]);
 
         // Store old status before updating
         $oldStatus = $ticket->status;
+        $newStatus = $validated['status'];
 
-        // Update the ticket status
-        $ticket->update([
-            'status' => $validated['status']
+        $ticket->status = $newStatus;
+        $ticket->save();
+
+        // Update all documents to match the ticket status
+        $ticket->documents()->update([
+            'status'=> $newStatus
         ]);
 
         // Get IDC member who made the change
@@ -274,5 +278,54 @@ class IsoDocumentController extends Controller
 
         return redirect()->route('iso.idc.dashboard')
             ->with('msg','Ticket Status updated successfully!');
+    }
+
+    // =====================================
+    // Updating the Document Statuses
+    // =====================================
+    public function updateDocumentStatus(Request $request, $documentId){
+        $request->validate([
+            'status' => 'required|in:approved,on_hold'
+        ]);
+
+        $document = IsoTicketDocument::findorFail($documentId);
+        $document->status = $request->status;
+        $document->save();
+
+        // Check if we need to auto-update each ticket status
+        $ticket = $document->ticket;
+        $this->recalculateTicketStatus($ticket);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Document status updated',
+            'ticket_status' => $ticket->status
+        ]);
+    }
+
+    public function recalculateTicketStatus($ticket){
+        $documents = $ticket->documents;
+
+        // check if any document is on_hold
+        $hasOnHold = $documents->contains(function($doc){
+            return $doc->status === 'on_hold';
+        });
+
+        if($hasOnHold){
+            $ticket->status = 'on_hold';
+            $ticket->save();
+            return;
+        }
+
+        // Check if all documents are approved
+        $allApproved = $documents->every(function($doc){
+            return $doc->status === 'approved';
+        });
+
+        if ($allApproved && $documents->every() > 0){
+            $ticket->status = 'approved';
+            $ticket->save();
+            return;
+        }
     }
 }

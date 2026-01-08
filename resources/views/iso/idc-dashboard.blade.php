@@ -242,17 +242,12 @@ function getStatusColor($status){
             <div class="mb-4">
                 <h3 class="font-semibold mb-2 text-gray-700">Documents in this Ticket</h3>
                 <div class="border border-gray-300 rounded-lg overflow-hidden">
-                    <table class="w-full text-sm">
-                        <thead class="bg-gray-100">
-                            <tr>
-                                <th class="px-3 py-2 text-left">Code</th>
-                                <th class="px-3 py-2 text-left">Title</th>
-                                <th class="px-3 py-2 text-left">Classification</th>
-                                <th class="px-3 py-2 text-left">Source</th>
-                            </tr>
-                        </thead>
-                        <tbody id="detail_documents_list"></tbody>
-                    </table>
+                    <div>
+                <table class="w-full text-sm">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="px-3 py-2 text-left">Code</th>
+                            <th class="px-3 py-2 text-left">Title</th>
                 </div>
             </div>
 
@@ -289,9 +284,10 @@ function getStatusColor($status){
                     <option value="">Select new status...</option>
                     <option value="submitted_to_idc">Submitted to IDC</option>
                     <option value="with_qmr">Send to QMR</option>
-                    <option value="approved">Approved</option>
-                    <option value="on_hold">Put On Hold</option>
                 </select>
+                <p class="text-sm text-orange-600 mt-2">
+                    ⚠️ Warning: This will change ALL document statuses to match the ticket status.
+                </p>
             </div>
             <div class="flex justify-end gap-3">
                 <button type="button" id="cancel_status_btn" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
@@ -463,6 +459,25 @@ function getStatusColor($status){
                         </span>
                     </td>
                     <td class="px-3 py-2">${sourceLabel}</td>
+
+                    <td class="px-3 py-2">
+                        <span class="inline-block px-2 py-1 text-xs rounded ${getStatusColorJS(status)}">
+                            ${formatStatusText(doc.status)}
+                        </span>
+                    </td>
+
+                    <td class="px-3 py-2">
+                        <div class="flex gap-2 justify-center">
+                            <button onclick="updateDocStatus(${doc.id}, 'approved')"
+                                class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-xs font-semibold">
+                                Approved
+                            </button>
+                            <button onclick="updateDocStatus(${doc.id}, 'on_hold')"
+                                class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs font-semibold">
+                                On-Hold
+                            </button>
+                        </div>
+                    </td>
                 `;
 
                 documentsList.appendChild(row);
@@ -474,6 +489,11 @@ function getStatusColor($status){
     });
 
     // Helper Functions
+    function formatStatusText(status){
+        const text = status.replace(/_/g, ' ');
+        return text.charAt(0).toUpperCase() + text.slice(1);
+    }
+
     function getStatusColorJS(status){
         const colors = {
             'pending': 'bg-yellow-100 text-yellow-800',
@@ -507,6 +527,39 @@ function getStatusColor($status){
             deletion: 'bg-red-200 text-red-800'
         };
         return colors[classification] || 'bg-gray-200 text-gray-800';
+    }
+    // Update Document Status
+    function updateDocStatus(documentId, newStatus){
+        // Confirm the action
+        const statusText = newStatus === 'approved' ? 'Approve' : 'Put On-Hold';
+        const confirmed = confirm(`Are you sure you want to ${statusText} this document?`);
+
+        if(!confirmed) return;
+
+        // AJAX request to update status
+        fetch(`/iso/idc/${documentId}/status`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({
+                status: newStatus
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.success){
+                alert('Document status updated successfully!');
+                location.reload();
+            } else{
+                alert('Failed to updated document status');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again.');
+        })
     }
 
     // ============================================
