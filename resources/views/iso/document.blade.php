@@ -256,7 +256,7 @@ function getStatusColor($status){
                     <!-- Based from the ticket_cluster id -->
                     <div class="form-group">
                         <label class="form-label text-sm">Specific Office<span class="text-red-500">*</span></label>
-                        <select id="ticket_office" name="originating_section" class="form-input" required disabled>
+                        <select id="ticket_office" name="originating_section" class="form-input opacity-50 cursor-not-allowed" required disabled>
                             <option value="">Select a Department first...</option>
                         </select>
                     </div>
@@ -267,6 +267,16 @@ function getStatusColor($status){
             <div class="bg-gray-50 p-4 rounded-lg mb-4">
                 <h3 class="font-semibold mb-3 text-gray-700">Add Documents to Ticket</h3>
                 <div class="grid grid-cols-2 gap-3">
+                    <!-- Classification / Nautre of Document Modification -->
+                    <div class="form-group mb-2">
+                        <label class="form-label text-sm">Nature of Document Modification</label>
+                        <select id="doc_classification" class="form-input">
+                            <option value="">Select...</option>
+                            <option value="revision">For revision</option>
+                            <option value="addition">Addition</option>
+                            <option value="deletion">Deletion</option>
+                        </select>
+                    </div>
                     <!-- Source Document Type -->
                     <div class="form-group mb-2">
                         <label class="form-label text-sm">Source Document</label>
@@ -277,16 +287,6 @@ function getStatusColor($status){
                             <option value="forms">Forms</option>
                             <option value="records">Records Management Manual</option>
                             <option value="others">Others</option>
-                        </select>
-                    </div>
-                    <!-- Classification / Nautre of Document Modification -->
-                    <div class="form-group mb-2">
-                        <label class="form-label text-sm">Nature of Document Modification</label>
-                        <select id="doc_classification" class="form-input">
-                            <option value="">Select...</option>
-                            <option value="revision">For revision</option>
-                            <option value="addition">Addition</option>
-                            <option value="deletion">Deletion</option>
                         </select>
                     </div>
                     <!-- Document Code -->
@@ -878,25 +878,31 @@ function getStatusColor($status){
     ticketClusterDropdown.addEventListener('change', ()=> {
         const selectedCluster = ticketClusterDropdown.value;
 
-        // Reset office dropdown when choosing a department
-        ticketOfficeDropdown.innerHTML = '<option value="">Select Office...</option>';
-        ticketOfficeDropdown.disabled = true;
-
-        // If a cluser is selected, populate the office choices
-        if (selectedCluster && specificOfficeOptions[selectedCluster]){
-            const offices = specificOfficeOptions[selectedCluster];
-
-            offices.forEach(office => {
-                const option = document.createElement('option');
-                option.value = office;
-                option.textContent = office;
-                ticketOfficeDropdown.appendChild(option);
-            });
-
-            ticketOfficeDropdown.disabled = false;
-            if(offices.length === 1){
-                ticketOfficeDropdown.value = offices[0];
+        if(selectedCluster !== ''){
+            // Reset office dropdown when choosing a department
+            ticketOfficeDropdown.innerHTML = '<option value="">Select Office...</option>';
+            ticketOfficeDropdown.classList.remove('opacity-50', 'cursor-not-allowed')
+    
+            // If a cluser is selected, populate the office choices
+            if (selectedCluster && specificOfficeOptions[selectedCluster]){
+                const offices = specificOfficeOptions[selectedCluster];
+    
+                offices.forEach(office => {
+                    const option = document.createElement('option');
+                    option.value = office;
+                    option.textContent = office;
+                    ticketOfficeDropdown.appendChild(option);
+                });
+    
+                ticketOfficeDropdown.disabled = false;
+                if(offices.length === 1){
+                    ticketOfficeDropdown.value = offices[0];
+                }
             }
+        } else{
+            ticketOfficeDropdown.innerHTML = '<option value="">Select a Department first...</option>';
+            ticketOfficeDropdown.classList.add('opacity-50', 'cursor-not-allowed');
+            ticketOfficeDropdown.disabled = true;
         }
     });
 

@@ -557,4 +557,12 @@ Route::middleware('auth','revalidate')->group(function () {
         ->name('iso.idc.update-status');
     Route::patch('/iso/idc/{documentId}/status', [IsoDocumentController::class, 'updateDocumentStatus'])
         ->name('iso.idc.status.update');
+    Route::delete('/iso/idc/reset-system', [IsoDocumentController::class, 'resetSystem'])
+        ->name('iso.idc.reset.system');
+
+    /*------------------------------------------------------------------
+    | 21. ISO Document Management
+    |------------------------------------------------------------------*/
+    Route::patch('/iso/idc/{ticket}/register', [IsoDocumentController::class, 'registerTicket'])
+        ->name('iso.idc.register.ticket');
 });

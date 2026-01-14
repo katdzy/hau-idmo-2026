@@ -17,7 +17,8 @@ class IsoTicket extends Model
         'sharepoint_link',
         'message_to_idc',
         'status',
-        'created_by'
+        'created_by',
+        'is_registered'
     ];
 
     // Define relationship: One-to-many -> One Ticket Many Documents

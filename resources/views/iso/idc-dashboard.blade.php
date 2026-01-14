@@ -44,10 +44,17 @@ function getStatusColor($status){
                 <!-- TODO: Remove this in the future (Just for debugging purposes) -->
                 <a href="{{ route('iso.document') }}" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold">
                 Switch to Document Handler View
-            </a>
+                </a>
+                <!-- TODO: Button to swtich to the management blade file -->
+            </div>
+            <!-- Reset System Button -->
+            <div class="px-4 py-3 right-4">
+                <button id="reset_system_btn"
+                    class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold flex items-center gap-2">
+                    <span>Reset Ticketing System</span>
+                </button>
             </div>
             <hr class="w-full opacity-100">
-
             <!-- Search Box  (Same as the one on the document blade) -->
             <div class="w-full px-4 py-3 bg-gray-50 rounded-lg mb-b">
                 <form method="GET" action="{{ route('iso.idc.dashboard') }}" class="flex gap-3 items-center">
@@ -168,6 +175,7 @@ function getStatusColor($status){
                                     </td>
                                     <td class="px-4 py-3 text-center">
                                         <div class="flex gap-2 justify-center">
+                                            <!-- View Details button (Always visible) -->
                                             <button 
                                                 class="view-details-btn text-blue-600 hover:text-blue-800 text-sm font-semibold"
                                                 data-ticket-id='{{ $ticket->id }}'
@@ -181,11 +189,27 @@ function getStatusColor($status){
                                             >
                                                 View Details
                                             </button>
-                                            <!-- Change Status Button -->
-                                            <button onclick="openStatusModal({{ $ticket->id }}, '{{ $ticket->status }}')"
-                                                class="bg-purple-500 hover:bg-purple-600 text-white px-3 py-1 rounded text-sm">
-                                                Change Status
-                                            </button>
+                                            <!-- Change Status Button - Only if not registered -->
+                                             @if (!$ticket->is_registered)
+                                                <button onclick="openStatusModal({{ $ticket->id }}, '{{ $ticket->status }}')"
+                                                    class="bg-purple-500 hover:bg-purple-600 text-white px-3 py-1 rounded text-sm">
+                                                    Change Status
+                                                </button>
+                                            @endif
+                                            <!-- Register Ticket Button - Only for APPROVED and NOT registered -->
+                                            @if ($ticket->status === 'approved' && !$ticket->is_registered)
+                                                <button onclick="confirmRegister({{ $ticket->id }})"
+                                                    class="bg-green-600 hover::bg-green-700 text-white px-3 py-1 rounded text-sm font-semibold">
+                                                    Register
+                                                </button>
+                                            @endif
+
+                                            <!-- Registered confirmation -->
+                                            @if ($ticket->is_registered)
+                                                <span class="inline-block px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold">
+                                                    Registered!
+                                                </span>
+                                            @endif
                                         </div>
                                     </td> 
                                 </tr>
@@ -309,6 +333,59 @@ function getStatusColor($status){
                 </button>
             </div>
         </form>
+    </div>
+</div>
+
+<!-- Reset Ticketing system Modal -->
+<div id="reset_modal" class="modal-overlay">
+    <div class="modal-content max-w-md">
+        <div class="modal-header bg-red-600 text-white">
+            <h2 class="text-xl font-bold">DANGER: Reset Ticketing System</h2>
+            <button id="close_reset_modal" class="text-white hover:text-gray-200 text-2xl">&times;</button>
+        </div>
+
+        <div class="modal-body">
+            <!-- Warning message -->
+            <div class="bg-red-50 border-l-4 border-red-600 p-4 mb-4">
+                <p class="text-red-800 font-semibold mb-2">THIS ACTION CANNOT BE UNDONE!</p>
+                <p class="text-red-700 text-sm">This will permanently:</p>
+                <ul class="text-red-700 text-sm list-disc ml-5 mt-2">
+                    <li>Delete ALL Tickets</li>
+                    <li>Delete ALL Documents</li>
+                    <li>Reset ticket numbers to start from #1</li>
+                </ul>
+            </div>
+            <!-- Confirm Button -->
+            <form id="reset_form" method="POST" action="{{ route('iso.idc.reset.system') }}">
+                @csrf
+                @method('DELETE')
+
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Type <span class="font-mono font-bold text-red-600">CONFIRM</span> to proceed:
+                    </label>
+                    <input type="text"
+                            id="reset_confirmation"
+                            class="w-full px-3 py-2 border-2 border-red-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 font-mono"
+                            placeholder="CONFIRM"
+                            autocomplete="off"
+                            required>
+                </div>
+                <div class="flex justify-end gap-3">
+                    <button type="button"
+                            id="cancel_reset_btn"
+                            class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                            id="confirm_reset_btn"
+                            class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md font-semibold opacity-50 cursor-not-allowed"
+                            disabled>
+                        Reset System
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 </x-app-layout>
@@ -528,7 +605,7 @@ function getStatusColor($status){
         };
         let label = labels[source] || source;
         if (specificType){
-            label += `${specificType}`;
+            label += ` (${specificType})`;
         }
         return label;
     }
@@ -560,7 +637,25 @@ function getStatusColor($status){
                 status: newStatus
             })
         })
-        .then(response => response.json())
+        // .then(response => response.json())
+        .then(response => {
+            console.log("Response status: ", response.status);
+            console.log("Response OK?: ", response.ok);
+
+            // Clone the response so we can read it twice
+            return response.clone().text().then(text => {
+                console.log("Raw Response: ", text);
+
+                // Try parsing
+                try{
+                    const data = JSON.parse(text);
+                    return data;
+                } catch(e){
+                    console.error('JSON parse failed. Response was:'+text);
+                    throw new Error('Invalid JSON response');
+                }
+            });
+        })
         .then(data => {
             if(data.success){
                 alert('Document status updated successfully!');
@@ -610,4 +705,104 @@ function getStatusColor($status){
         }
     })
 
+    // ============================================
+    // Reset System Function
+    // ============================================
+    const resetBtn = document.getElementById('reset_system_btn');
+    const resetModal = document.getElementById('reset_modal');
+    const closeResetModal = document.getElementById('close_reset_modal');
+    const cancelResetBtn = document.getElementById('cancel_reset_btn');
+    const resetForm = document.getElementById('reset_form');
+    const resetConfirmInput = document.getElementById('reset_confirmation');
+    const confirmResetBtn = document.getElementById('confirm_reset_btn');
+
+    // Open reset modal
+    resetBtn.addEventListener('click', ()=> {
+        resetModal.classList.add('active');
+        resetConfirmInput.value = '';
+        confirmResetBtn.disabled = true;
+    });
+    // Close modal when clicking outside
+    resetModal.addEventListener('click', (e)=>{
+        if(e.target === resetModal){
+            resetModal.classList.remove('active');
+        }
+    })
+
+    // Close modal functions
+    closeResetModal.addEventListener('click', ()=> {
+        resetModal.classList.remove('active');
+    });
+    cancelResetBtn.addEventListener('click', () => {
+        resetModal.classList.remove('active');
+    });
+
+    // Enable submit button only when "CONFIRM" is typed
+    resetConfirmInput.addEventListener('input', () =>{
+        const inputValue = resetConfirmInput.value;
+        if(inputValue === 'CONFIRM'){
+            confirmResetBtn.disabled = false;
+            confirmResetBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        } else{
+            confirmResetBtn.disabled = true;
+            confirmResetBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        }
+    });
+
+    // Final confirmation before submit
+    resetForm.addEventListener('submit', (e)=>{
+        if(resetConfirmInput.value !== 'CONFIRM'){
+            e.preventDefault();
+            alert('You must type CONFIRM to proceed');
+            return false;
+        }
+        // One last confirmation dialog
+        const finalConfirm = confirm(
+            'Final Warning!\n'+
+            'Are you ABSOLUTELY SURE you want to delete ALL tickets?\n' +
+            'This action is PERMANENT and IRREVERSIBLE!'
+        );
+
+        if(!finalConfirm) {
+            e.preventDefault();
+            return false;
+        }
+    });
+
+    // ============================================
+    // Register Ticket Function
+    // ============================================
+    function confirmRegister(ticketId){
+        const confirmed = confirm(
+            'Register this ticket?\n\n'+
+            'This will:\n'+
+            '• Lock the ticket (no more edits)\n' +
+            '• Move documents to Management Menu\n' +
+            '• Mark as officially registered\n\n' +
+            'Continue?'
+        );
+        if(confirmed){
+            // Submit registration
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = `/iso/idc/${ticketId}/register`;
+
+            // Add CSRF Token
+            const csrfInput = document.createElement('input');
+            csrfInput.type = 'hidden';
+            csrfInput.name = '_token';
+            csrfInput.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            form.appendChild(csrfInput);
+
+            // Add method for spoofing for PATCH
+            const methodInput = document.createElement('input');
+            methodInput.type = 'hidden';
+            methodInput.name = '_method';
+            methodInput.value = 'PATCH';
+            form.appendChild(methodInput);
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+    }
 </script>

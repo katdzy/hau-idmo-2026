@@ -17,7 +17,8 @@ class IsoTicketDocument extends Model
         'source_type',
         'specific_type',
         'ticket_id',
-        'status'
+        'status',
+        'registered_at'
     ];
 
     // Define relationship: The document belongs only to one ticket

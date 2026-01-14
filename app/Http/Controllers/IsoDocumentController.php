@@ -7,6 +7,7 @@ use App\Models\IsoTicket;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\TicketStatusChanged;
 
@@ -262,20 +263,9 @@ class IsoDocumentController extends Controller
         // Get IDC member who made the change
         $changedBy = auth()->user()->name;
 
-        // Email the Document Handler (Ticket Creator)
-        Mail::to($ticket->creator->email)
-            ->send(new TicketStatusChanged($ticket, $oldStatus, $changedBy));
-
-        // Email all IDC Admins
-        $idcAdmins = User::where('role', 'IDC Admin')->get();
-
-        foreach ($idcAdmins as $admin){
-            Mail::to($admin->email)
-            ->send(new TicketStatusChanged($ticket,$oldStatus, $changedBy));
-        }
+        $this->sendTicketStatusNotification($ticket,$oldStatus,$changedBy);
 
         // TODO: Ask if they want to add save notes to comments
-
         return redirect()->route('iso.idc.dashboard')
             ->with('msg','Ticket Status updated successfully!');
     }
@@ -290,6 +280,12 @@ class IsoDocumentController extends Controller
 
         $document = IsoTicketDocument::findorFail($documentId);
         $document->status = $request->status;
+
+        // Auto-set registered_at when approved
+        if($request->status === 'approved'){
+            $document->registered_at = now();
+        }
+
         $document->save();
 
         // Check if we need to auto-update each ticket status
@@ -307,6 +303,7 @@ class IsoDocumentController extends Controller
 
     public function recalculateTicketStatus($ticket){
         $documents = $ticket->documents;
+        $oldStatus = $ticket->status;
 
         // check if any document is on_hold
         $hasOnHold = $documents->contains(function($doc){
@@ -316,6 +313,14 @@ class IsoDocumentController extends Controller
         if($hasOnHold){
             $ticket->status = 'on_hold';
             $ticket->save();
+
+            if($oldStatus !== 'on_hold'){
+                $this->sendTicketStatusNotification(
+                    $ticket,
+                    $oldStatus,
+                    'IDC Admin'
+                );
+            }
             return;
         }
 
@@ -327,7 +332,103 @@ class IsoDocumentController extends Controller
         if ($allApproved && $documents->count() > 0){
             $ticket->status = 'approved';
             $ticket->save();
+            if($oldStatus !== 'approved'){
+                $this->sendTicketStatusNotification(
+                    $ticket,
+                    $oldStatus,
+                    'IDC Admin'
+                );
+            }
             return;
+        }
+    }
+
+    private function sendTicketStatusNotification($ticket, $oldStatus, $changedBy){
+        // Email the Document Handler (Ticket owner)
+        Mail::to($ticket->creator->email)
+            ->queue(new TicketStatusChanged($ticket, $oldStatus, $changedBy));
+        
+        // Delay for the free trial of Mailtrap
+        usleep(500000);
+
+        // Email all the IDC Admins
+        $idcAdmins = User::where('role', 'IDC Admin')->get();
+        foreach ($idcAdmins as $admin){
+            Mail::to($admin->email)
+                ->send(new TicketStatusChanged($ticket, $oldStatus, $changedBy));
+            // Delay for the free trial of Mailtrap
+            usleep(500000);
+        }
+    }
+
+    // ==================================
+    // Reset Ticket Function
+    // ==================================
+    public function resetSystem(Request $request){
+        // Double check if user is IDC Admin
+        $userRole = auth()->user()->role;
+        if($userRole !== 'IDC Admin' && $userRole !== 'SuperAdmin'){
+            return redirect()->back()->with('error', 'Unathorized Action');
+        }
+        try{
+            // Disable Foreign key check first before deleting
+            DB::statement('SET FOREIGN_KEY_CHECKS=0');
+
+            // Truncate delets all records and resets auto-increment
+            IsoTicketDocument::truncate(); //truncate the child first before the parent
+            IsoTicket::truncate();
+            
+            // Turn the foreign key check back on
+            DB::statement('SET FOREIGN_KEY_CHECKS=1');
+
+
+            return redirect()->route('iso.idc.dashboard')
+                ->with('msg', 'Ticketing system has been reset successfully!');
+        } catch (\Exception $e){
+            // Turn the foreign key check back on here as well just in case
+            DB::statement('SET FOREIGN_KEY_CHECKS=1');
+
+            \Log::error('Reset system failed: '.$e->getMessage());
+
+            return redirect()->back()
+                ->with('error', 'Failed to reset system. Please check logs');
+        }
+    }
+
+    // ==================================
+    // ISO Document management system
+    // ==================================
+    public function registerTicket(IsoTicket $ticket){
+        // Check if user is authorized
+        $userRole = auth()->user()->role;
+        $allowedRoles = ['IDC Admin', 'SuperAdmin'];
+
+        if(!in_array($userRole, $allowedRoles)){
+            return redirect()->back()->with('error', 'Uauthorized Action');
+        }
+
+        // Check if ticket is approved
+        if($ticket->status !== 'approved'){
+            return redirect()->back()->with('error', 'Only approved tickets can be registered');
+        }
+
+        // Check if already registered
+        if($ticket->is_registered){
+            return redirect()->back()->with('error','This ticket is already registered.');
+        }
+
+        try{
+            // Mark ticket as registered
+            $ticket->is_registered = true;
+            $ticket->save();
+
+            return redirect()->route('iso.idc.dashboard')
+                ->with('msg','Ticket #'.$ticket->id . ' has been registered successfully!');
+        } catch (\Exception $e){
+            \Log::error('Register ticket failed: '. $e->getMessage());
+
+            return redirect()->back()
+                ->with('error', 'Failed to register ticket. Please try again');
         }
     }
 }
