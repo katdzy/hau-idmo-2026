@@ -41,11 +41,16 @@ function getStatusColor($status){
                     <h1 class="text-[1.5rem] font-bold leading-tight text-purple-700">IDC Admin Management Dashboard</h1>
                     <span class="text-gray-500 text-sm">Institutional Document Controller - Ticket Management</span>
                 </div>
-                <!-- TODO: Remove this in the future (Just for debugging purposes) -->
-                <a href="{{ route('iso.document') }}" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold">
-                Switch to Document Handler View
-                </a>
-                <!-- TODO: Button to swtich to the management blade file -->
+                <div class="w-full flex gap-4">
+                    <!-- TODO: Remove this in the future (Just for debugging purposes) -->
+                    <a href="{{ route('iso.document') }}" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold">
+                        Switch to Document Handler View
+                    </a>
+                    <!-- TODO: Button to swtich to the management blade file -->
+                    <a href="{{ route('iso.management.index') }}" class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-semibold">
+                        Switch to Management View
+                    </a>
+                </div>
             </div>
             <!-- Reset System Button -->
             <div class="px-4 py-3 right-4">
@@ -186,6 +191,7 @@ function getStatusColor($status){
                                                 data-ticket-sharepoint='{{ $ticket->sharepoint_link }}'
                                                 data-ticket-message='{{ $ticket->message_to_idc }}'
                                                 data-ticket-documents='@json($ticket->documents)'
+                                                data-ticket-registered='{{ $ticket->is_registered ? "true" : "false" }}'
                                             >
                                                 View Details
                                             </button>
@@ -500,6 +506,7 @@ function getStatusColor($status){
             const sharepoint = e.target.dataset.ticketSharepoint;
             const message = e.target.dataset.ticketMessage;
             const documentsJson = e.target.dataset.ticketDocuments;
+            const isRegistered = e.target.dataset.ticketRegistered === 'true';
 
             // Parse documents json
             let ticketDocuments = [];
@@ -558,6 +565,10 @@ function getStatusColor($status){
 
                     <td class="px-3 py-2">
                         <div class="flex gap-2 justify-center">
+                            ${isRegistered ? 
+                            `<span class="text-xs text-gray-500 italic"> Locked </span>`
+                            :
+                            `
                             <button onclick="updateDocStatus(${doc.id}, 'approved')"
                                 class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-xs font-semibold">
                                 Approved
@@ -565,11 +576,11 @@ function getStatusColor($status){
                             <button onclick="updateDocStatus(${doc.id}, 'on_hold')"
                                 class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs font-semibold">
                                 On-Hold
-                            </button>
-                        </div>
+                            </button>`
+                            }
+                        </div>             
                     </td>
                 `;
-
                 documentsList.appendChild(row);
             });
 

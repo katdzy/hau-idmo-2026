@@ -36,7 +36,7 @@ function getStatusColor($status){
         <div class="w-[95%] px-4 flex my-4 items-center">
             <img src="{{ asset('images/logos/school/soc_logo.png') }}" class="w-[100px] h-[100px] mr-2"/>
             <div class="w-full flex flex-col justify-center">
-                <h1 class="text-[1.5rem] font-bold leading-tight">ISO Document Management System</h1>
+                <h1 class="text-[1.5rem] font-bold leading-tight">ISO Document Handler Ticket System</h1>
                 <span class="text-gray-500 text-sm"> Document Modification / Creation Notice (DMCN) Tracking</span>
             </div>
             <!-- DEBUG PURPOSES TODO: REMOVE IN THE FUTURE -->
@@ -810,7 +810,7 @@ function getStatusColor($status){
             '(AAC-SBA) School of Business & Accountancy',
             '(AAC-SEA) School of Engineering & Architecture',
             '(AAC-SED) School of Education',
-            '(AAC-SNA) SChool of Nursing & Allied MEdical Sciences',
+            '(AAC-SNA) SChool of Nursing & Allied Medical Sciences',
             '(AAC-SOC) School of Computing',
             '(AAC-STM) School of Hospitality & Tourism Management',
             '(AAC-URO) University Research Office'

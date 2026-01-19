@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class IsoTicket extends Model
 {
@@ -18,7 +20,10 @@ class IsoTicket extends Model
         'message_to_idc',
         'status',
         'created_by',
-        'is_registered'
+        'is_registered',
+    ];
+    protected $casts = [
+        'is_registered' => 'boolean',
     ];
 
     // Define relationship: One-to-many -> One Ticket Many Documents
@@ -41,5 +46,9 @@ class IsoTicket extends Model
             'created_by',
             'id'
         );
+    }
+    public function masterDocuments(): HasMany
+    {
+        return $this->hasMany(IsoMasterDocument::class);
     }
 }

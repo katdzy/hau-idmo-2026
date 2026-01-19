@@ -34,6 +34,7 @@ use App\Http\Controllers\UpdatesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SharepointController;
 use App\Http\Controllers\IsoDocumentController;
+use App\Http\Controllers\IsoManagementController;
 
 //
 // All routes are protected by the "auth" middleware.
@@ -565,4 +566,8 @@ Route::middleware('auth','revalidate')->group(function () {
     |------------------------------------------------------------------*/
     Route::patch('/iso/idc/{ticket}/register', [IsoDocumentController::class, 'registerTicket'])
         ->name('iso.idc.register.ticket');
+    Route::get('/iso/management', [IsoManagementController::class, 'index'])
+        ->name('iso.management.index');
+    Route::get('/iso/management/documents', [IsoManagementController::class, 'getDocuments'])
+        ->name('iso.management.documents');
 });

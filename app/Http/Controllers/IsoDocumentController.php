@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\IsoMasterDocument;
 use App\Models\IsoTicketDocument;
 use App\Models\IsoTicket;
 use App\Models\User;
@@ -418,9 +419,84 @@ class IsoDocumentController extends Controller
         }
 
         try{
-            // Mark ticket as registered
-            $ticket->is_registered = true;
-            $ticket->save();
+            DB::transaction(function() use($ticket){
+                // Mark ticket as registered
+                $ticket->is_registered = true;
+                $ticket->save();
+
+                // Process each document in the ticket
+                foreach($ticket->documents as $document){
+                    if($document->classification === 'addition'){
+                        $masterDoc = IsoMasterDocument::create([
+                            'document_code' => $document->document_code,
+                            'document_title' => $document->document_title,
+                            'source_type' => $document->source_type,
+                            'specific_type' => $document->specific_type,
+                            'originating_section' => $ticket->originating_section,
+                            'current_revision' => 0,
+                            'is_original' => 1,
+                            'original_document_id' => null,
+                            'status' => 'Active',
+                            'registered_at' => $document->registered_at,
+                            'source' => 'ticket',
+                            'ticket_id' => $ticket->id,
+                            'ticket_document_id' =>$document->id,
+                        ]);
+                    } elseif ($document->classification === 'revision'){
+                        $originalDoc = IsoMasterDocument::find($document->revising_master_document_id);
+                        $originalDoc->update([
+                            'status' => 'Superseded',
+                            'superseded_at'=> now(),
+                        ]);
+                        $masterDoc = IsoMasterDocument::create([
+                            'document_code' => $originalDoc->document_code,
+                            'document_title' => $document->document_title,
+                            'source_type' => $document->source_type,
+                            'specific_type' => $document->specific_type,
+                            'originating_section' => $ticket->originating_section,
+
+                            'current_revision' => $originalDoc->current_revision + 1,
+                            'is_original' => false,
+                            'original_document_id' => $originalDoc->is_original
+                                ? $originalDoc->id
+                                : $originalDoc->original_document_id,
+                            'status' => 'Active',
+                            'registered_at' => $document->registered_at,
+                            'source' => 'ticket',
+                            'ticket_id'=> $ticket->id,
+                            'ticket_document_id' => $document->id,
+                        ]);
+                    } elseif ($document->classification === 'deletion'){
+                        $docToDelete = IsoMasterDocument::find($document->revising_master_document_id);
+
+                        $docToDelete->update([
+                            'status' => 'deleted',
+                            'deleted_at' => now()
+                        ]);
+                        // Create deletion record for audit trail
+                        $masterDoc = IsoMasterDocument::create([
+                            'document_code' => $docToDelete->document_code,
+                            'document_title' => $docToDelete->document_title . ' (DELETED)',
+                            'source_type' => $docToDelete->source_type,
+                            'specific_type' => $docToDelete->specific_type,
+                            'originating_section' => $ticket->originating_section,
+                            'current_revision' => $docToDelete->current_revision,
+                            'is_original' => false,
+                            'original_document_id' => $docToDelete->original_document_id ?? $docToDelete->id,
+                            'status' => 'Deleted',
+                            'registered_at' => $document->registered_at,
+                            'deleted_at' => now(),
+                            'source' => 'ticket',
+                            'ticket_id' => $ticket->id,
+                            'ticket_document_id' => $document->id,
+                        ]);
+                    }
+                    $document->update([
+                        'master_document_id' => $masterDoc->id,
+                    ]);
+                }
+
+            });
 
             return redirect()->route('iso.idc.dashboard')
                 ->with('msg','Ticket #'.$ticket->id . ' has been registered successfully!');
