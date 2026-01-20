@@ -34,7 +34,6 @@ use App\Http\Controllers\UpdatesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SharepointController;
 use App\Http\Controllers\IsoDocumentController;
-use App\Http\Controllers\IsoManagementController;
 
 //
 // All routes are protected by the "auth" middleware.
@@ -516,6 +515,10 @@ Route::middleware('auth','revalidate')->group(function () {
     | 18. KPI Library
     |------------------------------------------------------------------*/
     Route::get('/kpis/dashboard', [KpiController::class, 'dashboard'])->name('kpis.dashboard');
+    
+    // Export KPI List to Excel
+    Route::get('/kpis/export', [KpiController::class, 'export'])->name('kpis.export-all');
+
     // AJAX search for KPI dashboard
     Route::get('/kpis/ajax-search', [KpiController::class, 'ajaxSearch'])->name('kpis.ajax-search');
 
@@ -525,9 +528,8 @@ Route::middleware('auth','revalidate')->group(function () {
     // View individual KPI details
     Route::get('/kpis/{kpi}', [KpiController::class, 'showKpiView'])->name('kpis.show');
     
-    // Export KPI to Excel
+    // Export Inidividual KPI to Excel
     Route::get('/kpis/{kpi}/export', [KpiController::class, 'export'])->name('kpis.export');
-
 
     /*------------------------------------------------------------------
     | 19. ISO Document Handling
@@ -549,25 +551,9 @@ Route::middleware('auth','revalidate')->group(function () {
     Route::patch('/iso/document/{ticket}/submit', [IsoDocumentController::class,'submitToIDC'])
         ->name('iso.document.submit');
 
-    /*------------------------------------------------------------------
-    | 20. ISO IDC Document Handling
-    |------------------------------------------------------------------*/
+    // IDC Management Routes
     Route::get('/iso/idc/dashboard', [IsoDocumentController::class,'loadIdcDashboard'])
         ->name('iso.idc.dashboard');
     Route::patch('iso/idc/{ticket}/update-status', [IsoDocumentController::class,'updateTicketStatus'])
-        ->name('iso.idc.update-status');
-    Route::patch('/iso/idc/{documentId}/status', [IsoDocumentController::class, 'updateDocumentStatus'])
-        ->name('iso.idc.status.update');
-    Route::delete('/iso/idc/reset-system', [IsoDocumentController::class, 'resetSystem'])
-        ->name('iso.idc.reset.system');
-
-    /*------------------------------------------------------------------
-    | 21. ISO Document Management
-    |------------------------------------------------------------------*/
-    Route::patch('/iso/idc/{ticket}/register', [IsoDocumentController::class, 'registerTicket'])
-        ->name('iso.idc.register.ticket');
-    Route::get('/iso/management', [IsoManagementController::class, 'index'])
-        ->name('iso.management.index');
-    Route::get('/iso/management/documents', [IsoManagementController::class, 'getDocuments'])
-        ->name('iso.management.documents');
+        ->name('iso.idc.-update-status');
 });

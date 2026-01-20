@@ -77,12 +77,22 @@ function highlightText($text, $search) {
 
                 <div class="flex items-center justify-between mb-6">
                     <h1 class="text-3xl font-bold drop-shadow" style="color: #b91c1c;">KPI Library</h1>
-                    @if(Auth::user()->role === 'SuperAdmin')
-                    <a href="{{ route('kpis.add') }}"
-                    class="bg-red-700 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-lg shadow text-sm transition">
-                        + Add KPI
-                    </a>
-                    @endif
+                    
+                    <div class="flex items-center space-x-2">
+                        <a href="{{ route('kpis.export-all') }}"
+                        class="flex items-center bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded-lg shadow text-sm transition">
+                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                            </svg>
+                            Export all KPIs to Excel
+                        </a>
+                        @if(Auth::user()->role === 'SuperAdmin')
+                        <a href="{{ route('kpis.add') }}"
+                        class="bg-red-700 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-lg shadow text-sm transition">
+                            + Add KPI
+                        </a>
+                        @endif
+                    </div>
                 </div>
 
                 <!-- Search Form -->
