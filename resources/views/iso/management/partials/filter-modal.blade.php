@@ -28,26 +28,29 @@
                 <hr class="my-4">
                 <!-- Department/Office Filter -->
                 <div class="mb-4">
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Department/Office</label>
-                    <!-- Search box for departments -->
-                    <input type="text"
-                        id="dept_search"
-                        placeholder="Search departments..."
-                        class="w-full px-3 py-2 border border-gray-300 rounded-lg mb-3 focus:outline-none focus:ring-2 focus:ring-purple-500">
-                    <!-- Get unique departments -->
-                    <div class="max-h-60 overflow-y-auto border border-gray-200 rounded-lg p-2">
-                        @php
-                            $departments = \App\Models\IsoMasterDocument::distinct()
-                                ->pluck('originating_section')
-                                ->filter()
-                                ->sort();
-                        @endphp
-                        @foreach ($departments as $dept)
-                            <label class="dept-item flex items-center bg-gray-50 p-2 mb-1 rounded hover:bg-gray-100 cursor-pointer" data-debt="{{ strtolower($dept) }}">
-                                <input type="checkbox" name="originating_section[]" value="{{ $dept }}" class="mr-2 text-purple-500 focus:ring-purple-500">
-                                <span class="text-sm">{{ $dept }}</span>
-                            </label>
-                        @endforeach
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Department</label>
+                    <select id="filter_department" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+                        <option value="">All Departments</option>
+                        <option value="aac">Academic Affairs Cluster (AAC)</option>
+                        <option value="aie">Institute for Academic Innovation & Entrepreneurship (AIE)</option>
+                        <option value="cfs">Institute for Christian Formation & Social Integration (CFS)</option>
+                        <option value="csd">Campus Services & Development Office (CSD)</option>
+                        <option value="eac">External Affairs Cluster (EAC)</option>
+                        <option value="frm">Finance & Resources Management Services (FRM)</option>
+                        <option value="hro">Human Resource Management Office (HRO)</option>
+                        <option value="oie">Office of Institutional Effectiveness (OIE)</option>
+                        <option value="oop">Office of the President (OOP)</option>
+                        <option value="rss">Records Services & Affairs (RSS)</option>
+                        <option value="ssa">Student Services & Affairs (SSA)</option>
+                    </select>
+                </div>
+                <!-- Offices Checkboxes -->
+                <div class="mb-4" id="offices_container"style="display:none;">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Specific Offices</label>
+                    <div class="max-h-60 overflow-y-auto border border-gray-200 rounded-lg p-3 bg-gray-50">
+                        <div id="offices_checkboxes">
+                            <!-- Will be populated via JS -->
+                        </div>
                     </div>
                 </div>
                 <hr class="my-4">

@@ -252,6 +252,92 @@
 </style>
 
 <script>
+const specificOfficeOptions = {
+    oop: [
+        "(OOP) Office of the President",
+        "(OOP-AVI) Aviation Insitute",
+        "(OOP-CKS) Center for Kapampangan Studies",
+        "(OOP-DPO) Data Privacy Office",
+        "(OOP-ITC) Institutional Testing and Evaluation Center",
+        "(OOP-ITS) Information Technology Systems & Services",
+        "(OOP-OIA) Office of International Affairs",
+        "(OOP-TRO) Treasury Office",
+        "(OOP-UCO) University Chaplain Office"
+    ],
+    aac: [
+        '(AAC) Academic Affairs Office',
+        '(AAC-BED) School of Basic Education',
+        '(AAC-CJE) College of Criminal Justice Education & Forensics',
+        '(AAC-CTL) Center for Teaching & Learning',
+        '(AAC-GSR) Graduate Studies & Research',
+        '(AAC-IRB) Institutional Review Board',
+        '(AAC-LIB) Library Department',
+        '(AAC-LMS) Learning Management System',
+        '(AAC-SAS) School of Arts & Sciences',
+        '(AAC-SBA) School of Business & Accountancy',
+        '(AAC-SEA) School of Engineering & Architecture',
+        '(AAC-SED) School of Education',
+        '(AAC-SNA) SChool of Nursing & Allied Medical Sciences',
+        '(AAC-SOC) School of Computing',
+        '(AAC-STM) School of Hospitality & Tourism Management',
+        '(AAC-URO) University Research Office'
+    ],
+    oie: [
+        '(OIE-DMO) Institutional Database Management Office',
+        '(OIE-IDC) Insitutional Document Controller',
+        '(OIE-IPR) Institutional Research, Planning & Publications Office',
+        '(OIE-QAO) Quality Assurance Office'
+    ],
+    cfs: [
+        '(CFS-CES) Office of the Community Extension Services',
+        '(CFS-CLE) Christian Living Education',
+        '(CFS-CMO) Campus Ministry Office'
+    ],
+    hro: [
+        '(HRO-HRD) Human Resource Development',
+        '(HRO-HRM) Recruitment and Maintenance'
+    ],
+    frm: [
+        '(FRM) Finance and Resource Management Office',
+        '(FRM-ACC) Accounts & Collection',
+        '(FRM-ASE) Ancillary Services',
+        '(FRM-ATO) Accounting',
+        '(FRM-GRT) Grants Accounttant',
+        '(FRM-PAO) Payroll'
+    ],
+    rss: [
+        '(RSS-ADO) Admissions Office'
+    ],
+    ssa: [
+        '(SSA-CPO) Career and Placement Office',
+        '(SSA-MDS) Medical and Dental Services',
+        '(SSA-SAO) Student Affairs',
+        '(SSA-SGO) Scholarships & Grants',
+        '(SSA-UGC) University Guidance Center',
+        '(SSA-USO) University Sports'
+    ],
+    eac: [
+        '(EAC) External Affairs Office',
+        '(EAC-ARO) Alumni Relations Office',
+        '(EAC-CRE) Creative Services',
+        '(EAC-PAM) Performing Arts and Events Management',
+        '(EAC-PRO) Public Relations Office'
+    ],
+    csd: [
+        '(CSD-CSO) Campus Services Office',
+        '(CSD-ECM) Engineering Construction and Maintenance',
+        '(CSD-MCM) Motorpool/Campus Maintenance',
+        '(CSD-PCO) Property Custodianship Office',
+        '(CSD-PUO) Purchasing Office',
+        '(CSD-SEC) Campus Security',
+        '(CSD-VLO) Venues and Logistics Office'
+    ],
+    aie: [
+        '(AIE-ETA) Expanded Tertiary Education, Equivalency & Accreditation',
+        '(AIE-SPL) School of Professional Education and Lifelong Learning',
+        '(AIE-TBI) Technology Business Incubator - KITTO'
+    ]
+};
 const filterModal = document.getElementById('filter_modal');
 const openFilterBtn = document.getElementById('open_filter_modal');
 const closeFilterBtn = document.getElementById('close_filter_modal');
@@ -272,25 +358,44 @@ filterModal.addEventListener('click', (e)=>{
 });
 
 // Department Search
-const deptSearch = document.getElementById('dept_search');
-const deptItems = document.querySelectorAll('.dept-item');
+const departmentSelect = document.getElementById('filter_department');
+const officesContainer = document.getElementById('offices_container');
+const officesCheckboxes = document.getElementById('offices_checkboxes');
 
-deptSearch.addEventListener('input', (e)=>{
-    const searchTerm = e.target.value.toLowerCase();
+departmentSelect.addEventListener('change', (e)=>{
+    const selectedDept = e.target.value;
 
-    deptItems.forEach(item => {
-        const deptName = item.getAttribute('data-dept');
-        if(deptName.includes(searchTerm)){
-            item.style.display = 'flex';
-        } else {
-            item.style.display = 'none';
-        }
+    officesCheckboxes.innerHTML = '';
+    if(!selectedDept || selectedDept===''){
+        officesContainer.style.display = 'none';
+        return;
+    }
+
+    officesContainer.style.display = 'block';
+
+    const offices = specificOfficeOptions[selectedDept];
+
+    offices.forEach((office) =>{
+        const label = document.createElement('label');
+        label.className = 'flex items-center bg-white p-2 mb-1 rounded hover:bg-gray-100 cursor-pointer';
+
+        label.innerHTML = `
+            <input type="checkbox"
+                name="originating_section[]"
+                value="${office}"
+                class="mr-2 text-purple-500 focus:ring-purple-500">
+            <span class="text-sm">${office}</span>
+        `;
+
+        officesCheckboxes.appendChild(label);
     });
 });
 
 // Clear All filters Button
 document.getElementById('clear_all_filters').addEventListener('click', ()=>{
     document.getElementById('filter_form').reset();
+    officesContainer.style.display = 'none';
+    officesCheckboxes.innerHTML = '';
 });
 
 // Apply Filters (AJAX)

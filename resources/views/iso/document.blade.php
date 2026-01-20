@@ -266,55 +266,89 @@ function getStatusColor($status){
             <!-- Add Document Section -->
             <div class="bg-gray-50 p-4 rounded-lg mb-4">
                 <h3 class="font-semibold mb-3 text-gray-700">Add Documents to Ticket</h3>
-                <div class="grid grid-cols-2 gap-3">
-                    <!-- Classification / Nautre of Document Modification -->
-                    <div class="form-group mb-2">
-                        <label class="form-label text-sm">Nature of Document Modification</label>
-                        <select id="doc_classification" class="form-input">
-                            <option value="">Select...</option>
-                            <option value="revision">For revision</option>
-                            <option value="addition">Addition</option>
-                            <option value="deletion">Deletion</option>
-                        </select>
-                    </div>
-                    <!-- Source Document Type -->
-                    <div class="form-group mb-2">
-                        <label class="form-label text-sm">Source Document</label>
-                        <select id="doc_source" class="form-input">
-                            <option value="">Select...</option>
-                            <option value="eoms">EOMS Manual</option>
-                            <option value="procedures">Procedures</option>
-                            <option value="forms">Forms</option>
-                            <option value="records">Records Management Manual</option>
-                            <option value="others">Others</option>
-                        </select>
-                    </div>
-                    <!-- Document Code -->
-                    <div class="form-group mb-2">
-                        <label class="form-label text-sm">Document Code</label>
-                        <input type="text" id="doc_code" class="form-input" placeholder="Enter Document Code">
-                    </div>
-                    <!-- Document Title -->
-                    <div class="form-group mb-2">
-                        <label class="form-label text-sm">Document Title</label>
-                        <input type="text" id="doc_title" class="form-input" placeholder="Enter Document Title">
-                    </div>
-                </div>
-                <!-- Specific Type (conditional) -->
-                <div id="specific_type_section" class="form-group mb-2" style="display: none;">
-                    <label class="form-label text-sm">Specific Type</label>
-                    <select id="doc_specific_type" class="form-input">
+                <!-- Classification / Nautre of Document Modification -->
+                <div class="form-group mb-2">
+                    <label class="form-label text-sm">Nature of Document Modification<span class="text-red-800"> *</span></label>
+                    <select id="doc_classification" class="form-input">
                         <option value="">Select...</option>
+                        <option value="revision">For revision</option>
+                        <option value="addition">Addition</option>
+                        <option value="deletion">Deletion</option>
                     </select>
                 </div>
-                <!-- Custom Source Input (for "Others") -->
-                <div id="custom_source_section" class="form-group mb-2 col-span-2" style="display: none;">
-                    <label class="form-label text-sm">Specify Type <span class="text-red-500">*</span></label>
-                    <input type="text"
-                            id="doc_custom_source"
-                            class="form-input"
-                            placeholder="Enter custom source type...">
-                    <small class="text-gray-500">Required when "Others" is selected</small>
+                <!-- For ADDITION: Show all manual input fields -->
+                <div id="addition_fields" style="display: none;">
+                    <div class="grid grid-cols-2 gap-3">
+                        <!-- Source Document Type -->
+                        <div class="form-group mb-2">
+                            <label class="form-label text-sm">Source Document</label>
+                            <select id="doc_source" class="form-input">
+                                <option value="">Select...</option>
+                                <option value="eoms">EOMS Manual</option>
+                                <option value="procedures">Procedures</option>
+                                <option value="forms">Forms</option>
+                                <option value="records">Records Management Manual</option>
+                                <option value="others">Others</option>
+                            </select>
+                        </div>
+                        <!-- Document Code -->
+                        <div class="form-group mb-2">
+                            <label class="form-label text-sm">Document Code</label>
+                            <input type="text" id="doc_code" class="form-input" placeholder="Enter Document Code">
+                        </div>
+                        <!-- Document Title -->
+                        <div class="form-group mb-2">
+                            <label class="form-label text-sm">Document Title</label>
+                            <input type="text" id="doc_title" class="form-input" placeholder="Enter Document Title">
+                        </div>
+                        <!-- Specific Type (conditional) -->
+                        <div id="specific_type_section" class="form-group mb-2" style="display: none;">
+                            <label class="form-label text-sm">Specific Type</label>
+                            <select id="doc_specific_type" class="form-input">
+                                <option value="">Select...</option>
+                            </select>
+                        </div>
+                        <!-- Custom Source Input (for "Others") -->
+                        <div id="custom_source_section" class="form-group mb-2 col-span-2" style="display: none;">
+                            <label class="form-label text-sm">Specify Type <span class="text-red-500"> *</span></label>
+                            <input type="text"
+                                    id="doc_custom_source"
+                                    class="form-input"
+                                    placeholder="Enter custom source type...">
+                            <small class="text-gray-500">Required when "Others" is selected</small>
+                        </div>
+                    </div>
+                </div>
+                <!-- For REVISION/DELETION: Show existing documents dropdown -->
+                <div id="existing_doc_fields" style="display:none;">
+                    <div class="form-group mb-3">
+                        <label class="form-label text-sm">Select Existing Document <span class="text-red-500"> *</span></label>
+                        <select id="existing_doc_select" class="form-input">
+                            <option value="">Select an Office first...</option>
+                        </select>
+                        <small class="text-gray-500 block mt-1">
+                            Only documents from the selected office will appear
+                        </small>
+                    </div>
+
+                    <!-- Show selected document details (read-only) -->
+                    <div id="selected_doc_preview" class="bg-white p-3 rounded border border-gray-300" style="display: none;">
+                        <h4 class="text-sm font-semibold text-gray-700 mb-2">Selected Document:</h4>
+                        <div class="grid grid-cols-2 gap-2 text-sm">
+                            <div>
+                                <span class="text-gray-600">Code:</span>
+                                <span id="preview_code" class="font-mono text-blue-600"></span>
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Source:</span>
+                                <span id="preview_source"></span>
+                            </div>
+                            <div class="col-span-2">
+                                <span class="text-gray-600">Title:</span>
+                                <span id="preview_title"></span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <button type="button" id="add_document_btn" class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 mt-2">
