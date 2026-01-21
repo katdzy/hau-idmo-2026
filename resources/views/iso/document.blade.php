@@ -269,7 +269,7 @@ function getStatusColor($status){
                 <!-- Classification / Nautre of Document Modification -->
                 <div class="form-group mb-2">
                     <label class="form-label text-sm">Nature of Document Modification<span class="text-red-800"> *</span></label>
-                    <select id="doc_classification" class="form-input">
+                    <select id="doc_classification" class="form-input opacity-50 cursor-not-allowed" required disabled>
                         <option value="">Select...</option>
                         <option value="revision">For revision</option>
                         <option value="addition">Addition</option>
@@ -972,17 +972,138 @@ function getStatusColor($status){
             customSourceInput.value = '';
         }
     });
+    
+    // New Doc Classification logic
+    let currentSelectedOffice = null;
 
-    // Add Document to List
-    document.getElementById('add_document_btn').addEventListener('click', () => {
+    ticketOfficeDropdown.addEventListener('change', ()=>{
+        currentSelectedOffice = ticketOfficeDropdown.value;
+
+        // If revision/deletion is selected, reload the documents dropdown
+        const classification = document.getElementById('doc_classification').value;
+        if(classification === 'revision' || classification === 'deletion'){
+            loadExistingDocuments(currentSelectedOffice);
+        } 
+    });
+
+    document.getElementById('doc_classification').addEventListener('change', (e)=>{
+        const classification = e.target.value;
+        const additionFields = document.getElementById('addition_fields');
+        const existingDocFields = document.getElementById('existing_doc_fields');
+
+        // Reset fields when classification Changes
+        clearDocumentForm()
+
+        if(classification === 'addition'){
+            additionFields.style.display = 'block';
+            existingDocFields.style.display = 'none';
+        } else if(classification === 'revision' || classification === 'deletion'){
+            additionFields.style.display = 'none';
+            existingDocFields.style.display = 'block';
+
+            // Load existing documents if office is selected
+            if(currentSelectedOffice){
+                loadExistingDocuments(currentSelectedOffice);
+            } else{
+                alert('Please select an office first');
+                e.target.value = '';
+            }
+        } else{
+            // No classification selected
+            additionFields.style.display = 'none';
+            existingDocFields.style.display = 'none';
+        }
+    })
+
+    async function loadExistingDocuments(office){
+        const selectElement = document.getElementById('existing_doc_select');
+
+        // Show loading state
+        selectElement.innerHTML = '<option value="">Loading Documents...</option>';
+        selectElement.disabled = true;
+
+        try{
+            const response = await fetch(`/iso/documents/by-office?office=${encodeURIComponent(office)}`);
+
+            if(!response.ok){
+                throw new Error('Failed to load documents');
+            }
+            const documents = await response.json();
+
+            selectElement.innerHTML = '<option value="">Select a document...</option>'
+
+            if(documents.length === 0){
+                selectElement.innerHTML = '<option value="">No documents found for this office</option>';
+            } else {
+                documents.forEach(doc => {
+                    const option = document.createElement('option');
+                    option.value = doc.id;
+                    option.textContent = `${doc.document_code} - ${doc.document_title}`;
+
+                    // Store document data in data attributes
+                    option.dataset.code = doc.document_code;
+                    option.dataset.title = doc.document_title;
+                    option.dataset.source = doc.source_type;
+                    option.dataset.specificType = doc.specific_type || '';
+
+                    selectElement.appendChild(option);
+                });
+            }
+
+            selectElement.disabled = false;
+        } catch (error) {
+            console.error('Error loading documents: ', error);
+            selectElement.innerHTML = '<option value="">Error loading documents</option>';
+            alert('Failed to load documents. Please try again.');
+        }
+    }
+
+    document.getElementById('existing_doc_select').addEventListener('change', (e)=>{
+        const selectedOption = e.target.options[e.target.selectedIndex];
+        const preview = document.getElementById('selected_doc_preview');
+
+        if(selectedOption.value){
+            // show document preview with data from option
+            document.getElementById('preview_code').textContent = selectedOption.dataset.code;
+            document.getElementById('preview_title').textContent = selectedOption.dataset.title;
+
+            // Format source type display
+            let sourceDisplay = selectedOption.dataset.source;
+            if(selectedOption.dataset.specificType){
+                sourceDisplay += `(${selectedOption.dataset.specificType})`;
+            }
+            document.getElementById('preview_source').textContent = sourceDisplay;
+            preview.style.display = 'block';
+        } else{
+            preview.style.display = 'none';
+        }
+    });
+
+    // Update add Document button logic
+    document.getElementById('add_document_btn').addEventListener('click', ()=>{
+        const classification = document.getElementById('doc_classification').value;
+
+        if(!classification){
+            alert('Please select Nature of Document Modification first');
+            return;
+        }
+        if(classification === 'addition'){
+            // Handle addition
+            addNewDocument();
+        } else if (classification === 'revision' || classification === 'deletion'){
+            addExistingDocument(classification);
+        }
+    });
+
+    function addNewDocument(){
         const code = document.getElementById('doc_code').value.trim();
         const title = document.getElementById('doc_title').value.trim();
-        const classification = document.getElementById('doc_classification').value;
+        const classification = 'addition';
         const source = document.getElementById('doc_source').value;
         const specificType = document.getElementById('doc_specific_type').value;
         const customSource = document.getElementById('doc_custom_source').value.trim();
 
-        if (!validationCheckForm(code, title, classification, source, specificType, customSource)) {
+        if (!validationCheckForm(code, title, classification, source, specificType, customSource)){
             return;
         }
 
@@ -993,12 +1114,36 @@ function getStatusColor($status){
             classification,
             source,
             specificType: source === 'others' ? customSource : (specificType || null),
-            id: Date.now() //Give a unique ID for removal
+            id: Date.now(),
+            revisingMasterId: null //New documents doesn't revise anything
         };
         documents.push(doc);
         updateDocumentsList();
         clearDocumentForm();
-    });
+    }
+
+    function addExistingDocument(classification){
+        const selectElement = document.getElementById('existing_doc_select');
+        const selectedOption = selectElement.options[selectElement.selectedIndex];
+
+        if(!selectedOption.value){
+            alert('Please select a document');
+            return;
+        }
+
+        const doc = {
+            code: selectedOption.dataset.code,
+            title: selectedOption.dataset.title,
+            classification: classification,
+            source: selectedOption.dataset.source,
+            specificType: selectedOption.dataset.specificType || null,
+            id: Date.now(),
+            revisingMasterId: selectedOption.value
+        };
+        documents.push(doc);
+        updateDocumentsList();
+        clearDocumentForm();
+    }
 
     function updateDocumentsList() {
         const tbody = document.getElementById('documents_list');
@@ -1089,7 +1234,7 @@ function getStatusColor($status){
     function clearDocumentForm(){
         document.getElementById('doc_code').value = '';
         document.getElementById('doc_title').value = '';
-        document.getElementById('doc_classification').value = '';
+        // document.getElementById('doc_classification').value = '';
         document.getElementById('doc_source').value = '';
         document.getElementById('doc_specific_type').value = '';
         document.getElementById('doc_custom_source').value = '';

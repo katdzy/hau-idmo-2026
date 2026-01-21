@@ -395,6 +395,24 @@ class IsoDocumentController extends Controller
                 ->with('error', 'Failed to reset system. Please check logs');
         }
     }
+    // ==================================
+    // Getting Documents based on the office
+    // ==================================
+    public function getDocumentsByOffice(Request $request){
+        $office = $request->query('office');
+
+        if(!$office){
+            return response()->json([]);
+        }
+
+        $documents = IsoMasterDocument::where('originating_section', $office)
+            ->where('status', 'Active')
+            ->select('id', 'document_code', 'document_title', 'source_type', 'specific_type')
+            ->orderBy('document_code')
+            ->get();
+            
+        return response()->json($documents);
+    }
 
     // ==================================
     // ISO Document management system

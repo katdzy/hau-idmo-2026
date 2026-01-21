@@ -34,6 +34,7 @@ use App\Http\Controllers\UpdatesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SharepointController;
 use App\Http\Controllers\IsoDocumentController;
+use App\Http\Controllers\IsoManagementController;
 
 //
 // All routes are protected by the "auth" middleware.
@@ -544,6 +545,9 @@ Route::middleware('auth','revalidate')->group(function () {
         ->name('iso.document.edit');
     Route::put('/iso/document/{ticket}', [IsoDocumentController::class,'updateDocument'])
         ->name('iso.document.update');
+    // Route to get documents by office
+    Route::get('/iso/documents/by-office', [IsoDocumentController::class, 'getDocumentsByOffice'])
+        ->name('iso.documents.by_office');
 
     Route::delete('/iso/document/{ticket}', [IsoDocumentController::class,'destroyDocument'])
         ->name('iso.document.destroy');
@@ -551,9 +555,26 @@ Route::middleware('auth','revalidate')->group(function () {
     Route::patch('/iso/document/{ticket}/submit', [IsoDocumentController::class,'submitToIDC'])
         ->name('iso.document.submit');
 
+    /*------------------------------------------------------------------
+    | 20. ISO IDC Document Handling
+    |------------------------------------------------------------------*/
     // IDC Management Routes
     Route::get('/iso/idc/dashboard', [IsoDocumentController::class,'loadIdcDashboard'])
         ->name('iso.idc.dashboard');
     Route::patch('iso/idc/{ticket}/update-status', [IsoDocumentController::class,'updateTicketStatus'])
         ->name('iso.idc.-update-status');
+    Route::patch('/iso/idc/{documentId}/status', [IsoDocumentController::class, 'updateDocumentStatus'])
+        ->name('iso.idc.status.update');
+    Route::delete('/iso/idc/reset-system', [IsoDocumentController::class, 'resetSystem'])
+        ->name('iso.idc.reset.system');
+    
+    /*------------------------------------------------------------------
+    | 21. ISO Document Management
+    |------------------------------------------------------------------*/
+    Route::patch('/iso/idc/{ticket}/register', [IsoDocumentController::class, 'registerTicket'])
+        ->name('iso.idc.register.ticket');
+    Route::get('/iso/management', [IsoManagementController::class, 'index'])
+        ->name('iso.management.index');
+    Route::get('/iso/management/documents', [IsoManagementController::class, 'getDocuments'])
+        ->name('iso.management.documents');
 });
