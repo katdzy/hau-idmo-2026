@@ -271,9 +271,9 @@ function getStatusColor($status){
                     <label class="form-label text-sm">Nature of Document Modification<span class="text-red-800"> *</span></label>
                     <select id="doc_classification" class="form-input opacity-50 cursor-not-allowed" required disabled>
                         <option value="">Select...</option>
-                        <option value="revision">For revision</option>
-                        <option value="addition">Addition</option>
-                        <option value="deletion">Deletion</option>
+                        <option value="addition">Addition (Add new Document)</option>
+                        <option value="revision">Revision (Update an Existing Document)</option>
+                        <option value="deletion">Deletion (Delete an Existing Document)</option>
                     </select>
                 </div>
                 <!-- For ADDITION: Show all manual input fields -->
@@ -496,17 +496,6 @@ function getStatusColor($status){
                 @csrf
                 @method('PUT')
                 
-                <!-- Originating Section -->
-                <!-- <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Originating Section <span class="text-red-500">*</span>
-                    </label>
-                    <input type="text" 
-                           id="edit_originating_section" 
-                           name="originating_section"
-                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                           required>
-                </div> -->
                 <!-- Originating Section - New Dropdown -->
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -575,51 +564,85 @@ function getStatusColor($status){
 
                     <!-- Add Document Form -->
                     <div class="bg-gray-50 p-4 rounded-md mb-3">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
-                            <div>
-                                <label class="block text-xs text-gray-600 mb-1">Document Code</label>
-                                <input type="text" id="edit_doc_code" class="w-full px-2 py-1 border rounded text-sm">
-                            </div>
-                            <div>
-                                <label class="block text-xs text-gray-600 mb-1">Document Title</label>
-                                <input type="text" id="edit_doc_title" class="w-full px-2 py-1 border rounded text-sm">
-                            </div>
-                            <div>
-                                <label class="block text-xs text-gray-600 mb-1">Nature of Document Modification</label>
-                                <select id="edit_doc_classification" class="w-full px-2 py-1 border rounded text-sm">
-                                    <option value="">Select...</option>
-                                    <option value="revision">Revision</option>
-                                    <option value="addition">Addition</option>
-                                    <option value="deletion">Deletion</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-xs text-gray-600 mb-1">Source Type</label>
-                                <select id="edit_doc_source" class="w-full px-2 py-1 border rounded text-sm">
-                                    <option value="">Select...</option>
-                                    <option value="eoms">EOMS Manual</option>
-                                    <option value="procedures">Procedures</option>
-                                    <option value="forms">Forms</option>
-                                    <option value="records">Records Management</option>
-                                    <option value="others">Others</option>
-                                </select>
-                            </div>
-                        </div>
-                        <!-- Specific Type (shown only when Source Type is "EOMS Manual" or "Records Management") -->
-                        <div id="edit_specific_type_section" style="display: none;" class="mb-3">
-                            <label class="block text-xs text-gray-600 mb-1">Specific Type</label>
-                            <select id="edit_doc_specific_type" class="w-full px-2 py-1 border rounded text-sm">
+                        <div>
+                            <label class="block text-xs text-gray-600 mb-1">Nature of Document Modification</label>
+                            <select id="edit_doc_classification" class="w-full px-2 py-1 border rounded text-sm">
                                 <option value="">Select...</option>
+                                <option value="revision">Revision</option>
+                                <option value="addition">Addition</option>
+                                <option value="deletion">Deletion</option>
                             </select>
                         </div>
-                        <!-- Custom Source input for Edit modal -->
-                        <div id="edit_custom_source_section" style="display: none;" class="col-span-2 mb-3">
-                            <label class="block text-xs text-gray-600 mb-1">Specify Source Type <span class="text-red-500">*</span></label>
-                            <input type="text"
-                                    id="edit_doc_custom_source"
-                                    class="w-full px-2 py-1 border rounded text-sm"
-                                    placeholder="Enter custom source type...">
+                        <!-- For Addition -->
+                        <div id="edit_addition_fields" style="display:none;">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+                                <div>
+                                    <label class="block text-xs text-gray-600 mb-1">Document Code</label>
+                                    <input type="text" id="edit_doc_code" class="w-full px-2 py-1 border rounded text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-gray-600 mb-1">Document Title</label>
+                                    <input type="text" id="edit_doc_title" class="w-full px-2 py-1 border rounded text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-gray-600 mb-1">Source Type</label>
+                                    <select id="edit_doc_source" class="w-full px-2 py-1 border rounded text-sm">
+                                        <option value="">Select...</option>
+                                        <option value="eoms">EOMS Manual</option>
+                                        <option value="procedures">Procedures</option>
+                                        <option value="forms">Forms</option>
+                                        <option value="records">Records Management</option>
+                                        <option value="others">Others</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- Specific Type (shown only when Source Type is "EOMS Manual" or "Records Management") -->
+                            <div id="edit_specific_type_section" style="display: none;" class="mb-3">
+                                <label class="block text-xs text-gray-600 mb-1">Specific Type</label>
+                                <select id="edit_doc_specific_type" class="w-full px-2 py-1 border rounded text-sm">
+                                    <option value="">Select...</option>
+                                </select>
+                            </div>
+                            <!-- Custom Source input for Edit modal -->
+                            <div id="edit_custom_source_section" style="display: none;" class="col-span-2 mb-3">
+                                <label class="block text-xs text-gray-600 mb-1">Specify Source Type <span class="text-red-500">*</span></label>
+                                <input type="text"
+                                        id="edit_doc_custom_source"
+                                        class="w-full px-2 py-1 border rounded text-sm"
+                                        placeholder="Enter custom source type...">
+                            </div>
                         </div>
+                        <!-- FOR REVISION/DELETION: Only show existing documents -->
+                        <div id="edit_existing_doc_fields" style="display:none;">
+                            <div class="mb-3">
+                                <label class="block text-xs text-gray-600 mb-1">Select Existing Document <span class="text-red-500">*</span></label>
+                                <select id="edit_existing_doc_select" class="w-full px-2 py-1 border rounded text-sm">
+                                    <option value="">Loading...</option>
+                                </select>
+                                <small class="text-gray-500 block mt-1">
+                                    Only documents from the selected office will appear
+                                </small>
+                            </div>
+                            <!-- Show selected document details -->
+                            <div id="edit_selected_doc_preview" class="bg-white p-3 rounded border border-gray-300" style="display:none;">
+                                <h4 class="text-sm font-semibold text-gray-700 mb-2">Selected Document:</h4>
+                                <div class="grid grid-cols-2 gap-2 text-sm">
+                                    <div>
+                                        <span class="text-gray-600">Code: </span>
+                                        <span id="edit_preview_code" class="font-mono text-blue-600"></span>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-600">Source: </span>
+                                        <span id="edit_preview_source"></span>
+                                    </div>
+                                    <div class="col-span-2">
+                                        <span class="text-gray-600">Title: </span>
+                                        <span id="edit_preview_title"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Submit/Add Document to list button -->
                         <button type="button" id="edit_add_document_btn" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm">
                             Add Document to List
                         </button>
@@ -976,17 +999,29 @@ function getStatusColor($status){
     // New Doc Classification logic
     let currentSelectedOffice = null;
 
+    const classificationSelect = document.getElementById('doc_classification');
+
+    toggleClassification(null); //Initially set to lock state on page load
+
     ticketOfficeDropdown.addEventListener('change', ()=>{
         currentSelectedOffice = ticketOfficeDropdown.value;
 
+        toggleClassification(currentSelectedOffice); //Enable classification
+
         // If revision/deletion is selected, reload the documents dropdown
-        const classification = document.getElementById('doc_classification').value;
+        const classification = classificationSelect.value;
         if(classification === 'revision' || classification === 'deletion'){
             loadExistingDocuments(currentSelectedOffice);
         } 
     });
 
-    document.getElementById('doc_classification').addEventListener('change', (e)=>{
+    classificationSelect.addEventListener('change', (e)=>{
+        if(!currentSelectedOffice){
+            alert('Please select an office first');
+            e.target.value = '';
+            return;
+        }
+
         const classification = e.target.value;
         const additionFields = document.getElementById('addition_fields');
         const existingDocFields = document.getElementById('existing_doc_fields');
@@ -1000,14 +1035,7 @@ function getStatusColor($status){
         } else if(classification === 'revision' || classification === 'deletion'){
             additionFields.style.display = 'none';
             existingDocFields.style.display = 'block';
-
-            // Load existing documents if office is selected
-            if(currentSelectedOffice){
-                loadExistingDocuments(currentSelectedOffice);
-            } else{
-                alert('Please select an office first');
-                e.target.value = '';
-            }
+            loadExistingDocuments(currentSelectedOffice);
         } else{
             // No classification selected
             additionFields.style.display = 'none';
@@ -1372,6 +1400,7 @@ function getStatusColor($status){
 // ============================================
     let editDocuments = [];
     let currentEditTicketId = null;
+    let currentEditOffice = null;
 
     const editModal = document.getElementById('edit_modal');
     const closeEditBtn = document.getElementById('close_edit_modal');
@@ -1389,7 +1418,7 @@ function getStatusColor($status){
         const selectedCluster = editTicketClusterDropdown.value;
 
         // Reset office dropdown
-        editTicketOfficeDropdown.innerHTML = '<option value="">Select Office... </option>';
+        editTicketOfficeDropdown.innerHTML = '<option value="">Select Office...</option>';
         editTicketOfficeDropdown.disabled = true;
 
         if(selectedCluster && specificOfficeOptions[selectedCluster]){
@@ -1436,7 +1465,103 @@ function getStatusColor($status){
         document.body.classList.remove('overflow-hidden');
     }
 
-    // Handle Source Type Change (for Edit Modal)
+    editTicketOfficeDropdown.addEventListener('change', ()=>{
+        currentEditOffice = editTicketOfficeDropdown.value;
+
+        // If revision/deletion is selected. reload documents
+        const classification = document.getElementById('edit_doc_classification').value;
+        if(classification === 'revision' || classification === 'deletion'){
+            loadExistingDocumentsForEdit(currentEditOffice);
+        }
+    });
+
+    document.getElementById('edit_doc_classification').addEventListener('change', (e)=>{
+        const classification = e.target.value;
+        const additionFields = document.getElementById('edit_addition_fields');
+        const existingDocFields = document.getElementById('edit_existing_doc_fields');
+
+        clearEditDocumentForm();
+        if(classification === 'addition'){
+            additionFields.style.display = 'block';
+            existingDocFields.style.display = 'none';
+        } else if (classification === 'reivision' || classification === 'deletion'){
+            additionFields.style.display = 'none';
+            existingDocFields.style.display = 'block';
+
+            if(currentEditOffice){
+                loadExistingDocumentsForEdit(currentEditOffice);
+            } else{
+                alert('Please select an office first');
+                e.target.value = '';
+            }
+        } else{
+            additionFields.style.display = 'none';
+            existingDocFields.style.display = 'none';
+        }
+    });
+
+
+    async function loadExistingDocumentsForEdit(office){
+        const selectElement = document.getElementById('edit_existing_doc_select');
+
+        selectElement.innerHTML = '<option value="">Loading Documents...</option>';
+        selectElement.disabled = true;
+
+        try{
+            const response = await fetch(`/iso/documents/by-office?office=${encodeURIComponent(office)}`);
+
+            if(!response.ok){
+                throw new Error('Failed to load documents');
+            }
+
+            const documents = await response.json();
+            selectElement.innerHTML = '<option value="">Select a document...</option>';
+
+            if(documents.length === 0){
+                selectElement.innerHTML = '<option value="">No documents found for this office</option>';
+            } else {
+                documents.forEach(doc =>{
+                    const option = document.createElement('option');
+                    option.value = doc.id;
+                    option.textContent = `${doc.document_code} - ${doc.document_title}`;
+
+                    option.dataset.code = doc.document_code;
+                    option.dataset.title = document_title;
+                    option.dataset.source = doc.source_type;
+                    option.dataset.specificType = doc.specific_type || '';
+
+                    selectElement.appendChild(option);
+                });
+            }
+            selectElement.disabled = false;
+        } catch (error){
+            console.error('Error loading documents:', error);
+            selectElement.innerHTML = '<option value="">Error loading documents</option>';
+            alert('Failed to load documents. Please try again.');
+        }
+    }
+
+    // Handle existing document selection in edit mode
+    document.getElementById('edit_existing_doc_select').addEventListener('change',(e)=>{
+        const selectedOption = e.target.options[e.target.selectedIndex];
+        const preview = document.getElementById('edit_selected_doc_preview');
+
+        if(selectedOption.value){
+            document.getElementById('edit_preview_code').textContent = selectedOption.dataset.code;
+            document.getElementById('edit_preview_title').textContent = selectedOption.dataset.title;
+
+            let sourceDisplay = selectedOption.dataset.source;
+            if(selectedOption.dataset.specificType){
+                sourceDisplay += `${selectedOption.dataset.source}`;
+            }
+            document.getElementById('edit_preview_source').textContent = sourceDisplay;
+            preview.style.display = 'block';
+        } else{
+            preview.style.display = 'none';
+        }
+    });
+
+    // Handle Source Type Change (for Edit Modal - ADDITION ONLY)
     editDocSource.addEventListener('change', () => {
         const source = editDocSource.value;
 
@@ -1466,33 +1591,97 @@ function getStatusColor($status){
             editSpecificTypeSelect.value = '';
         }
     });
-    document.getElementById('edit_add_document_btn').addEventListener('click', () => {
-        const code = document.getElementById('edit_doc_code').value.trim();
-        const title =document.getElementById('edit_doc_title').value.trim();
-        const classification = document.getElementById('edit_doc_classification').value;
-        const source = document.getElementById('edit_doc_source').value;
-        const specificType = document.getElementById('edit_doc_specific_type').value;
-        const customSource = document.getElementById('edit_doc_custom_source').value.trim();
+    
+    // Cluster dropdown for edit
+    editTicketClusterDropdown.addEventListener('change', ()=>{
+        const selectedCluster = editTicketClusterDropdown.value;
 
-        if (!validationCheckForm(code, title, classification, source, specificType, customSource)) {
+        editTicketOfficeDropdown.innerHTML = '<option value="">Select Office...</option>';
+        editTicketOfficeDropdown.disabled = true;
+        if(selectedCluster && specificOfficeOptions[selectedCluster]){
+            const offices = specificOfficeOptions[selectedCluster];
+
+            offices.forEach(office => {
+                const option = document.createElement('option');
+                option.value = office;
+                option.textContent = office;
+                editTicketOfficeDropdown.appendChild(option);
+            });
+
+            editTicketOfficeDropdown.disabled = false;
+
+            if(offices.length === 1){
+                editTicketOfficeDropdown.value = offices[0];
+                currentEditOffice = offices[0];
+            }
+        }
+    });
+
+    document.getElementById('edit_add_document_btn').addEventListener('click', () => {
+        const classification = document.getElementById('edit_doc_classification').value;
+
+        if(!classification){
+            alert('Please select Nature of Document Modification first');
             return;
         }
 
+        if(classification === 'addition'){
+            addEditNewDocument();
+        } else if (classification === 'revision' || classification === 'deletion'){
+            addEditExistingDocument(classification);
+        }
+    });
+    
+    // Function to add NEW document in edit mode
+    function addEditNewDocument(){
+        const code = document.getElementById('edit_doc_code').value.trim();
+        const title = document.getElementById('edit_doc_title').value.trim();
+        const classification = 'addition';
+        const source = document.getElementById('edit_doc_source').value;
+        const specificType = document.getElementById('edit_doc_specific_type').value;
+        const customSource =document.getElementById('edit_doc_custom_source').value.trim();
 
-        // Create document object
+        if(!validationCheckForm(code, title, classification, source, specificType, customSource)){
+            return;
+        }
+
         const doc = {
             code,
             title,
             classification,
             source,
-            specificType: source === 'others' ? customSource : (specificType || null),
-            id: Date.now() + Math.random()
+            specificType: source === 'others' ? customSource: (specificType || null),
+            id:Date.now() + Math.random(),
+            revisingMasterId : null //Addition has no revising Id's
         };
-
         editDocuments.push(doc);
         updateEditDocumentsList();
         clearEditDocumentForm();
-    });
+    }
+
+    function addEditExistingDocument(classification){
+        const selectElement = document.getElementById('edit_existing_doc_select');
+        const selectedOption = selectElement.options[selectElement.selectedIndex];
+
+        if(!selectedOption.value){
+            alert('Please select a document');
+            return;
+        }
+
+        const doc = {
+            code: selectedOption.dataset.code,
+            title: selectedOption.dataset.title,
+            classification: classification,
+            source: selectedOption.dataset.source,
+            specificType: selected.dataset.specificType || null,
+            id: Date.now() + Math.random(),
+            revisingMasterId: selectedOption.value
+        };
+        editDocuments.push();
+        updateEditDocumentsList();
+        clearEditDocumentForm();
+    }
+
 
     // Open Edit Modal and fetch ticket data
     function openEditModal(ticketId){
@@ -1620,12 +1809,15 @@ function getStatusColor($status){
         // The title and code needs to be swapped.
         document.getElementById('edit_doc_title').value = '';
         document.getElementById('edit_doc_code').value = '';
-        document.getElementById('edit_doc_classification').value = '';
         document.getElementById('edit_doc_source').value = '';
         document.getElementById('edit_doc_specific_type').value = '';
         document.getElementById('edit_doc_custom_source').value = '';
-        editSpecificTypeSection.style.display = 'none';
-        editCustomSourceSection.style.display = 'none';
+        
+        document.getElementById('edit_addition_fields').style.display = 'none';
+        document.getElementById('edit_existing_doc_fields').style.display = 'none';
+        document.getElementById('edit_specific_type_section').style.display = 'none';
+        document.getElementById('edit_custom_source_section').style.display = 'none';
+        document.getElementById('edit_selected_doc_preview').style.display = 'none';
     }
 
     // Reset Entire edit form
@@ -1644,7 +1836,7 @@ function getStatusColor($status){
             alert('Please add at least one document to the ticket');
             return false;
         }
-    })
+    });
 
     // ============================================
     // DELETE TICKET FUNCTIONALITY
@@ -1731,5 +1923,20 @@ function getStatusColor($status){
             }
         }
         return null;
+    }
+    function toggleClassification(selectedOffice){
+        if(!selectedOffice){
+            // visually + functionally disable
+            classificationSelect.classList.add('opacity-50', 'cursor-not-allowed');
+            classificationSelect.setAttribute('disabled', true);
+            classificationSelect.value = '';
+
+            document.getElementById('addition_fields').style.display = 'none';
+            document.getElementById('existing_doc_fields').style.display = 'none';
+        } else {
+            // Enable
+            classificationSelect.classList.remove('opacity-50','cursor-not-allowed');
+            classificationSelect.removeAttribute('disabled');
+        }
     }
 </script>

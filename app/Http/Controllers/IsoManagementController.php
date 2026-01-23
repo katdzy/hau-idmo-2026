@@ -20,10 +20,13 @@ class IsoManagementController extends Controller
         $totalDocuments = IsoMasterDocument::count();
         $originalDocuments = IsoMasterDocument::where('is_original', true)->count();
         $revisedDocuments = IsoMasterDocument::where('current_revision', '>', 0)->count();
+        $activeDocuments = IsoMasterDocument::where('status', 'active')->count();
+        $deletedDocuments = IsoMasterDocument::where('status', 'deleted')->count();
+        $supersededDocuments = IsoMasterDocument::where('status', 'superseded')->count();
         $byClassification = IsoMasterDocument::selectRaw('source_type, COUNT(*) as count')
             ->groupBy('source_type')
             ->get();
-        
+        // Top 10 departments
         $byDepartment = IsoMasterDocument::selectRaw('originating_section, COUNT(*) as count')
             ->groupBy('originating_section')
             ->orderBy('count', 'desc')
@@ -33,6 +36,9 @@ class IsoManagementController extends Controller
             'totalDocuments',
             'originalDocuments',
             'revisedDocuments',
+            'activeDocuments',
+            'deletedDocuments',
+            'supersededDocuments',
             'byClassification',
             'byDepartment'
         ));

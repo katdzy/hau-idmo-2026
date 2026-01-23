@@ -113,6 +113,7 @@ class IsoDocumentController extends Controller
                 'classification'=> $document['classification'],
                 'source_type'=> $document['source'],
                 'specific_type'=> $document['specificType'],
+                'revising_master_document_id' => $document['revisingMasterId'] ?? null,
             ]);
         }
 
@@ -167,7 +168,8 @@ class IsoDocumentController extends Controller
                 'document_title'=> $document['title'],
                 'classification' => $document['classification'],
                 'source_type' => $document['source'],
-                'specific_type' => $document['specificType']
+                'specific_type' => $document['specificType'],
+                'revising_master_document_id' => $document['revisingMasterId'] ?? null,
             ]);
         }
         return redirect()->route('iso.document')->with('success', 'Ticket created successfully!');
@@ -461,7 +463,20 @@ class IsoDocumentController extends Controller
                             'ticket_document_id' =>$document->id,
                         ]);
                     } elseif ($document->classification === 'revision'){
+                        // Debug: Remove this in the future
+                        \Log::info('=== Revision Debug ===');
+                        \Log::info('Document ID: ' . $document->id);
+                        \Log::info('Looking for master doc ID: ' . $document->revising_master_document_id);
+                        \Log::info('Document object:', $document->toArray());
+
                         $originalDoc = IsoMasterDocument::find($document->revising_master_document_id);
+
+                        \Log::info('Found original doc: ' . ($originalDoc ? 'YES (ID: '.$originalDoc->id.')' : 'NO - NULL'));
+                        if(!$originalDoc){
+                            \Log::error('FAILED TO FIND MASTER DOCUMENT!');
+                            \Log::info('All master documents:', IsoMasterDocument::pluck('id', 'document_code')->toArray());
+                        }
+
                         $originalDoc->update([
                             'status' => 'Superseded',
                             'superseded_at'=> now(),
@@ -491,7 +506,8 @@ class IsoDocumentController extends Controller
                             'status' => 'deleted',
                             'deleted_at' => now()
                         ]);
-                        // Create deletion record for audit trail
+                        // Create deletion record for audit trail TODO: Ask them to have a separate record
+                        // when deleting a document or just keep one.
                         $masterDoc = IsoMasterDocument::create([
                             'document_code' => $docToDelete->document_code,
                             'document_title' => $docToDelete->document_title . ' (DELETED)',

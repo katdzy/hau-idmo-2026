@@ -82,15 +82,15 @@
                     <div class="grid grid-cols-3 gap-2">
                         <label class="flex items-center bg-green-50 p-2 rounded hover:bg-green-100 cursor-pointer">
                             <input type="radio" name="status[]" value="Active" class="mr-2 text-green-500 focus:ring-green-500" checked>
-                            <span class="text-sm">All Documents</span>
+                            <span class="text-sm">Active</span>
                         </label>
                         <label class="flex items-center bg-yellow-50 p-2 rounded hover:bg-yellow-100 cursor-pointer">
                             <input type="radio" name="status[]" value="Superseded" class="mr-2 text-yellow-500 focus:ring-yellow-500" checked>
-                            <span class="text-sm">Original Documents Only</span>
+                            <span class="text-sm">Superseded</span>
                         </label>
                         <label class="flex items-center bg-red-50 p-2 rounded hover:bg-red-100 cursor-pointer">
                             <input type="radio" name="status[]" value="Deleted" class="mr-2 text-red-500 focus:ring-red-500" checked>
-                            <span class="text-sm">Documents with Revisions</span>
+                            <span class="text-sm">Deleted</span>
                         </label>
                     </div>
                 </div>
