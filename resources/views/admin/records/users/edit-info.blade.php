@@ -356,7 +356,7 @@
                         <option value="HR Admin" {{ (old('role', $data->login->role) == 'HR Admin') ? 'selected' : '' }}>HR Admin</option>
                         <option value="Dean" {{ (old('role', $data->login->role) == 'Dean') ? 'selected' : '' }}>Dean</option>
                         <option value="IDC Admin" {{ (old('role', $data->login->role) == 'IDC Admin') ? 'selected' : '' }}>IDC Admin</option>
-                        <option value="IDC Document Handler" {{ (old('role', $data->login->role) == 'IDC Document Handler') ? 'selected' : '' }}>IDC Document Handler</option>
+                        <option value="ISO Document Handler" {{ (old('role', $data->login->role) == 'ISO Document Handler') ? 'selected' : '' }}>ISO Document Handler</option>
                     </select>
                 </div>
             @endif

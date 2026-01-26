@@ -109,7 +109,7 @@
                                 <option value="Dean"         @if(!empty($roleSelected) && $roleSelected == 'Dean') selected @endif>Dean</option>
                                 <option value="SuperAdmin"   @if(!empty($roleSelected) && $roleSelected == 'SuperAdmin') selected @endif>SuperAdmin</option>
                                 <option value="IDC Admin"    @if(!empty($roleSelected) && $roleSelected == 'IDC Admin') selected @endif>IDC Admin</option>
-                                <option value="IDC Document Handler"    @if(!empty($roleSelected) && $roleSelected == 'IDC Document Handler') selected @endif>IDC Document Handler</option>
+                                <option value="ISO Document Handler"    @if(!empty($roleSelected) && $roleSelected == 'ISO Document Handler') selected @endif>ISO Document Handler</option>
                             </select>
                         </div>
 

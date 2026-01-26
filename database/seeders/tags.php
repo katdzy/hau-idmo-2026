@@ -12,7 +12,7 @@ class tags extends Seeder {
 
 
 
-    public function run(): void { 
+    public function run(): void {
 
         $gender = ['Male', 'Female'];
         $civil_status = ['Single', 'Married', 'Widowed', 'Separated'];
@@ -92,9 +92,11 @@ class tags extends Seeder {
 
         ]; 
 
-        $roles = ['Employee', 'SuperAdmin', 'HR Admin', 'Dean', 'IDC Admin', 'IDC Document Handler'];
+        $roles = ['Employee', 'SuperAdmin', 'HR Admin', 'Dean', 'IDC Admin', 'ISO Document Handler'];
 
         foreach ($roles as $role) {
+            // when adding a role in the future replace it
+            // with this instead: tagmodel::createOrUpdate
             tagmodel::create([
                 'category' => 'roles',
                 'item' => $role,

@@ -39,10 +39,17 @@ function getStatusColor($status){
                 <h1 class="text-[1.5rem] font-bold leading-tight">ISO Document Handler Ticket System</h1>
                 <span class="text-gray-500 text-sm"> Document Modification / Creation Notice (DMCN) Tracking</span>
             </div>
-            <!-- DEBUG PURPOSES TODO: REMOVE IN THE FUTURE -->
-            <a href="{{ route('iso.idc.dashboard') }}" class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg font-semibold">
-                Switch to Admin view
-            </a>
+            <!-- DEBUG/ADMIN links - Only visible to roles that has SuperAdmin or IDC Admin -->
+            @if(in_array(auth()->user()->role, ['IDC Admin', 'SuperAdmin']))
+                <div class="flex flex-warp items-center gap-3 shrink-0">
+                    <a href="{{ route('iso.idc.dashboard') }}" class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg font-semibold">
+                        Switch to IDC Admin view
+                    </a>
+                    <a href="{{ route('iso.management.index') }}" class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-semibold">
+                        Switch to Management View
+                    </a>
+                </div>
+            @endif
         </div>
         <hr class="w-full opacity-100">
 

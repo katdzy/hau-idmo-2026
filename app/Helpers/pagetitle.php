@@ -293,13 +293,9 @@ class pagetitle
                 $curr_page = 'KPIs';
                 break;
             // ISO Document Management
-            case 'iso.document':
-                $curr_page = 'ISO Document Management';
+            case 'iso.document' || 'iso.idc.dashboard' || 'iso.management.index':
+                $curr_page = 'ISO Document Handling';
                 break;
-            case 'iso.idc.dashboard':
-                $curr_page = 'ISO Admin Document Management';
-                break;
-
         
         }
 
