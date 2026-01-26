@@ -83,7 +83,7 @@
 
                     <!-- Add Document Form -->
                     <div class="bg-gray-50 p-4 rounded-md mb-3">
-                        <div>
+                        <div class="mb-3">
                             <label class="block text-xs text-gray-600 mb-1">Nature of Document Modification</label>
                             <select id="edit_doc_classification" class="w-full px-2 py-1 border rounded text-sm">
                                 <option value="">Select...</option>
@@ -92,16 +92,16 @@
                                 <option value="deletion">Deletion</option>
                             </select>
                         </div>
-                        <!-- For Addition -->
+                        <!-- FOR ADDITION: Show all manual input fields -->
                         <div id="edit_addition_fields" style="display:none;">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
                                 <div>
                                     <label class="block text-xs text-gray-600 mb-1">Document Code</label>
-                                    <input type="text" id="edit_doc_code" class="w-full px-2 py-1 border rounded text-sm">
+                                    <input type="text" id="edit_doc_code" class="w-full px-2 py-1 border rounded text-sm" placeholder="Enter Document Code">
                                 </div>
                                 <div>
                                     <label class="block text-xs text-gray-600 mb-1">Document Title</label>
-                                    <input type="text" id="edit_doc_title" class="w-full px-2 py-1 border rounded text-sm">
+                                    <input type="text" id="edit_doc_title" class="w-full px-2 py-1 border rounded text-sm" placeholder="Enter Document Title">
                                 </div>
                                 <div>
                                     <label class="block text-xs text-gray-600 mb-1">Source Type</label>
@@ -162,7 +162,7 @@
                             </div>
                         </div>
                         <!-- Submit/Add Document to list button -->
-                        <button type="button" id="edit_add_document_btn" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm">
+                        <button type="button" id="edit_add_document_btn" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm mt-2">
                             Add Document to List
                         </button>
                     </div>

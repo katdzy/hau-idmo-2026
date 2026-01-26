@@ -98,7 +98,7 @@
                 <div class="flex justify-end gap-3 mt-6">
                     <button type="button"
                             id="clear_all_filters"
-                            class="px- py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 font-semibold">
+                            class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 font-semibold">
                         Clear All
                     </button>
                     <button type="submit"

@@ -1022,7 +1022,7 @@ function getStatusColor($status){
         if(classification === 'addition'){
             additionFields.style.display = 'block';
             existingDocFields.style.display = 'none';
-        } else if (classification === 'reivision' || classification === 'deletion'){
+        } else if (classification === 'revision' || classification === 'deletion'){
             additionFields.style.display = 'none';
             existingDocFields.style.display = 'block';
 
@@ -1064,7 +1064,7 @@ function getStatusColor($status){
                     option.textContent = `${doc.document_code} - ${doc.document_title}`;
 
                     option.dataset.code = doc.document_code;
-                    option.dataset.title = document_title;
+                    option.dataset.title = doc.document_title;
                     option.dataset.source = doc.source_type;
                     option.dataset.specificType = doc.specific_type || '';
 
@@ -1089,9 +1089,11 @@ function getStatusColor($status){
             document.getElementById('edit_preview_title').textContent = selectedOption.dataset.title;
 
             let sourceDisplay = selectedOption.dataset.source;
-            if(selectedOption.dataset.specificType){
-                sourceDisplay += `${selectedOption.dataset.source}`;
+            const specific = selectedOption.dataset.specificType;
+            if(specific && specific.trim() !== ""){
+                sourceDisplay += ` ${specific}`;
             }
+            sourceDisplay = sourceDisplay.toUpperCase();
             document.getElementById('edit_preview_source').textContent = sourceDisplay;
             preview.style.display = 'block';
         } else{
@@ -1201,7 +1203,7 @@ function getStatusColor($status){
         const selectElement = document.getElementById('edit_existing_doc_select');
         const selectedOption = selectElement.options[selectElement.selectedIndex];
 
-        if(!selectedOption.value){
+        if(!selectedOption.value || !selectedOption.value){
             alert('Please select a document');
             return;
         }
@@ -1211,11 +1213,11 @@ function getStatusColor($status){
             title: selectedOption.dataset.title,
             classification: classification,
             source: selectedOption.dataset.source,
-            specificType: selected.dataset.specificType || null,
+            specificType: selectedOption.dataset.specificType || null,
             id: Date.now() + Math.random(),
             revisingMasterId: selectedOption.value
         };
-        editDocuments.push();
+        editDocuments.push(doc);
         updateEditDocumentsList();
         clearEditDocumentForm();
     }
@@ -1239,6 +1241,9 @@ function getStatusColor($status){
                 // Find which cluster the office belongs to
                 const currentOffice = ticket.originating_section;
                 const currentCluster = findClusterByOffice(currentOffice);
+
+                currentEditOffice = currentOffice;
+
                 if (currentCluster){
                     // Set the cluster dropdown
                     editTicketClusterDropdown.value = currentCluster;
@@ -1338,7 +1343,7 @@ function getStatusColor($status){
     }
     // Remove Document from Edit List
     function removeEditDocument(id){
-        editDocuments = editDocuments.filter(doc => doc.id !== id);
+        editDocuments = editDocuments.filter(doc => String(doc.id) !== String(id));
         updateEditDocumentsList();
     }
 

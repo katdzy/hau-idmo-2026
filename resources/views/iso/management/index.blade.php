@@ -3,22 +3,18 @@
 <div class="min-h-screen">
     <div class="container mx-auto">
         <div class="con-box">
-            <!-- Success Message -->
-            @if (session('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
-            @if (session('msg'))
-                <div class="w-full bg-green-600 text-white rounded-xl px-4 py-2 mb-4" id="msg">
-                    {{ session('msg') }}
+            <!-- Success and Message -->
+            @if (session('success') || session('msg'))
+                <div class="flex items-center p-4 mb-4 text-emerald-800 border-t-4 border-emerald-300 bg-emerald-50 rounded-lg shadow-sm" role="alert">
+                    <svg class="flex-shrink-0 w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                    <div class="ml-3 text-sm font-medium">{{ session('success') ?? session('msg') }}</div>
                 </div>
             @endif
             <!-- Error message -->
             @if (session('error'))
-                <div class="w-full bg-red-600 text-white rounded-xl px-4 py-2 mb-4" id="error">
-                    {{ session('error') }}
+                <div class="flex items-center p-4 mb-4 text-red-800 border-t-4 border-red-300 bg-emerald-50 red-lg shadow-sm" role="alert">
+                    <svg class="flex-shrink-0 w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+                    <div class="ml-3 text-sm font-medium">{{ session('error') }}</div>
                 </div>
             @endif
             <!-- Header -->
@@ -112,7 +108,9 @@
                         </div>
                         <!-- Icon -->
                         <div class="bg-red-500 text-white rounded-full p-3">
-    
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                                <path fill-rule="evenodd" d="M16.5 4.478v.227a48.816 48.816 0 0 1 3.878.512.75.75 0 1 1-.256 1.478l-.209-.035-1.005 13.07a3 3 0 0 1-2.991 2.77H8.084a3 3 0 0 1-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 0 1-.256-1.478A48.567 48.567 0 0 1 7.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 0 1 3.369 0c1.603.051 2.815 1.387 2.815 2.951Zm-6.136-1.452a51.196 51.196 0 0 1 3.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 0 0-6 0v-.113c0-.794.609-1.428 1.364-1.452Zm-.355 5.945a.75.75 0 1 0-1.5.058l.347 9a.75.75 0 1 0 1.499-.058l-.346-9Zm5.48.058a.75.75 0 1 0-1.498-.058l-.347 9a.75.75 0 0 0 1.5.058l.345-9Z" clip-rule="evenodd" />
+                            </svg>
                         </div>
                     </div>
                 </div>
@@ -125,7 +123,10 @@
                         </div>
                         <!-- Icon -->
                         <div class="bg-rose-500 text-white rounded-full p-3">
-    
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                                <path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375Z" />
+                                <path fill-rule="evenodd" d="m3.087 9 .54 9.176A3 3 0 0 0 6.62 21h10.757a3 3 0 0 0 2.995-2.824L20.913 9H3.087Zm6.163 3.75A.75.75 0 0 1 10 12h4a.75.75 0 0 1 0 1.5h-4a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd" />
+                            </svg>
                         </div>
                     </div>
                 </div>
@@ -164,27 +165,36 @@
                     </div>
                     <div class="p-4">
                         @forelse($byDepartment as $item)
-                            <div class="flex justify-between items-center py-2 px-3 mb-2 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
-                                <div class="flex-items-center">
-                                    <div class="bg-green-100 text-green-600 rounded-full p-2 mr-3">
-                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clip-rule="evenodd"/>
+                            <li class="flex justify-between items-center py-2.5 px-4 bg-gray-50 rounded-xl hover:bg-white hover:shadow-md hover:ring-1 hover:ring-gray-200 transition-all duration-200 group">
+                                <div class="flex items-center min-w-0">
+                                    <div class="flex shrink-0 bg-green-100 text-green-600 rounded-lg p-2 mr-3 group-hover:bg-green-600 group-hover:text-white transition-colors">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                            <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2-2V5zm2 4h-2v2h2V9z" clip-rule="evenodd"/>
                                         </svg>
                                     </div>
-                                    <span class="font-medium text-gray-700 text-sm">{{ $item->originating_section }}</span>
+                                    <span class="font-medium text-gray-700 text-sm truncate">
+                                        {{ $item->originating_section }}
+                                    </span>
                                 </div>
-                                <span class="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+
+                                <span class="ml-4 bg-green-500 text-white px-2.5 py-0.5 rounded-full text-xs font-bold tabular-nums">
                                     {{ number_format($item->count) }}
                                 </span>
-                            </div>
+                            </li>
                         @empty
-                            <p class="text-gray-400 text-center py-6 italic">No documents registered yet</p>
+                            <li class="flex flex-col items-center justify-center py-12 px-4 border-2 border-dashed border-gray-200 rounded-xl">
+                                <svg class="w-12 h-12 text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                                <p class="text-gray-500 text-sm font-medium">No documents registered yet</p>
+                                <p class="text-gray-400 text-xs">New entries will appear here automatically.</p>
+                            </li>
                         @endforelse
                     </div>
                 </div>
             </div>
             <!-- Filter Button -->
-            <div class="w-[95%] px-4 text-center">
+            <div class="w-[95%] px-4 text-center mb-4">
                 <button type="button"
                     id="open_filter_modal"
                     class="bg-purple-500 hover:bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold text-lg shadow-sm transition">
@@ -193,36 +203,53 @@
             </div>
 
             <!-- Documents Table (hidden until filters are applied) -->
-            <div class="w-[95%] px-4 pb-4" id="documents_table_section" style="display:none;">
-                <div class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-                    <h5 class="font-bold text-gray-700">Filtered Documents</h5>
-                    <button type="button"
-                            onclick="clearFilters()"
-                            class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-semibold">
-                        Clear FIlters
-                    </button>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-sm">
-                        <thead class="bg-gray-100 border-b">
-                            <tr>
-                                <th class="px-4 py-3 text-left font-semibold text-gray-700">Document Code</th>
-                                <th class="px-4 py-3 text-left font-semibold text-gray-700">Document Title</th>
-                                <th class="px-4 py-3 text-left font-semibold text-gray-700">Source Type</th>
-                                <th class="px-4 py-3 text-left font-semibold text-gray-700">Specific Type</th>
-                                <th class="px-4 py-3 text-left font-semibold text-gray-700">Department/Office</th>
-                                <th class="px-4 py-3 text-left font-semibold text-gray-700">Revision</th>
-                                <th class="px-4 py-3 text-left font-semibold text-gray-700">Status</th>
-                                <th class="px-4 py-3 text-left font-semibold text-gray-700">Registered Date</th>
-                            </tr>
-                        </thead>
-                        <tbody id="documents_table_body">
-                            <!-- Populated via AJAX -->
-                        </tbody>
-                    </table>
-                </div>
-                <div id="no_results_message" class="text-center py-8 text-gray-400 italic" style="display:none;">
-                    No documents match your filters
+            <div class="w-full max-w-[98%] mx-auto px-4 pb-8" id="documents_table_section" style="display:none;">
+                <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+                    <div class="flex flex-col sm:flex-row justify-between items-center p-4 gap-4 border-b border-gray-100 bg-gray-50/50">
+                        <div>
+                            <h5 class="font-bold text-gray-80 flex-items-center gap-2">
+                                <span class="w-2 h-5 bg-indigo-500 rounded-full"></span>
+                                Filtered Documents
+                            </h5>
+                            <p class="text-xs text-gray-500 mt-0.5">Showing results based on your current selection</p>
+                        </div>
+                        <button type="button"
+                                onclick="clearFilters()"
+                                class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 text-sm font-semibold rounded-lg shadow-sm transition-all focus:ring-2 focus:ring-indigo-500 outline-none">
+                            <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-gray-50/80 border-b border-gray-200">
+                                    <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Document Code</th>
+                                    <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Document Title</th>
+                                    <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Source</th>
+                                    <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Type</th>
+                                    <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Dept/Office</th>
+                                    <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Rev.</th>
+                                    <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Registered</th>
+                                </tr>
+                            </thead>
+                            <tbody id="documents_table_body" class="divide-y divide-gray-100 text-sm text-gray-600">
+                                <!-- WIll be populated via AJAX -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="no_results_message" class="flex flex-col items-center justify-center py-16 px-4" style="display:none;">
+                        <div class="bg-gray-100 p-4 rounded-full mb-2">
+                            <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </div>
+                        <p class="text-gray-600 font-medium">No documents match your filters</p>
+                        <p class="text-gray-400 text-sm mt-1">Try adjusting your search criteria or clearing all filters.</p>
+                    </div>
                 </div>
             </div>
         </div>
