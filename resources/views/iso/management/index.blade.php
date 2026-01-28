@@ -38,95 +38,96 @@
             <hr class="w-full opacity-100">
 
             <!-- Summary Statistics Cards -->
-            <div class="w-[95%] grid grid-cols-3 gap-4 px-4 py-4">
-                <!-- Total Document Card -->
-                <div class="bg-gradient-to-br from-blue-50 to blue-100 border border-blue-200 rounded-lg p-4 shadow-sm">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm text-blue-600 font-medium mb-1">Total Registered Documents</p>
-                            <h3 class="text-3xl font-bold text-blue-700">{{ number_format($totalDocuments) }}</h3>
-                        </div>
-                        <!-- Document Icon -->
-                        <div class="bg-blue-500 text-white rounded-full p-3">
-                            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9 2a2 2 0 00-2 2v8a2 2 0 002 2h6a2 2 0 002-2V6.414A2 2 0 0016.414 5L14 2.586A2 2 0 0012.586 2H9z"/>
-                                <path d="M3 8a2 2 0 012-2v10h8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-                <!-- Total Active Documents -->
-                <div class="bg-gradient-to-br from-emerald-50 to emerald-100 border border-emerald-200 rounded-lg p-4 shadow-sm">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm text-emerald-600 font-medium mb-1">Total Active Documents</p>
-                            <h3 class="text-3xl font-bold text-emerald-700">{{ number_format($activeDocuments) }}</h3>
-                        </div>
-                        <!-- Icon -->
-                        <div class="bg-emerald-500 text-white rounded-full p-3">
-                            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Original Documents Card -->
-                <div class="bg-gradient-to-br from-green-50 to-green-100 border border-green-200 rounded-lg p-4 shadow-sm">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm text-green-600 font-medium mb-1">Original Documents</p>
-                            <h3 class="text-3xl font-bold text-green-700">{{ number_format($originalDocuments) }}</h3>
-                        </div>
-                        <div class="bg-green-500 text-white rounded-full p-3">
-                            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V8z" clip-rule="evenodd"/>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-                <!-- Revised Documents Card -->
-                <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 border border-yellow-200 rounded-lg p-4 shadow-sm">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm text-yellow-600 font-medium mb-1">Documents with Revision</p>
-                            <h3 class="text-3xl font-bold text-yellow-700">{{ number_format($revisedDocuments) }}</h3>
-                        </div>
-                        <div class="bg-yellow-500 text-white rounded-full p-3">
-                            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-                <!-- Deleted Documents Card -->
-                 <div class="bg-gradient-to-br from-red-50 to-red-100 border border-red-200 rounded-lg p-4 shadow-sm">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm text-red-600 font-medium mb-1">Total Deleted Documents</p>
-                            <h3 class="text-3xl font-bold text-red-700">{{ number_format($deletedDocuments) }}</h3>
-                        </div>
-                        <!-- Icon -->
-                        <div class="bg-red-500 text-white rounded-full p-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-                                <path fill-rule="evenodd" d="M16.5 4.478v.227a48.816 48.816 0 0 1 3.878.512.75.75 0 1 1-.256 1.478l-.209-.035-1.005 13.07a3 3 0 0 1-2.991 2.77H8.084a3 3 0 0 1-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 0 1-.256-1.478A48.567 48.567 0 0 1 7.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 0 1 3.369 0c1.603.051 2.815 1.387 2.815 2.951Zm-6.136-1.452a51.196 51.196 0 0 1 3.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 0 0-6 0v-.113c0-.794.609-1.428 1.364-1.452Zm-.355 5.945a.75.75 0 1 0-1.5.058l.347 9a.75.75 0 1 0 1.499-.058l-.346-9Zm5.48.058a.75.75 0 1 0-1.498-.058l-.347 9a.75.75 0 0 0 1.5.058l.345-9Z" clip-rule="evenodd" />
-                            </svg>
+            <div class="w-[95%] px-4 py-4">
+                <div class="grid grid-cols-2 gap-6">
+
+                    <!-- LEFT COLUMN: Total Documents & Status Breakdown -->
+                    <div class="space-y-4">
+                        <h4 class="text-sm font-semibold text-gray-600 mb-3 px-1">Document Status</h4>
+                        <!-- Total Document Card -->
+                        <x-stat-card 
+                            title="Total Registered Documets" 
+                            :value="number_format($totalDocuments)"
+                            color="blue"
+                            class="border-2 border-blue-300 shadow-md"
+                        >
+                            <x-slot:icon>
+                                <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9 2a2 2 0 00-2 2v8a2 2 0 002 2h6a2 2 0 002-2V6.414A2 2 0 0016.414 5L14 2.586A2 2 0 0012.586 2H9z"/>
+                                    <path d="M3 8a2 2 0 012-2v10h8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/>
+                                </svg> 
+                            </x-slot:icon>
+                        </x-stat-card>
+    
+                        <!-- Status Breakdown -->
+                        <div class="space-y-3">
+                            <!-- Active Documents -->
+                            <x-stat-card
+                                title="Active"
+                                :value="number_format($activeDocuments)"
+                                color="emerald"
+                                >
+                                    <x-slot:icon>
+                                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </x-slot:icon>
+                            </x-stat-card>
+                            <!-- Superseded Documents -->
+                            <x-stat-card
+                                title="Superseded"
+                                :value="number_format($supersededDocuments)"
+                                color="rose"
+                                >
+                                    <x-slot:icon>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8">
+                                            <path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375Z" />
+                                            <path fill-rule="evenodd" d="m3.087 9 .54 9.176A3 3 0 0 0 6.62 21h10.757a3 3 0 0 0 2.995-2.824L20.913 9H3.087Zm6.163 3.75A.75.75 0 0 1 10 12h4a.75.75 0 0 1 0 1.5h-4a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd" />
+                                        </svg>
+                                    </x-slot:icon>
+                            </x-stat-card>
+                            <!-- Deleted Documents -->
+                            <x-stat-card
+                                title="Deleted"
+                                :value="number_format($deletedDocuments)"
+                                color="red"
+                                >
+                                    <x-slot:icon>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8">
+                                            <path fill-rule="evenodd" d="M16.5 4.478v.227a48.816 48.816 0 0 1 3.878.512.75.75 0 1 1-.256 1.478l-.209-.035-1.005 13.07a3 3 0 0 1-2.991 2.77H8.084a3 3 0 0 1-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 0 1-.256-1.478A48.567 48.567 0 0 1 7.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 0 1 3.369 0c1.603.051 2.815 1.387 2.815 2.951Zm-6.136-1.452a51.196 51.196 0 0 1 3.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 0 0-6 0v-.113c0-.794.609-1.428 1.364-1.452Zm-.355 5.945a.75.75 0 1 0-1.5.058l.347 9a.75.75 0 1 0 1.499-.058l-.346-9Zm5.48.058a.75.75 0 1 0-1.498-.058l-.347 9a.75.75 0 0 0 1.5.058l.345-9Z" clip-rule="evenodd" />
+                                        </svg>
+                                    </x-slot:icon>
+                            </x-stat-card>
                         </div>
                     </div>
-                </div>
-                <!-- Superseded Documents Card -->
-                 <div class="bg-gradient-to-br from-rose-50 to-rose-100 border border-rose-200 rounded-lg p-4 shadow-sm">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm text-rose-600 font-medium mb-1">Total Superseded Documents</p>
-                            <h3 class="text-3xl font-bold text-rose-700">{{ number_format($supersededDocuments) }}</h3>
-                        </div>
-                        <!-- Icon -->
-                        <div class="bg-rose-500 text-white rounded-full p-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-                                <path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375Z" />
-                                <path fill-rule="evenodd" d="m3.087 9 .54 9.176A3 3 0 0 0 6.62 21h10.757a3 3 0 0 0 2.995-2.824L20.913 9H3.087Zm6.163 3.75A.75.75 0 0 1 10 12h4a.75.75 0 0 1 0 1.5h-4a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd" />
-                            </svg>
+                    <!-- RIGHT COLUMN: Document Type Breakdown -->
+                    <div class="space-y-4">
+                        <h4 class="text-sm font-semibold text-gray-600 mb-3 px-1">Document Type</h4>
+                        <div class="space-y-3">
+                            <!-- Original Documents -->
+                            <x-stat-card
+                                title="Total Original Documents"
+                                :value="number_format($originalDocuments)"
+                                color="green"
+                                >
+                                    <x-slot:icon>
+                                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V8z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </x-slot:icon>
+                            </x-stat-card>
+                            <!-- Revised Documents -->
+                            <x-stat-card
+                                title="Total Documents with Revision"
+                                :value="number_format($revisedDocuments)"
+                                color="yellow"
+                                >
+                                    <x-slot:icon>
+                                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </x-slot:icon>
+                            </x-stat-card>
                         </div>
                     </div>
                 </div>

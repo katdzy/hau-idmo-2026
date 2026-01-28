@@ -230,6 +230,7 @@ $mname = '';
         </div> 
     </div>
     
+    @if(Auth::user()->role === 'IDC Admin' || Auth::user()->role === 'SuperAdmin')
     <div class = "navigation-cards">
         <div class = "navigation-cards-box-5">
             <!-- a card slot  -->
@@ -243,6 +244,7 @@ $mname = '';
             <!-- end of card slot  -->
         </div> 
     </div>
+    @endif
 
     
   

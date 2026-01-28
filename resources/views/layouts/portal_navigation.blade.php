@@ -227,18 +227,17 @@
                     </div>
                 </a> 
 
-                <!-- A LINK NAVIGATION  -->
-                 <a href="{{ route('iso.document') }}" class="{{ request()->routeIs('iso*') ? 'font-semibold' : '' }}">
+                
+                @if(Auth::user()->role === 'IDC Admin' || Auth::user()->role === 'SuperAdmin')
+                <!-- A LINK NAVIGATION Can only be seen by IDC Admin and SuperAdmin-->
+                <a href="{{ route('iso.document') }}" class="{{ request()->routeIs('iso*') ? 'font-semibold' : '' }}">
                     <div class="nav-link">
-                        
                             <img src="{{ asset('images/icons/portal_nav/iso.png') }}" />
-                    
-                     
-                            <h3>Iso Document Handling</h3>
-                     
+                            <h3>ISO Document Handling</h3>
                     </div>
                 </a> 
-
+                @endif
+                
          @if(Auth::user()->role !== 'Employee')
         <!-- A LINK NAVIGATION  -->
         <div class="w-full flex justify-center my-4">

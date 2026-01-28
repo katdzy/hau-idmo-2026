@@ -417,7 +417,7 @@ class IsoDocumentController extends Controller
     }
 
     // ==================================
-    // ISO Document management system
+    // ISO Document management system (Registry)
     // ==================================
     public function registerTicket(IsoTicket $ticket){
         // Check if user is authorized
@@ -463,20 +463,7 @@ class IsoDocumentController extends Controller
                             'ticket_document_id' =>$document->id,
                         ]);
                     } elseif ($document->classification === 'revision'){
-                        // Debug: Remove this in the future
-                        \Log::info('=== Revision Debug ===');
-                        \Log::info('Document ID: ' . $document->id);
-                        \Log::info('Looking for master doc ID: ' . $document->revising_master_document_id);
-                        \Log::info('Document object:', $document->toArray());
-
                         $originalDoc = IsoMasterDocument::find($document->revising_master_document_id);
-
-                        \Log::info('Found original doc: ' . ($originalDoc ? 'YES (ID: '.$originalDoc->id.')' : 'NO - NULL'));
-                        if(!$originalDoc){
-                            \Log::error('FAILED TO FIND MASTER DOCUMENT!');
-                            \Log::info('All master documents:', IsoMasterDocument::pluck('id', 'document_code')->toArray());
-                        }
-
                         $originalDoc->update([
                             'status' => 'Superseded',
                             'superseded_at'=> now(),
