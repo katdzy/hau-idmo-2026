@@ -35,6 +35,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SharepointController;
 use App\Http\Controllers\IsoDocumentController;
 use App\Http\Controllers\IsoManagementController;
+use App\Http\Controllers\VisitorController;
 
 //
 // All routes are protected by the "auth" middleware.
@@ -577,4 +578,14 @@ Route::middleware('auth','revalidate')->group(function () {
         ->name('iso.management.index');
     Route::get('/iso/management/documents', [IsoManagementController::class, 'getDocuments'])
         ->name('iso.management.documents');
+
+    /*------------------------------------------------------------------
+    | 22. Visit Counter
+    |------------------------------------------------------------------*/
+    Route::get('/visitor-count/visitors', [VisitorController::class, 'index'])
+        ->name('visitor-count.dashboard');
+    Route::post('/visitor-count/visitors/homepage-period', [VisitorController::class, 'setHomepagePeriod'])
+        ->name('visitor-count.homepage-period');
+    Route::delete('/visitor-count/clear', [VisitorController::class, 'clearAll'])
+        ->name('visitor-count.clear');
 });

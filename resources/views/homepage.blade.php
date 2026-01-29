@@ -22,6 +22,12 @@
         <!-- Welcome Message -->
     <div class="border-l-4 p-6 rounded-r-lg" style="background-color: #FFF8DC; border-left-color: #B8860B; max-width: 900px; width: 100%; margin-left: auto; margin-right: auto; margin-bottom: 2.5rem;">
             <h2 class="text-xl font-semibold mb-2" style="color: #70121D;">Welcome to the Office of Institutional Effectiveness</h2>
+            <div class="flex flex-row">
+                <img src="{{ asset('images/icons/eye-2.svg') }}" class = "w-6 h-6"/>
+                <div class="px-2">
+                    {{ $count }} {{ ucfirst($period) }} Visitors               
+                </div>
+            </div>
             <p style="color: #B8860B;"></p>
         </div>
 

@@ -292,9 +292,17 @@ class pagetitle
             case 'kpis.show':
                 $curr_page = 'KPIs';
                 break;
+
             // ISO Document Management
-            case 'iso.document' || 'iso.idc.dashboard' || 'iso.management.index':
+            case 'iso.document': 
+            case 'iso.idc.dashboard': 
+            case 'iso.management.index':
                 $curr_page = 'ISO Document Handling';
+                break;
+
+            //Visit Counter
+            case 'visitor-count.dashboard':
+                $curr_page = 'Visitor Counter';
                 break;
         
         }

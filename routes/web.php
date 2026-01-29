@@ -8,6 +8,8 @@ use App\Models\Employee;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
+use App\Models\VisitSetting;
+use App\Models\Visitor;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -41,10 +43,10 @@ Route::post('/reset-password', function (Request $request) {
 })->middleware('guest')->name('password.update');
 
 
-
-
 Route::get('/', function () {
-    return view('homepage');
+    $period = VisitSetting::get('visitor_period', 'daily');
+    $count = Visitor::getCount($period);
+    return view('homepage', compact('count', 'period'));
 }) -> name ('home');
 
 Route::get('/sharepoint', [SharepointController::class, 'publicIndex'])->name('sharepoint.public');

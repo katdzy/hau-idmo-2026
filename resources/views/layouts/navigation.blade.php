@@ -120,13 +120,26 @@
                 <!-- TODO: fix the if statements here to fit on the role available for the ISO Document Handlers and Admin -->
                 @if(Auth::user()->role === 'IDC Admin' || Auth::user()->role === 'SuperAdmin')
                 <!-- A LINK NAVIGATION  -->
-                 <a href="{{ route('iso.document') }}" class="{{ request()->routeIs('iso*') ? 'font-semibold' : '' }}">
+                 <a href="{{ route('iso.document') }}" class="{{ request()->routeIs('iso*') ? 'active' : '' }}">
                     <div class="nav-link">
                             <img src="{{ asset('images/icons/portal_nav/iso.png') }}" />
                             <h3>ISO Document Handling</h3>
                     </div>
                 </a> 
-                @endif 
+                @endif
+                
+                @if(Auth::user()->role !== 'Employee')
+                <!-- A LINK NAVIGATION  -->
+                 <a href="{{ route('visitor-count.dashboard') }}" class="{{ request()->routeIs('visitor-count*') ? 'active' : '' }}">
+                    <div class="nav-link">
+                        
+                            <img src="{{ asset('images/icons/nav/visitor_count.svg') }}" class = "w-24 h-24"/>
+                        
+                            <h3>Visitor Counter</h3>
+                      
+                    </div>
+                </a>
+                @endif
     </div> 
 
     <div class="navigation-links">
