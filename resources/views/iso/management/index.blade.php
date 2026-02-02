@@ -19,7 +19,7 @@
             @endif
             <!-- Header -->
             <div class="w-[95%] px-4 flex my-4 items-center">
-                <img src="{{ asset('images/logos/school/soc_logo.png') }}" class="w-[100px] h-[100px] mr-2"/>
+                <img src="{{ asset('images/icons/portal_nav/iso-title.png') }}" class="w-[100px] h-[100px] mr-4"/>
                 <div class="w-full flex flex-col justify-center">
                     <h1 class="text-[1.5rem] font-bold leading-tight text-purple-700">Document Management System</h1>
                     <span class="text-gray-500 text-sm">Registered Documents Dashboard</span>
@@ -39,31 +39,15 @@
 
             <!-- Summary Statistics Cards -->
             <div class="w-[95%] px-4 py-4">
-                <div class="grid grid-cols-2 gap-6">
-
+                <div class="grid grid-cols-3 gap-6">
                     <!-- LEFT COLUMN: Total Documents & Status Breakdown -->
                     <div class="space-y-4">
-                        <h4 class="text-sm font-semibold text-gray-600 mb-3 px-1">Document Status</h4>
-                        <!-- Total Document Card -->
-                        <x-stat-card 
-                            title="Total Registered Documets" 
-                            :value="number_format($totalDocuments)"
-                            color="blue"
-                            class="border-2 border-blue-300 shadow-md"
-                        >
-                            <x-slot:icon>
-                                <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M9 2a2 2 0 00-2 2v8a2 2 0 002 2h6a2 2 0 002-2V6.414A2 2 0 0016.414 5L14 2.586A2 2 0 0012.586 2H9z"/>
-                                    <path d="M3 8a2 2 0 012-2v10h8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/>
-                                </svg> 
-                            </x-slot:icon>
-                        </x-stat-card>
-    
+                        <h4 class="text-lg font-bold text-gray-600 mb-3 px-1">Document Status</h4>
                         <!-- Status Breakdown -->
                         <div class="space-y-3">
                             <!-- Active Documents -->
                             <x-stat-card
-                                title="Active"
+                                title="Active Documents"
                                 :value="number_format($activeDocuments)"
                                 color="emerald"
                                 >
@@ -75,7 +59,7 @@
                             </x-stat-card>
                             <!-- Superseded Documents -->
                             <x-stat-card
-                                title="Superseded"
+                                title="Superseded Documents"
                                 :value="number_format($supersededDocuments)"
                                 color="rose"
                                 >
@@ -88,7 +72,7 @@
                             </x-stat-card>
                             <!-- Deleted Documents -->
                             <x-stat-card
-                                title="Deleted"
+                                title="Deleted Documents"
                                 :value="number_format($deletedDocuments)"
                                 color="red"
                                 >
@@ -99,10 +83,25 @@
                                     </x-slot:icon>
                             </x-stat-card>
                         </div>
+                        <hr class="w-full opacity-100">
+                        <!-- Total Document Card -->
+                        <x-stat-card 
+                            title="Total Registered Documents" 
+                            :value="number_format($totalDocuments)"
+                            color="blue"
+                            class="border-2 border-blue-300 shadow-md"
+                        >
+                            <x-slot:icon>
+                                <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9 2a2 2 0 00-2 2v8a2 2 0 002 2h6a2 2 0 002-2V6.414A2 2 0 0016.414 5L14 2.586A2 2 0 0012.586 2H9z"/>
+                                    <path d="M3 8a2 2 0 012-2v10h8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/>
+                                </svg> 
+                            </x-slot:icon>
+                        </x-stat-card>
                     </div>
-                    <!-- RIGHT COLUMN: Document Type Breakdown -->
+                    <!-- Middle Column: Document Type Breakdown -->
                     <div class="space-y-4">
-                        <h4 class="text-sm font-semibold text-gray-600 mb-3 px-1">Document Type</h4>
+                        <h4 class="text-lg font-bold text-gray-600 mb-3 px-1">Document Type</h4>
                         <div class="space-y-3">
                             <!-- Original Documents -->
                             <x-stat-card
@@ -128,6 +127,57 @@
                                         </svg>
                                     </x-slot:icon>
                             </x-stat-card>
+                        </div>
+                    </div>
+                    <!-- RIGHT COLUMN TODO: Add a way to manually include documents on management -->
+                    <div class="space-y-4">
+                        <h4 class="text-lg font-bold text-gray-600 mb-3 px-1">Action Panel</h4>
+                        <!-- TODO: Insert buttons here for reading an excel sheet and potentially a modal to manually enter documents? -->
+                        <!-- Import Button -->
+                        <x-iso-button
+                            label="Import from Excel"
+                            color="purple"
+                            onClick="openImportModal()"
+                        >
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                            </svg>
+                        </x-iso-button>
+                        <!-- Export Button -->
+                        <x-iso-button
+                            label="Export Filtered Documents"
+                            color="blue"
+                            onClick="exportDocuments()"
+                        >
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                        </x-iso-button>
+                        <!-- Download Template Button -->
+                        <x-iso-button
+                            label="Download Template()"
+                            color="emerald"
+                            onClick="downloadTemplate()"
+                        >
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                        </x-iso-button>
+                        <!-- Info Card -->
+                        <div class="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                            <div class="flex gap-2">
+                                <svg class="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                                </svg>
+                                <div class="text-sm text-blue-800">
+                                    <p class="font-semibold mb-1">Quick Tips:</p>
+                                    <ul class="list-disc list-inside space-y-1 text-xs">
+                                        <li>Export respects current filters</li>
+                                        <li>Download template for proper format</li>
+                                        <li>Revisions require original document first</li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -164,9 +214,9 @@
                     <div class="bg-gray-50 px-4 py-3 border-b border-gray-200">
                         <h5 class="font-bold text-gray-700">Top Departments/Offices</h5>
                     </div>
-                    <div class="p-4">
+                    <div class="p-4 flex flex-col gap-2">
                         @forelse($byDepartment as $item)
-                            <li class="flex justify-between items-center py-2.5 px-4 bg-gray-50 rounded-xl hover:bg-white hover:shadow-md hover:ring-1 hover:ring-gray-200 transition-all duration-200 group">
+                            <li class="flex justify-between gap-y-4 items-center py-2.5 px-4 bg-gray-50 rounded-xl hover:bg-white hover:shadow-md hover:ring-1 hover:ring-gray-200 transition-all duration-200 group">
                                 <div class="flex items-center min-w-0">
                                     <div class="flex shrink-0 bg-green-100 text-green-600 rounded-lg p-2 mr-3 group-hover:bg-green-600 group-hover:text-white transition-colors">
                                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
@@ -238,7 +288,7 @@
                                 </tr>
                             </thead>
                             <tbody id="documents_table_body" class="divide-y divide-gray-100 text-sm text-gray-600">
-                                <!-- WIll be populated via AJAX -->
+                                <!-- Will be populated via AJAX -->
                             </tbody>
                         </table>
                     </div>
@@ -258,6 +308,8 @@
 </div>
 <!-- Filter Modal -->
 @include('iso.management.partials.filter-modal')
+<!-- Import Modal -->
+@include('iso.management.partials.import-modal')
 </x-app-layout>
 
 <style>
@@ -561,4 +613,107 @@ setTimeout(() => {
     if(msg) msg.style.display = 'none';
     if(errorMsg) errorMsg.style.display = 'none';
 }, 5000);
+
+// ==============================
+// Import Modal Functions
+// ==============================
+const importModal = document.getElementById('import_modal');
+const closeImportBtn = document.getElementById('close_import_modal');
+const cancelImportBtn = document.getElementById('cancel_import_btn');
+
+function openImportModal(){
+    importModal.classList.add('active');
+    resetImportForm();
+}
+
+function closeImportModal(){
+    importModal.classList.remove('active');
+    resetImportForm();
+}
+
+// Handle close modal when clicking 'x' or Cancel button
+closeImportBtn.addEventListener('click', closeImportModal);
+cancelImportBtn.addEventListener('click', closeImportModal);
+
+// Close modal when clicking outside
+importModal.addEventListener('click', (e) =>{
+    if(e.target === importModal){
+        closeImportModal();
+    }
+});
+
+function resetImportForm(){
+    document.getElementById('import_form').reset();
+    document.getElementById('file-name').textContent = '';
+    document.getElementById('import-errors').classList.add('hidden');
+    document.getElementById('import-success').classList.add('hidden')
+}
+
+function displayFileName(input){
+    const fileName = input.files[0]?.name;
+    if(fileName){
+        document.getElementById('file-name').textContent = `Selected: ${fileName}`;
+    }
+}
+
+// Handle Import form Submission
+document.getElementById('import_form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+    const submitBtn = this.querySelector('button[type="submit"');
+    const originalBtnText = submitBtn.innerHTML;
+
+    // Show loading state
+    document.getElementById('import-errors').classList.add('hidden');
+    document.getElementById('import-success').classList.add('hidden');
+
+    try{
+        const response = await fetch('/iso/management/import', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            }
+        });
+        const data = await response.json();
+        if(response.ok){
+            document.getElementById('success-message').textContent = data.message;
+            document.getElementById('import-success').classList.remove('hidden');
+
+            setTimeout(() => {
+                closeImportModal();
+                fetchDocuments();
+            }, 2000);
+        } else {
+            const errorList = document.getElementById('error-list');
+            errorList.innerHTML = '';
+
+            if(data.errors) {
+                Object.values(data.errors).forEach(errorArray => {
+                    errorArray.forEach(error => {
+                        const li = document.createElement('li');
+                        li.textContent = error:
+                        errorList.appendChild(li);
+                    });
+                });
+            } else {
+                const li = document.createElement('li');
+                li.textContent = data.message || 'Import Failed';
+                errorList.appendChild(li);
+            }
+            document.getElementById('import-errors').classList.remove('hidden');
+        }
+    } catch (error){
+        console.error('Import Error: ', error);
+        const errorList = document.getElementById('error-list');
+        errorList.innerHTML = '<li>An unexpected error occured. Please try again.</li>';
+        document.getElementById('import-errors').classList.remove('hidden');
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
+    }
+});
+
+// Export function
 </script>

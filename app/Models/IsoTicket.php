@@ -20,6 +20,8 @@ class IsoTicket extends Model
         'message_to_idc',
         'status',
         'created_by',
+        'ticket_number',
+        'submitted_at',
         'is_registered',
     ];
     protected $casts = [

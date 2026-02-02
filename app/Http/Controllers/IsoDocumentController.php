@@ -178,11 +178,34 @@ class IsoDocumentController extends Controller
         // Auth check
         $this->authTicketCheck($ticket);
 
+        // Testing Feature: Generate ticketing number
+        $ticketNumber = $this->generateTicketNumber();
+
         // Update ticket Status
         $ticket->update([
-            'status' => 'submitted_to_idc'
+            'status' => 'submitted_to_idc',
+            'ticket_number' => $ticketNumber,
+            'submitted_at' => now()
         ]);
-        return redirect()->route('iso.document')->with('success','Ticket submitted to IDC successfully!');
+
+        return redirect()->route('iso.document')->with('success','Ticket #' . $ticketNumber . ' submitted to IDC successfully!');
+    }
+
+    private function generateTicketNumber(){
+        $year = date('Y');
+
+        // get the last ticket number for this year
+        $lastTicket = IsoTicket::whereYear('submitted_at', $year)
+            ->whereNotNull('ticket_number')
+            ->orderBy('ticket_number', 'desc')
+            ->first();
+        if($lastTicket && preg_match('/(\d+)$/', $lastTicket->ticket_number, $matches)){
+            $nextNumber = intval($matches[1]) + 1;
+        } else {
+            $nextNumber = 1;
+        }
+
+        return 'ISO-' . $year . '-' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
     }
 
     public function loadIdcDashboard(Request $request){

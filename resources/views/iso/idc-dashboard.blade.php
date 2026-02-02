@@ -36,7 +36,7 @@ function getStatusColor($status){
 
             <!-- Header -->
             <div class="w-[95%] px-4 flex my-4 items-center">
-                <img src="{{ asset('images/logos/school/soc_logo.png') }}"class="w-[100px] h-[100px] mr-2"/>
+                <img src="{{ asset('images/icons/portal_nav/iso-title.png') }}" class="w-[100px] h-[100px] mr-4"/>
                 <div class="w-full flex flex-col justify-center">
                     <h1 class="text-[1.5rem] font-bold leading-tight text-purple-700">IDC Admin Management Dashboard</h1>
                     <span class="text-gray-500 text-sm">Institutional Document Controller - Ticket Management</span>
@@ -71,7 +71,7 @@ function getStatusColor($status){
                         <input type="text"
                             name="search"
                             value="{{ $search ?? '' }}"
-                            placeholder="Search by Ticket ID, Section, Document Code, or document Title..."
+                            placeholder="Search by Ticket Number, Section, Document Code, or document Title..."
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
                     </div>
 
@@ -139,12 +139,12 @@ function getStatusColor($status){
                 </a>
             </div>
             <!-- Tickets Table -->
-            <div class="w-full flex flex-col border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+            <div class="w-full flex flex-col border border-gray-200 shadow-sm overflow-hidden">
                 @if(count($tickets) > 0)
                     <table class="w-full">                      
                         <thead class="bg-gray-100 border-b">
                             <tr>  
-                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Ticket ID</th>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Ticket Number</th>
                                 <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Originating Section</th>
                                 <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Created By</th>
                                 <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Documents</th>
@@ -157,7 +157,7 @@ function getStatusColor($status){
                             @foreach ($tickets as $ticket)
                                 <tr class="border-b hover:bg-gray-50 cursor-pointer">
                                     <td class="px-4 py-3 text-sm font-mono text-blue-600">
-                                        #{{ $ticket->id }}
+                                        #{{ $ticket->ticket_number }}
                                     </td>
                                     <td class="px-4 py-3 text-sm">
                                         {{ $ticket->originating_section }}

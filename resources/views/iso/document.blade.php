@@ -34,7 +34,7 @@ function getStatusColor($status){
         @endif
 
         <div class="w-[95%] px-4 flex my-4 items-center">
-            <img src="{{ asset('images/logos/school/soc_logo.png') }}" class="w-[100px] h-[100px] mr-2"/>
+            <img src="{{ asset('images/icons/portal_nav/iso-title.png') }}" class="w-[100px] h-[100px] mr-4"/>
             <div class="w-full flex flex-col justify-center">
                 <h1 class="text-[1.5rem] font-bold leading-tight">ISO Document Handler Ticket System</h1>
                 <span class="text-gray-500 text-sm"> Document Modification / Creation Notice (DMCN) Tracking</span>
@@ -79,7 +79,7 @@ function getStatusColor($status){
          <hr class="mb-2 opacity-90 w-full">
 
         <!-- Search Box -->
-        <div class="w-full px-4 py-3 bg-gray-50 rounded-lg mb-4">
+        <div class="w-full px-4 py-3 bg-gray-50 rounded mb-4">
             <form method="GET" action="{{ route('iso.document') }}" class="flex gap-3 items-center">
                 <!-- Preserve status filter -->
                 <input type="hidden" name="status" value="{{ $statusFilter ?? 'all' }}">
@@ -89,7 +89,7 @@ function getStatusColor($status){
                     <input type="text"
                         name="search"
                         value="{{ $search ?? '' }}"
-                        placeholder="Search by ticket ID, section, document code, or title..."
+                        placeholder="Search by Ticket Number, Section, Document Code, or Title..."
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
                 <!-- Search button -->
@@ -118,7 +118,7 @@ function getStatusColor($status){
         @endif
 
         <!-- My Tickets Table -->
-        <div id="mytickets" class="w-full flex flex-col border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+        <div id="mytickets" class="w-[95%] flex flex-col border border-gray-200 rounded-lg shadow-sm overflow-hidden">
             @if(count($tickets) > 0)
                 <table class="w-full">
                     <thead class="bg-gray-100 border-b">
@@ -135,7 +135,11 @@ function getStatusColor($status){
                         @foreach ($tickets as $ticket)
                             <tr class="border-b hover:bg-gray-50 cursor-pointer">
                                 <td class="px-4 py-3 text-sm font-mono text-blue-600">
-                                    #{{ $ticket->id }}
+                                    @if($ticket->ticket_number)
+                                        #{{ $ticket->ticket_number }}
+                                    @else
+                                        Pending
+                                    @endif
                                 </td>
                                 <td class="px-4 py-3 text-sm">
                                     {{ $ticket->originating_section }}
@@ -418,6 +422,7 @@ function getStatusColor($status){
             '(AAC-URO) University Research Office'
         ],
         oie: [
+            '(OIE) Office of the Insitutional Effectiveness',
             '(OIE-DMO) Institutional Database Management Office',
             '(OIE-IDC) Insitutional Document Controller',
             '(OIE-IPR) Institutional Research, Planning & Publications Office',
