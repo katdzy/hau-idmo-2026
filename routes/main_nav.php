@@ -25,6 +25,8 @@ Route::middleware(['admin','revalidate'])->group(function() {
   
     Route::get('sharepoint-sites/dashboard', [SharepointController::class, 'index'])->name('sharepoint-sites.dashboard');
     
+    Route::get('knowledge-hub/dashboard', [KnowledgeHubController::class, 'index'])->name('knowledge-hub.dashboard');
+    
     Route::get('/kpis/dashboard', [KpiController::class, 'dashboard'])->name('kpis.dashboard');
 
     Route::get('/under-construction', function () {
