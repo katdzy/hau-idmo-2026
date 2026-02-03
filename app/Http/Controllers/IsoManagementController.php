@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\IsoMasterDocument;
+use App\Imports\DocumentsImport;
+use App\Exports\DocumentsExport;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Validator;
 
 class IsoManagementController extends Controller
 {
@@ -65,5 +69,119 @@ class IsoManagementController extends Controller
         }
         $documents = $query->orderBy('registered_at','desc')->get();
         return response()->json($documents);
+    }
+    // ===============================
+    // Import Documents Function
+    // ===============================
+    public function import(Request $request){
+        // Validate the uploaded file
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|file|mimes:xlsx, xls,csv|max:10240', //10MB max
+        ]);
+
+        if($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        try{
+            $import = new DocumentsImport();
+            Excel::import($import, $request->file('file'));
+
+            $importedCount = $import->getImportedCount();
+            
+            return response()->json([
+                'message' => "Successfully imported {$importedCount} documents!",
+                'success' => true
+            ], 200);
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e){
+            $failures = $e->failures();
+            $errors = [];
+
+            foreach($failures as $failure){
+                $errors[] = "Row {$failure->row()}: " .implode(', ', $failure->errors());
+            }
+            return response()->json([
+                'message' => 'Import failed: ',
+                'errors' => ['file' => $errors]
+            ], 422);
+        } catch (\Exception $e){
+            return response()->json([
+                'message' => 'Import failed: ' . $e->getMessage(),
+                'errors' => ['file' => [$e->getMessage()]]
+            ], 422);
+        }
+    }
+
+    // Export Filtered Documents to Excel
+    public function export(Request $request){
+        $filters = [
+            'source_type' => $request->input('source_type', []),
+            'originating_section' => $request->input('originating_section', []),
+            'revision_status' => $request->input('revision_status'),
+            'status' => $request->input('status', []),
+        ];
+
+        $filename = 'iso_documents_' . now()->format('Y-m-d_His') . '.xlsx';
+
+        return Excel::download(new DocumentsExport($filters), $filename);
+    }
+
+    // Download blank template
+    public function downloadTemplate(){
+        $template = [
+            [
+                'document_code',
+                'document_title',
+                'source_type',
+                'specific_type',
+                'originating_section',
+                'current_revision',
+                'registered_at',
+                'status',
+                'superseded_at',
+                'deleted_at'
+            ],
+            [
+                'AAC-BED-001',
+                'Sample Document Title',
+                'Policies',
+                '',
+                'AAC-BED',
+                '0',
+                '2024-01-15',
+                'Active',
+                '',
+                ''
+            ],
+            [
+                'AAC-BED-001',
+                'Sample Document Title',
+                'Policies',
+                '',
+                'AAC-BED',
+                '1',
+                '2024-06-20',
+                'Active',
+                '',
+                ''
+            ]
+        ];
+
+        return Excel::download(
+            new class($template) implements \Maatwebsite\Excel\Concerns\FromArray {
+                protected $data;
+
+                public function __construct($data){
+                    $this->data = $data;
+                }
+                public function array(): array{
+                    return $this->data;
+                }
+            },
+            'iso_documents_template.xlsx'
+        );
     }
 }

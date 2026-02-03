@@ -584,6 +584,14 @@ Route::middleware('auth','revalidate')->group(function () {
     Route::get('/iso/management/documents', [IsoManagementController::class, 'getDocuments'])
         ->name('iso.management.documents');
 
+    // Import/Export Routes
+    Route::post('iso/management/import', [IsoManagementController::class, 'import'])
+        ->name('iso.management.import');
+    Route::get('iso/management/export', [IsoManagementController::class, 'export'])
+        ->name('iso.management.export');
+    Route::get('iso/management/template', [IsoManagementController::class, 'downloadTemplate'])
+        ->name('iso.management.template');
+
     /*------------------------------------------------------------------
     | 23. Visit Counter
     |------------------------------------------------------------------*/

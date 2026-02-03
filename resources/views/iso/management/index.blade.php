@@ -155,8 +155,8 @@
                         </x-iso-button>
                         <!-- Download Template Button -->
                         <x-iso-button
-                            label="Download Template()"
-                            color="emerald"
+                            label="Download Template"
+                            color="green"
                             onClick="downloadTemplate()"
                         >
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -676,6 +676,7 @@ document.getElementById('import_form').addEventListener('submit', async function
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
             }
         });
+
         const data = await response.json();
         if(response.ok){
             document.getElementById('success-message').textContent = data.message;
@@ -683,7 +684,7 @@ document.getElementById('import_form').addEventListener('submit', async function
 
             setTimeout(() => {
                 closeImportModal();
-                fetchDocuments();
+                document.getElementById('filter_form').dispatchEvent(new Event('submit'));
             }, 2000);
         } else {
             const errorList = document.getElementById('error-list');
@@ -693,7 +694,7 @@ document.getElementById('import_form').addEventListener('submit', async function
                 Object.values(data.errors).forEach(errorArray => {
                     errorArray.forEach(error => {
                         const li = document.createElement('li');
-                        li.textContent = error:
+                        li.textContent = error;
                         errorList.appendChild(li);
                     });
                 });
@@ -716,4 +717,36 @@ document.getElementById('import_form').addEventListener('submit', async function
 });
 
 // Export function
+async function exportDocuments(){
+    const filterForm = document.getElementById('filter_form');
+    const formData = new FormData(filterForm);
+
+    // Check if any filters are applied
+    let hasFilters = false;
+    for (let pair of formData.entries()){
+        if(pair[1]){
+            hasFilters = true;
+            break;
+        }
+    }
+    // Warning if no filters applied
+    // TODO: replace this with just: opacity-50 and cursor not allowed on the html tag instead
+    if(!hasFilters){
+        const confirmed = confirm('No filters applied. This will export ALL documents. Continue?');
+        if(!confirmed) return;
+    }
+
+    // Convert FormData to URLSearchParams
+    const params = new URLSearchParams();
+    formData.forEach((value, key) => {
+        params.append(key, value);
+    });
+
+    window.location.href = `/iso/management/export?${params.toString()}`;
+}
+
+// Download template function
+function downloadTemplate(){
+    window.location.href = '/iso/management/template';
+}
 </script>
