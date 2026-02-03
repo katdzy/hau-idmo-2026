@@ -287,6 +287,14 @@ class pagetitle
                 $curr_page = 'SharePoint Sites';
                 break;
 
+            //Knowledge Hub Sites
+            case 'knowledge-hub.dashboard':
+            case 'knowledge-hub.add':
+            case 'knowledge-hub.edit-list':
+            case 'knowledge-hub.edit':
+                $curr_page = 'Knowledge Hub';
+                break;
+
             // KPIs
             case 'kpis.dashboard':
             case 'kpis.show':

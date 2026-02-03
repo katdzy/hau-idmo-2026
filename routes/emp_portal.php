@@ -33,6 +33,7 @@ use App\Http\Controllers\certificationController;
 use App\Http\Controllers\UpdatesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SharepointController;
+use App\Http\Controllers\KnowledgeHubController;
 use App\Http\Controllers\IsoDocumentController;
 use App\Http\Controllers\IsoManagementController;
 use App\Http\Controllers\VisitorController;
@@ -512,9 +513,13 @@ Route::middleware('auth','revalidate')->group(function () {
     |------------------------------------------------------------------*/
     Route::get('sharepoint-sites/dashboard', [SharepointController::class, 'index'])->name('sharepoint-sites.dashboard');
 
+    /*------------------------------------------------------------------
+    | 18. Knowledge Hub
+    |------------------------------------------------------------------*/
+    Route::get('knowledge-hub/dashboard', [KnowledgeHubController::class, 'index'])->name('knowledge-hub.dashboard');
     
     /*------------------------------------------------------------------
-    | 18. KPI Library
+    | 19. KPI Library
     |------------------------------------------------------------------*/
     Route::get('/kpis/dashboard', [KpiController::class, 'dashboard'])->name('kpis.dashboard');
     
@@ -534,7 +539,7 @@ Route::middleware('auth','revalidate')->group(function () {
     Route::get('/kpis/{kpi}/export', [KpiController::class, 'export'])->name('kpis.export');
 
     /*------------------------------------------------------------------
-    | 19. ISO Document Handling
+    | 20. ISO Document Handling
     |------------------------------------------------------------------*/
     Route::get('/iso/document', [IsoDocumentController::class, 'loadDocument'])
         ->name('iso.document');
@@ -557,7 +562,7 @@ Route::middleware('auth','revalidate')->group(function () {
         ->name('iso.document.submit');
 
     /*------------------------------------------------------------------
-    | 20. ISO IDC Document Handling
+    | 21. ISO IDC Document Handling
     |------------------------------------------------------------------*/
     // IDC Management Routes
     Route::get('/iso/idc/dashboard', [IsoDocumentController::class,'loadIdcDashboard'])
@@ -570,7 +575,7 @@ Route::middleware('auth','revalidate')->group(function () {
         ->name('iso.idc.reset.system');
     
     /*------------------------------------------------------------------
-    | 21. ISO Document Management
+    | 22. ISO Document Management
     |------------------------------------------------------------------*/
     Route::patch('/iso/idc/{ticket}/register', [IsoDocumentController::class, 'registerTicket'])
         ->name('iso.idc.register.ticket');
@@ -580,7 +585,7 @@ Route::middleware('auth','revalidate')->group(function () {
         ->name('iso.management.documents');
 
     /*------------------------------------------------------------------
-    | 22. Visit Counter
+    | 23. Visit Counter
     |------------------------------------------------------------------*/
     Route::get('/visitor-count/visitors', [VisitorController::class, 'index'])
         ->name('visitor-count.dashboard');

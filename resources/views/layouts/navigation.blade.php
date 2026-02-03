@@ -106,6 +106,17 @@
                 </a>
 
                 <!-- A LINK NAVIGATION  -->
+                 <a href="{{ route('knowledge-hub.dashboard') }}" class="{{ request()->routeIs('knowledge-hub*') ? 'active' : '' }}">
+                    <div class="nav-link">
+                        
+                            <img src="{{ asset('images/icons/nav/knowledge.svg') }}" class = "w-24 h-24"/>
+                        
+                            <h3>Knowledge Hub</h3>
+                      
+                    </div>
+                </a>
+
+                <!-- A LINK NAVIGATION  -->
                  <a href="{{ route('kpis.dashboard') }}" class="{{ request()->routeIs('kpis*') ? 'active' : '' }}">
                     <div class="nav-link">
                         

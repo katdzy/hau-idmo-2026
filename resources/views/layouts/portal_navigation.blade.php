@@ -216,6 +216,18 @@
                 </a> 
 
                 <!-- A LINK NAVIGATION  -->
+                 <a href="{{ route('knowledge-hub.dashboard') }}" class="{{ request()->routeIs('knowledge-hub*') ? 'font-semibold' : '' }}">
+                    <div class="nav-link">
+                        
+                            <img src="{{ asset('images/icons/nav/knowledge.svg') }}" />
+                    
+                     
+                            <h3>Knowledge Hub</h3>
+                     
+                    </div>
+                </a>
+
+                <!-- A LINK NAVIGATION  -->
                  <a href="{{ route('kpis.dashboard') }}" class="{{ request()->routeIs('kpis*') ? 'font-semibold' : '' }}">
                     <div class="nav-link">
                         

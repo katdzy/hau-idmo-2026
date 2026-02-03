@@ -8,6 +8,7 @@ use App\Http\Controllers\KpiSegmentationController;
 use App\Http\Controllers\KpiDimensionController;
 use App\Http\Controllers\SemesterController;
 use App\Http\Controllers\SharepointController;
+use App\Http\Controllers\KnowledgeHubController;
 use App\Http\Controllers\UserRecordsController;
 use App\Http\Controllers\UserTerminationController;
 use App\Models\Employee;
@@ -193,6 +194,26 @@ Route::middleware(['superAdmin','revalidate'])->group(function() {
     // Delete sharepoint link
     Route::delete('sharepoint-sites/delete/{id}', [SharepointController::class, 'destroy'])->name('sharepoint-sites.delete');
 
+    /******************** KNOWLEDGE HUB LINKS ********************/
+    // Add knowledge hub link (form)
+    Route::get('knowledge-hub/add', [KnowledgeHubController::class, 'create'])->name('knowledge-hub.add');
+
+    // Store new knowledge hub link
+    Route::post('knowledge-hub/store', [KnowledgeHubController::class, 'store'])->name('knowledge-hub.store');
+
+    // Edit knowledge hub link (form)
+    Route::get('knowledge-hub/edit/{id}', [KnowledgeHubController::class, 'edit'])->name('knowledge-hub.edit'); 
+    Route::get('knowledge-hub/edit', [KnowledgeHubController::class, 'editList'])->name('knowledge-hub.edit-list'); 
+
+    // Select link to edit (optional if used separately)
+    Route::get('knowledge-hub/select', [KnowledgeHubController::class, 'selectForm'])->name('knowledge-hub.select-form');
+    Route::post('knowledge-hub/select', [KnowledgeHubController::class, 'select'])->name('knowledge-hub.select');
+
+    // Update knowledge hub link
+    Route::put('knowledge-hub/update/{id}', [KnowledgeHubController::class, 'update'])->name('knowledge-hub.update');
+
+    // Delete knowledge hub link
+    Route::delete('knowledge-hub/delete/{id}', [KnowledgeHubController::class, 'destroy'])->name('knowledge-hub.delete');
 
     /******************** KPI Library ********************/
     Route::get('/kpis/add', [KpiController::class, 'create'])->name('kpis.add');
