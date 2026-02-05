@@ -404,6 +404,7 @@ const specificOfficeOptions = {
         '(AAC-URO) University Research Office'
     ],
     oie: [
+        '(OIE) Office of the Institutional Effectiveness',
         '(OIE-DMO) Institutional Database Management Office',
         '(OIE-IDC) Insitutional Document Controller',
         '(OIE-IPR) Institutional Research, Planning & Publications Office',
@@ -661,10 +662,18 @@ document.getElementById('import_form').addEventListener('submit', async function
     e.preventDefault();
 
     const formData = new FormData(this);
-    const submitBtn = this.querySelector('button[type="submit"');
-    const originalBtnText = submitBtn.innerHTML;
+    const submitBtn = document.getElementById('import_submit_btn');
+    const btnText = document.getElementById('import_btn_text');
+    const btnIcon = document.getElementById('import_icon');
+    const spinner = document.getElementById('import_spinner');
 
     // Show loading state
+    submitBtn.disabled = true;
+    submitBtn.classList.add('opacity-75', 'cursor-not-allowed');
+    btnIcon.classList.add('hidden');
+    spinner.classList.remove('hidden');
+    btnText.textContent = 'Importing...';
+
     document.getElementById('import-errors').classList.add('hidden');
     document.getElementById('import-success').classList.add('hidden');
 
@@ -684,7 +693,7 @@ document.getElementById('import_form').addEventListener('submit', async function
 
             setTimeout(() => {
                 closeImportModal();
-                document.getElementById('filter_form').dispatchEvent(new Event('submit'));
+                window.location.reload();
             }, 2000);
         } else {
             const errorList = document.getElementById('error-list');
@@ -712,7 +721,10 @@ document.getElementById('import_form').addEventListener('submit', async function
         document.getElementById('import-errors').classList.remove('hidden');
     } finally {
         submitBtn.disabled = false;
-        submitBtn.innerHTML = originalBtnText;
+        submitBtn.classList.remove('opacity-75', 'cursor-not-allowed');
+        btnIcon.classList.remove('hidden');
+        spinner.classList.add('hidden');
+        btnText.textContent = 'Import Documents';
     }
 });
 

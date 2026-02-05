@@ -71,7 +71,7 @@ class IsoManagementController extends Controller
         return response()->json($documents);
     }
     // ===============================
-    // Import Documents Function
+    // Import and Export Documents Function
     // ===============================
     public function import(Request $request){
         // Validate the uploaded file

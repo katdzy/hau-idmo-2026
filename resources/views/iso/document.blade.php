@@ -422,7 +422,7 @@ function getStatusColor($status){
             '(AAC-URO) University Research Office'
         ],
         oie: [
-            '(OIE) Office of the Insitutional Effectiveness',
+            '(OIE) Office of the Institutional Effectiveness',
             '(OIE-DMO) Institutional Database Management Office',
             '(OIE-IDC) Insitutional Document Controller',
             '(OIE-IPR) Institutional Research, Planning & Publications Office',

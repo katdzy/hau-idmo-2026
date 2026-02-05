@@ -512,9 +512,13 @@ class IsoDocumentController extends Controller
                     } elseif ($document->classification === 'deletion'){
                         $docToDelete = IsoMasterDocument::find($document->revising_master_document_id);
 
+                        if(!$docToDelete){
+                            throw new \Exception("Document to delete not found (ID: {$document->revising_master_document_id})");
+                        }
+
                         $docToDelete->update([
-                            'status' => 'deleted',
-                            'deleted_at' => now()
+                            'status' => 'Superseded',
+                            'superseded_at' => now()
                         ]);
                         // Create deletion record for audit trail TODO: Ask them to have a separate record
                         // when deleting a document or just keep one.
