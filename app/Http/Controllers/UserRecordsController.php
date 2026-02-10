@@ -625,7 +625,14 @@ class UserRecordsController extends Controller
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
+        // Define roles that only require limited information
+        $rolesWithLimitedInfo = ['SuperAdmin', 'HR Admin' , 'Dean' , 'IDC Admin' , 'ISO Document Handler'];
+        
+        // Check if the selected role requires limited fields
+        $requiresLimitedInfo = in_array($request->role, $rolesWithLimitedInfo);
+        
+        // Base validation rules (always required)
+        $validationRules = [
             'emp_id' => 'required|unique:tbl_info,emp_id',
             'emp_fname' => 'required|string|max:255',
             'emp_mname' => 'nullable|string|max:255',
@@ -638,53 +645,121 @@ class UserRecordsController extends Controller
             'emp_cStatus' => 'nullable|string|max:255',
             'emp_religion' => 'nullable|string|max:255',
             'emp_blood_type' => 'nullable|string|max:10',
-            'emp_houseno' => 'required|string|max:50',
-            'street' => 'required|string|max:50',
-            'brgy' => 'required|string|max:50',
-            'city' => 'required|string|max:50',
-            'province' => 'required|string|max:50',
-            'postal_code' => 'required|string|max:20',
-            'home_phone' => 'required|string|max:20',
-            'mobile_phone' => 'required|string|max:20',
-            'email_address_1' => 'required|email|max:255',
-            'email_address_2' => 'required|email|max:255',
-            'pc_emp_houseno' => 'nullable|string|max:50',
-            'pc_street' => 'nullable|string|max:50',
-            'pc_brgy' => 'nullable|string|max:50',
-            'pc_city' => 'nullable|string|max:50',
-            'pc_province' => 'nullable|string|max:50',
-            'pc_postal_code' => 'nullable|string|max:20',
-            'pc_phone' => 'nullable|string|max:20',
-            'cp_fname' => 'required|string|max:255',
-            'cp_mname' => 'nullable|string|max:255',
-            'cp_lname' => 'required|string|max:255',
-            'cp_relationship' => 'required|string|max:255',
-            'cp_house_no' => 'required|string|max:50',
-            'cp_street' => 'required|string|max:50',
-            'cp_city' => 'required|string|max:50',
-            'cp_province' => 'required|string|max:50',
-            'cp_postal_code' => 'required|string|max:20',
-            'cp_home_phone' => 'required|string|max:20',
-            'cp_mobile_no' => 'required|string|max:20',
-            'sss_no' => 'nullable|string|max:50',
-            'tax_no' => 'nullable|string|max:50',
-            'pagibig_no' => 'nullable|string|max:50',
-            'philhealth_no' => 'nullable|string|max:50',
-            'date_hired' => 'required|date',
-            'position' => 'required|string|max:50',
-            'nature' => 'required|string|max:50',
-            'tenure' => 'required|string|max:50',
-            'nontenured' => 'required_if:tenure,Non-tenured|string|max:50',
-            'license' => 'required|boolean',
             'email' => 'required|email|unique:tbl_login,email',
             'password' => 'required|string|confirmed',
             'password_confirmation' => 'required|string|same:password',
-            'role' => 'required|string|in:Employee,SuperAdmin,HR Admin,Dean,IDC Admin, ISO Document Handler',
-        ]);
+            'role' => 'required|string|in:Employee,SuperAdmin,HR Admin,Dean,IDC Admin,ISO Document Handler',
+        ];
+        
+        // Conditional validation rules (only required for certain roles)
+        if (!$requiresLimitedInfo) {
+            $validationRules = array_merge($validationRules, [
+                // Contact Information
+                'emp_houseno' => 'required|string|max:50',
+                'street' => 'required|string|max:50',
+                'brgy' => 'required|string|max:50',
+                'city' => 'required|string|max:50',
+                'province' => 'required|string|max:50',
+                'postal_code' => 'required|string|max:20',
+                'home_phone' => 'required|string|max:20',
+                'mobile_phone' => 'required|string|max:20',
+                'email_address_1' => 'required|email|max:255',
+                'email_address_2' => 'required|email|max:255',
+                
+                // Provincial Contact Information
+                'pc_emp_houseno' => 'nullable|string|max:50',
+                'pc_street' => 'nullable|string|max:50',
+                'pc_brgy' => 'nullable|string|max:50',
+                'pc_city' => 'nullable|string|max:50',
+                'pc_province' => 'nullable|string|max:50',
+                'pc_postal_code' => 'nullable|string|max:20',
+                'pc_phone' => 'nullable|string|max:20',
+                
+                // Emergency Contact Information
+                'cp_fname' => 'required|string|max:255',
+                'cp_mname' => 'nullable|string|max:255',
+                'cp_lname' => 'required|string|max:255',
+                'cp_relationship' => 'required|string|max:255',
+                'cp_house_no' => 'required|string|max:50',
+                'cp_street' => 'required|string|max:50',
+                'cp_city' => 'required|string|max:50',
+                'cp_province' => 'required|string|max:50',
+                'cp_postal_code' => 'required|string|max:20',
+                'cp_home_phone' => 'required|string|max:20',
+                'cp_mobile_no' => 'required|string|max:20',
+                
+                // Accounting Details
+                'sss_no' => 'nullable|string|max:50',
+                'tax_no' => 'nullable|string|max:50',
+                'pagibig_no' => 'nullable|string|max:50',
+                'philhealth_no' => 'nullable|string|max:50',
+                
+                // Hiring Information
+                'date_hired' => 'required|date',
+                'position' => 'required|string|max:50',
+                'nature' => 'required|string|max:50',
+                'tenure' => 'required|string|max:50',
+                'nontenured' => 'required_if:tenure,Non-tenured|string|max:50',
+                'license' => 'required|boolean',
+            ]);
+        } else {
+            $validationRules = array_merge($validationRules, [
+                // Contact Information
+                'emp_houseno' => 'nullable|string|max:50',
+                'street' => 'nullable|string|max:50',
+                'brgy' => 'nullable|string|max:50',
+                'city' => 'nullable|string|max:50',
+                'province' => 'nullable|string|max:50',
+                'postal_code' => 'nullable|string|max:20',
+                'home_phone' => 'nullable|string|max:20',
+                'mobile_phone' => 'nullable|string|max:20',
+                'email_address_1' => 'nullable|email|max:255',
+                'email_address_2' => 'nullable|email|max:255',
+                
+                // Provincial Contact Information
+                'pc_emp_houseno' => 'nullable|string|max:50',
+                'pc_street' => 'nullable|string|max:50',
+                'pc_brgy' => 'nullable|string|max:50',
+                'pc_city' => 'nullable|string|max:50',
+                'pc_province' => 'nullable|string|max:50',
+                'pc_postal_code' => 'nullable|string|max:20',
+                'pc_phone' => 'nullable|string|max:20',
+                
+                // Emergency Contact Information
+                'cp_fname' => 'nullable|string|max:255',
+                'cp_mname' => 'nullable|string|max:255',
+                'cp_lname' => 'nullable|string|max:255',
+                'cp_relationship' => 'nullable|string|max:255',
+                'cp_house_no' => 'nullable|string|max:50',
+                'cp_street' => 'nullable|string|max:50',
+                'cp_city' => 'nullable|string|max:50',
+                'cp_province' => 'nullable|string|max:50',
+                'cp_postal_code' => 'nullable|string|max:20',
+                'cp_home_phone' => 'nullable|string|max:20',
+                'cp_mobile_no' => 'nullable|string|max:20',
+                
+                // Accounting Details
+                'sss_no' => 'nullable|string|max:50',
+                'tax_no' => 'nullable|string|max:50',
+                'pagibig_no' => 'nullable|string|max:50',
+                'philhealth_no' => 'nullable|string|max:50',
+                
+                // Hiring Information
+                'date_hired' => 'nullable|date',
+                'position' => 'nullable|string|max:50',
+                'nature' => 'nullable|string|max:50',
+                'tenure' => 'nullable|string|max:50',
+                'nontenured' => 'nullable|string|max:50',
+                'license' => 'nullable|boolean',
+            ]);
+        }
+        
+        $validatedData = $request->validate($validationRules);
 
         try {
             DB::beginTransaction();
 
+            // Create Employee record
             Employee::create([
                 'emp_id' => $request->emp_id,
                 'emp_fname' => $request->emp_fname,
@@ -698,19 +773,20 @@ class UserRecordsController extends Controller
                 'emp_cStatus' => $request->emp_cStatus,
                 'emp_religion' => $request->emp_religion,
                 'emp_blood_type' => $request->emp_blood_type,
-                'emp_houseno' => $request->emp_houseno,
-                'street' => $request->street,
-                'brgy' => $request->brgy,
-                'city' => $request->city,
-                'province' => $request->province,
-                'postal_code' => $request->postal_code,
+                'emp_houseno' => $request->emp_houseno ?? null,
+                'street' => $request->street ?? null,
+                'brgy' => $request->brgy ?? null,
+                'city' => $request->city ?? null,
+                'province' => $request->province ?? null,
+                'postal_code' => $request->postal_code ?? null,
                 'info_status' => 'Active',
-                'home_phone' => $request->home_phone,
-                'mobile_phone' => $request->mobile_phone,
-                'email_address_1' => $request->email_address_1,
-                'email_address_2' => $request->email_address_2,
+                'home_phone' => $request->home_phone ?? null,
+                'mobile_phone' => $request->mobile_phone ?? null,
+                'email_address_1' => $request->email_address_1 ?? null,
+                'email_address_2' => $request->email_address_2 ?? null,
             ]);
 
+            // Create Login record
             Employee_Login::create([
                 'id' => $request->emp_id,
                 'email' => $request->email,
@@ -719,75 +795,117 @@ class UserRecordsController extends Controller
                 'terminated' => 0,
             ]);
 
-            provincial_contact::create([
-                'id' => $request->emp_id,
-                'pc_emp_houseno' => $request->pc_emp_houseno,
-                'pc_street' => $request->pc_street,
-                'pc_brgy' => $request->pc_brgy,
-                'pc_city' => $request->pc_city,
-                'pc_province' => $request->pc_province,
-                'pc_postal_code' => $request->pc_postal_code,
-                'pc_phone' => $request->pc_phone,
-            ]);
+            if (!$requiresLimitedInfo) {
+                // Provincial Contact
+                provincial_contact::create([
+                    'id' => $request->emp_id,
+                    'pc_emp_houseno' => $request->pc_emp_houseno,
+                    'pc_street' => $request->pc_street,
+                    'pc_brgy' => $request->pc_brgy,
+                    'pc_city' => $request->pc_city,
+                    'pc_province' => $request->pc_province,
+                    'pc_postal_code' => $request->pc_postal_code,
+                    'pc_phone' => $request->pc_phone,
+                ]);
 
-            DB::table('tbl_emergency')->insert([
-                'emp_id' => $request->emp_id,
-                'cp_fname' => $request->cp_fname,
-                'cp_mname' => $request->cp_mname,
-                'cp_lname' => $request->cp_lname,
-                'cp_relationship' => $request->cp_relationship,
-                'cp_house_no' => $request->cp_house_no,
-                'cp_street' => $request->cp_street,
-                'cp_city' => $request->cp_city,
-                'cp_province' => $request->cp_province,
-                'cp_postal_code' => $request->cp_postal_code,
-                'cp_home_phone' => $request->cp_home_phone,
-                'cp_mobile_no' => $request->cp_mobile_no,
-            ]);
+                // Emergency Contact
+                DB::table('tbl_emergency')->insert([
+                    'emp_id' => $request->emp_id,
+                    'cp_fname' => $request->cp_fname,
+                    'cp_mname' => $request->cp_mname,
+                    'cp_lname' => $request->cp_lname,
+                    'cp_relationship' => $request->cp_relationship,
+                    'cp_house_no' => $request->cp_house_no,
+                    'cp_street' => $request->cp_street,
+                    'cp_city' => $request->cp_city,
+                    'cp_province' => $request->cp_province,
+                    'cp_postal_code' => $request->cp_postal_code,
+                    'cp_home_phone' => $request->cp_home_phone,
+                    'cp_mobile_no' => $request->cp_mobile_no,
+                ]);
 
-            DB::table('tbl_accounting_details')->insert([
-                'emp_id' => $request->emp_id,
-                'sss_no' => $request->sss_no,
-                'tax_no' => $request->tax_no,
-                'pagibig_no' => $request->pagibig_no,
-                'philhealth_no' => $request->philhealth_no,
-            ]);
+                // Accounting Details
+                DB::table('tbl_accounting_details')->insert([
+                    'emp_id' => $request->emp_id,
+                    'sss_no' => $request->sss_no,
+                    'tax_no' => $request->tax_no,
+                    'pagibig_no' => $request->pagibig_no,
+                    'philhealth_no' => $request->philhealth_no,
+                ]);
 
-            $div = "";
-            switch($request->position) {
-                case 'Faculty':
-                    $div = 'Academic';
-                    break;
-                default:
-                    $div = 'Non-academic';
-                    break;
+                // Hiring Information
+                $div = "";
+                switch($request->position) {
+                    case 'Faculty':
+                        $div = 'Academic';
+                        break;
+                    default:
+                        $div = 'Non-academic';
+                        break;
+                }
+
+                HiringInfo::create([
+                    'emp_id' => $request->emp_id,
+                    'emp_position' => $request->position,
+                    'emp_nature' => $request->nature,
+                    'emp_tenure' => $request->tenure,
+                    'non_tenured' => $request->nontenured,
+                    'division' => $div,
+                    'license' => $request->license,
+                ]);
+
+                // Hiring History
+                do { 
+                    $uid = $request->emp_id . '-h-' . Str::random(8); 
+                } while (HiringHistory::where('id', $uid)->exists()); 
+
+                $deptName = Departments::where('code', $request->emp_dept)->first();
+
+                HiringHistory::create([
+                    'id' => $uid,
+                    'emp_id' => $request->emp_id,
+                    'date'=> $request->date_hired,
+                    'position'=> $request->position,
+                    'division'=> $div,
+                    'department'=> $deptName->dept,
+                    'nature'=> $request->nature
+                ]);
+            } else {
+                provincial_contact::create([
+                    'id' => $request->emp_id,
+                    'pc_emp_houseno' => null,
+                    'pc_street' => null,
+                    'pc_brgy' => null,
+                    'pc_city' => null,
+                    'pc_province' => null,
+                    'pc_postal_code' => null,
+                    'pc_phone' => null,
+                ]);
+
+                DB::table('tbl_emergency')->insert([
+                    'emp_id' => $request->emp_id,
+                    'cp_fname' => null,
+                    'cp_mname' => null,
+                    'cp_lname' => null,
+                    'cp_relationship' => null,
+                    'cp_house_no' => null,
+                    'cp_street' => null,
+                    'cp_city' => null,
+                    'cp_province' => null,
+                    'cp_postal_code' => null,
+                    'cp_home_phone' => null,
+                    'cp_mobile_no' => null,
+                ]);
+
+                DB::table('tbl_accounting_details')->insert([
+                    'emp_id' => $request->emp_id,
+                    'sss_no' => null,
+                    'tax_no' => null,
+                    'pagibig_no' => null,
+                    'philhealth_no' => null,
+                ]);
+
             }
-
-            HiringInfo::create([
-                'emp_id' => $request->emp_id,
-                'emp_position' => $request->position,
-                'emp_nature' => $request->nature,
-                'emp_tenure' => $request->tenure,
-                'non_tenured' => $request->nontenured,
-                'division' => $div,
-                'license' => $request->license,
-            ]);
-
-            do { 
-                $uid = $request->emp_id . '-h-' . Str::random(8); 
-            } while (HiringHistory::where('id', $uid)->exists()); 
-
-            $deptName = Departments::where('code', $request->emp_dept)->first();
-
-            HiringHistory::create([
-                'id' => $uid,
-                'emp_id' => $request->emp_id,
-                'date'=> $request->date_hired,
-                'position'=> $request->position,
-                'division'=> $div,
-                'department'=> $deptName->dept,
-                'nature'=> $request->nature
-            ]);
 
             DB::commit();
 

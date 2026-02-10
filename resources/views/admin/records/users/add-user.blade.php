@@ -29,8 +29,71 @@
             <form action="{{ route('admin.users.store') }}" method="POST" class="space-y-6" id="addUserForm">
                 @csrf
                 
+                <!-- Hidden inputs to track which sections are visible -->
+                <input type="hidden" name="section_contact_visible" id="section_contact_visible" value="1">
+                <input type="hidden" name="section_provincial_visible" id="section_provincial_visible" value="1">
+                <input type="hidden" name="section_emergency_visible" id="section_emergency_visible" value="1">
+                <input type="hidden" name="section_accounting_visible" id="section_accounting_visible" value="1">
+                <input type="hidden" name="section_hiring_visible" id="section_hiring_visible" value="1">
+                
                 <!-- Form Sections -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                    <!-- Login Information -->
+                    <div class="bg-gray-100 px-4 py-6 rounded-lg shadow-sm">
+                        <h3 class="text-xl font-semibold text-gray-700 mb-4">Login Information</h3>
+
+                        <div class="space-y-4">
+                            <!-- Email -->
+                            <div>
+                                <label for="email" class="block text-gray-700 font-medium mb-1">
+                                    Email <span class="required-indicator">*</span>
+                                </label>
+                                <input type="email" name="email" id="email" value="{{ old('email') }}"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900"
+                                    required>
+                            </div>
+
+                            <!-- Password -->
+                            <div class="relative">
+                                <label for="password" class="block text-gray-700 font-medium mb-1">
+                                    Password <span class="required-indicator">*</span>
+                                </label>
+                                <input id="password" type="password" name="password" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900" required>
+                            </div>
+
+                            <div class="mt-4">
+                                <label for="password_confirmation" class="block text-gray-700 font-medium mb-1">
+                                        Confirm Password <span class="required-indicator">*</span>
+                                </label>
+                                <input id="password_confirmation" type="password" name="password_confirmation" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900" required>
+                                <p id="passwordMismatch" class="text-red-500 text-sm mt-2 hidden">Passwords do not match.</p>
+                            </div>
+
+                            <!-- Show Password Checkbox -->
+                            <div class="mt-2 flex items-center">
+                                <input type="checkbox" id="showPassword" class="mr-2">
+                                <label for="showPassword" class="text-sm text-gray-700">Show Password</label>
+                            </div>
+
+                            <div>
+                                <label for="role" class="block text-gray-700 font-medium mb-1">
+                                    Role <span class="required-indicator">*</span>
+                                </label>
+                                <select name="role" id="role"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900"
+                                    required>
+                                    <option value="" disabled selected>Select...</option>
+                                    @foreach($roles as $role)
+                                        <option value="{{ $role->item }}" {{ old('role') == $role->item ? 'selected' : '' }}>
+                                            {{ $role->item }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Personal Information -->
                     <div class="bg-gray-100 px-4 py-6 rounded-lg shadow-sm">
                         <h3 class="text-xl font-semibold text-gray-700 mb-4">Personal Information</h3>
@@ -157,114 +220,114 @@
                     </div>
 
                     <!-- Contact Information -->
-                    <div class="bg-gray-100 px-4 py-6 rounded-lg shadow-sm">
+                    <div class="bg-gray-100 px-4 py-6 rounded-lg shadow-sm conditional-section" data-section="contact">
                         <h3 class="text-xl font-semibold text-gray-700 mb-4">Contact Information</h3>
 
                         <div class="space-y-4">
                             <!-- House Number -->
                             <div>
                                 <label for="emp_houseno" class="block text-gray-700 font-medium mb-1">
-                                    House Number <span class="required-indicator">*</span>
+                                    House Number <span class="required-indicator conditional-required">*</span>
                                 </label>
                                 <input type="text" name="emp_houseno" id="emp_houseno" value="{{ old('emp_houseno') }}"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900"
-                                    required>
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900 conditional-input"
+                                    data-initially-required="true">
                             </div>
 
                             <!-- Street -->
                             <div>
                                 <label for="street" class="block text-gray-700 font-medium mb-1">
-                                    Street <span class="required-indicator">*</span>
+                                    Street <span class="required-indicator conditional-required">*</span>
                                 </label>
                                 <input type="text" name="street" id="street" value="{{ old('street') }}"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900"
-                                    required>
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900 conditional-input"
+                                    data-initially-required="true">
                             </div>
 
                             <!-- Barangay -->
                             <div>
                                 <label for="brgy" class="block text-gray-700 font-medium mb-1">
-                                    Barangay <span class="required-indicator">*</span>
+                                    Barangay <span class="required-indicator conditional-required">*</span>
                                 </label>
                                 <input type="text" name="brgy" id="brgy" value="{{ old('brgy') }}"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900"
-                                    required>
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900 conditional-input"
+                                    data-initially-required="true">
                             </div>
 
                             <!-- City -->
                             <div>
                                 <label for="city" class="block text-gray-700 font-medium mb-1">
-                                    City <span class="required-indicator">*</span>
+                                    City <span class="required-indicator conditional-required">*</span>
                                 </label>
                                 <input type="text" name="city" id="city" value="{{ old('city') }}"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900"
-                                    required>
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900 conditional-input"
+                                    data-initially-required="true">
                             </div>
 
                             <!-- Province -->
                             <div>
                                 <label for="province" class="block text-gray-700 font-medium mb-1">
-                                    Province <span class="required-indicator">*</span>
+                                    Province <span class="required-indicator conditional-required">*</span>
                                 </label>
                                 <input type="text" name="province" id="province" value="{{ old('province') }}"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900"
-                                    required>
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900 conditional-input"
+                                    data-initially-required="true">
                             </div>
 
                             <!-- Postal Code -->
                             <div>
                                 <label for="postal_code" class="block text-gray-700 font-medium mb-1">
-                                    Postal Code <span class="required-indicator">*</span>
+                                    Postal Code <span class="required-indicator conditional-required">*</span>
                                 </label>
                                 <input type="text" name="postal_code" id="postal_code" value="{{ old('postal_code') }}"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900"
-                                    required>
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900 conditional-input"
+                                    data-initially-required="true">
                             </div>
 
                             <!-- Home Phone -->
                             <div>
                                 <label for="home_phone" class="block text-gray-700 font-medium mb-1">
-                                    Home Phone <span class="required-indicator">*</span>
+                                    Home Phone <span class="required-indicator conditional-required">*</span>
                                 </label>
                                 <input type="text" name="home_phone" id="home_phone" value="{{ old('home_phone') }}"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900"
-                                    required>
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900 conditional-input"
+                                    data-initially-required="true">
                             </div>
 
                             <!-- Mobile Phone -->
                             <div>
                                 <label for="mobile_phone" class="block text-gray-700 font-medium mb-1">
-                                    Mobile Phone <span class="required-indicator">*</span>
+                                    Mobile Phone <span class="required-indicator conditional-required">*</span>
                                 </label>
                                 <input type="text" name="mobile_phone" id="mobile_phone" value="{{ old('mobile_phone') }}"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900"
-                                    required>
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900 conditional-input"
+                                    data-initially-required="true">
                             </div>
 
                             <!-- Email Address 1 -->
                             <div>
                                 <label for="email_address_1" class="block text-gray-700 font-medium mb-1">
-                                    Email Address 1 <span class="required-indicator">*</span>
+                                    Email Address 1 <span class="required-indicator conditional-required">*</span>
                                 </label>
                                 <input type="email" name="email_address_1" id="email_address_1" value="{{ old('email_address_1') }}"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900"
-                                    required>
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900 conditional-input"
+                                    data-initially-required="true">
                             </div>
 
                             <!-- Email Address 2 -->
                             <div>
                                 <label for="email_address_2" class="block text-gray-700 font-medium mb-1">
-                                    Email Address 2 <span class="required-indicator">*</span>
+                                    Email Address 2 <span class="required-indicator conditional-required">*</span>
                                 </label>
                                 <input type="email" name="email_address_2" id="email_address_2" value="{{ old('email_address_2') }}"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900"
-                                    required>
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900 conditional-input"
+                                    data-initially-required="true">
                             </div>
                         </div>
                     </div>
 
                     <!-- Provincial Contact Information -->
-                    <div class="bg-gray-100 px-4 py-6 rounded-lg shadow-sm">
+                    <div class="bg-gray-100 px-4 py-6 rounded-lg shadow-sm conditional-section" data-section="provincial">
                         <h3 class="text-xl font-semibold text-gray-700 mb-4">Provincial Contact Information</h3>
 
                         <div class="space-y-4">
@@ -320,18 +383,18 @@
                     </div>
 
                     <!-- Emergency Contact Information -->
-                    <div class="bg-gray-100 px-4 py-6 rounded-lg shadow-sm">
+                    <div class="bg-gray-100 px-4 py-6 rounded-lg shadow-sm conditional-section" data-section="emergency">
                         <h3 class="text-xl font-semibold text-gray-700 mb-4">Emergency Contact Information</h3>
 
                         <div class="space-y-4">
                             <!-- Contact Person First Name -->
                             <div>
                                 <label for="cp_fname" class="block text-gray-700 font-medium mb-1">
-                                    First Name <span class="required-indicator">*</span>
+                                    First Name <span class="required-indicator conditional-required">*</span>
                                 </label>
                                 <input type="text" name="cp_fname" id="cp_fname" value="{{ old('cp_fname') }}"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900"
-                                    required>
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900 conditional-input"
+                                    data-initially-required="true">
                             </div>
 
                             <!-- Contact Person Middle Name -->
@@ -344,161 +407,165 @@
                             <!-- Contact Person Last Name -->
                             <div>
                                 <label for="cp_lname" class="block text-gray-700 font-medium mb-1">
-                                    Last Name <span class="required-indicator">*</span>
+                                    Last Name <span class="required-indicator conditional-required">*</span>
                                 </label>
                                 <input type="text" name="cp_lname" id="cp_lname" value="{{ old('cp_lname') }}"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900"
-                                    required>
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900 conditional-input"
+                                    data-initially-required="true">
                             </div>
 
                             <!-- Relationship -->
                             <div>
                                 <label for="cp_relationship" class="block text-gray-700 font-medium mb-1">
-                                    Relationship <span class="required-indicator">*</span>
+                                    Relationship <span class="required-indicator conditional-required">*</span>
                                 </label>
                                 <input type="text" name="cp_relationship" id="cp_relationship" value="{{ old('cp_relationship') }}"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900"
-                                    required>
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900 conditional-input"
+                                    data-initially-required="true">
                             </div>
 
                             <!-- House Number -->
                             <div>
                                 <label for="cp_house_no" class="block text-gray-700 font-medium mb-1">
-                                    House Number <span class="required-indicator">*</span>
+                                    House Number <span class="required-indicator conditional-required">*</span>
                                 </label>
                                 <input type="text" name="cp_house_no" id="cp_house_no" value="{{ old('cp_house_no') }}"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900"
-                                    required>
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900 conditional-input"
+                                    data-initially-required="true">
                             </div>
 
                             <!-- Street -->
                             <div>
                                 <label for="cp_street" class="block text-gray-700 font-medium mb-1">
-                                    Street <span class="required-indicator">*</span>
+                                    Street <span class="required-indicator conditional-required">*</span>
                                 </label>
                                 <input type="text" name="cp_street" id="cp_street" value="{{ old('cp_street') }}"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900"
-                                    required>
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900 conditional-input"
+                                    data-initially-required="true">
                             </div>
 
                             <!-- City -->
                             <div>
                                 <label for="cp_city" class="block text-gray-700 font-medium mb-1">
-                                    City <span class="required-indicator">*</span>
+                                    City <span class="required-indicator conditional-required">*</span>
                                 </label>
                                 <input type="text" name="cp_city" id="cp_city" value="{{ old('cp_city') }}"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900"
-                                    required>
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900 conditional-input"
+                                    data-initially-required="true">
                             </div>
 
                             <!-- Province -->
                             <div>
                                 <label for="cp_province" class="block text-gray-700 font-medium mb-1">
-                                    Province <span class="required-indicator">*</span>
+                                    Province <span class="required-indicator conditional-required">*</span>
                                 </label>
                                 <input type="text" name="cp_province" id="cp_province" value="{{ old('cp_province') }}"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900"
-                                    required>
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900 conditional-input"
+                                    data-initially-required="true">
                             </div>
 
                             <!-- Postal Code -->
                             <div>
                                 <label for="cp_postal_code" class="block text-gray-700 font-medium mb-1">
-                                    Postal Code <span class="required-indicator">*</span>
+                                    Postal Code <span class="required-indicator conditional-required">*</span>
                                 </label>
                                 <input type="text" name="cp_postal_code" id="cp_postal_code" value="{{ old('cp_postal_code') }}"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900"
-                                    required>
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900 conditional-input"
+                                    data-initially-required="true">
                             </div>
 
                             <!-- Home Phone -->
                             <div>
                                 <label for="cp_home_phone" class="block text-gray-700 font-medium mb-1">
-                                    Home Phone <span class="required-indicator">*</span>
+                                    Home Phone <span class="required-indicator conditional-required">*</span>
                                 </label>
                                 <input type="text" name="cp_home_phone" id="cp_home_phone" value="{{ old('cp_home_phone') }}"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900"
-                                    required>
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900 conditional-input"
+                                    data-initially-required="true">
                             </div>
 
                             <!-- Mobile Phone -->
                             <div>
                                 <label for="cp_mobile_no" class="block text-gray-700 font-medium mb-1">
-                                    Mobile Phone <span class="required-indicator">*</span>
+                                    Mobile Phone <span class="required-indicator conditional-required">*</span>
                                 </label>
                                 <input type="text" name="cp_mobile_no" id="cp_mobile_no" value="{{ old('cp_mobile_no') }}"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900"
-                                    required>
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900 conditional-input"
+                                    data-initially-required="true">
                             </div>
                         </div>
                     </div>
 
                     <!-- Accounting Details -->
-                    <div class="bg-gray-100 px-4 py-6 rounded-lg shadow-sm">
+                    <div class="bg-gray-100 px-4 py-6 rounded-lg shadow-sm conditional-section" data-section="accounting">
                         <h3 class="text-xl font-semibold text-gray-700 mb-4">Accounting Details</h3>
 
                         <div class="space-y-4">
                             <!-- SSS Number -->
                             <div>
                                 <label for="sss_no" class="block text-gray-700 font-medium mb-1">
-                                    SSS Number <span class="required-indicator">*</span>
+                                    SSS Number <span class="required-indicator conditional-required">*</span>
                             </label>
                                 <input type="text" name="sss_no" id="sss_no" value="{{ old('sss_no') }}"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900">
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900 conditional-input"
+                                    data-initially-required="false">
                             </div>
 
                             <!-- Tax Number -->
                             <div>
                                 <label for="tax_no" class="block text-gray-700 font-medium mb-1">
-                                    Tax Identification Number <span class="required-indicator">*</span>
+                                    Tax Identification Number <span class="required-indicator conditional-required">*</span>
                                 </label>
                                 <input type="text" name="tax_no" id="tax_no" value="{{ old('tax_no') }}"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900">
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900 conditional-input"
+                                    data-initially-required="false">
                             </div>
 
                             <!-- Pag-IBIG Number -->
                             <div>
                                 <label for="pagibig_no" class="block text-gray-700 font-medium mb-1">
-                                    Pag-IBIG Number <span class="required-indicator">*</span>
+                                    Pag-IBIG Number <span class="required-indicator conditional-required">*</span>
                                 </label>
                                 <input type="text" name="pagibig_no" id="pagibig_no" value="{{ old('pagibig_no') }}"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900">
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900 conditional-input"
+                                    data-initially-required="false">
                             </div>
 
                             <!-- PhilHealth Number -->
                             <div>
                                 <label for="philhealth_no" class="block text-gray-700 font-medium mb-1">
-                                    PhilHealth Number <span class="required-indicator">*</span>
+                                    PhilHealth Number <span class="required-indicator conditional-required">*</span>
                                 </label>
                                 <input type="text" name="philhealth_no" id="philhealth_no" value="{{ old('philhealth_no') }}"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900">
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900 conditional-input"
+                                    data-initially-required="false">
                             </div>
                         </div>
                     </div>
 
                     <!-- Hiring Information -->
-                    <div class="bg-gray-100 px-4 py-6 rounded-lg shadow-sm">
+                    <div class="bg-gray-100 px-4 py-6 rounded-lg shadow-sm conditional-section" data-section="hiring">
                         <h3 class="text-xl font-semibold text-gray-700 mb-4">Hiring Information</h3>
                         
                         <div class="space-y-4">
                             <!-- Date Hired -->
                             <div>
                                 <label for="date_hired" class="block text-gray-700 font-medium mb-1">
-                                    Date Hired <span class="required-indicator">*</span>
+                                    Date Hired <span class="required-indicator conditional-required">*</span>
                                 </label>
                                 <input type="date" name="date_hired" id="date_hired" value="{{ old('date_hired') }}"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900"
-                                    required>
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900 conditional-input"
+                                    data-initially-required="true">
                             </div>
 
                             <!-- Position -->
                             <div>
                                 <label for="position" class="block text-gray-700 font-medium mb-1">
-                                    Position <span class="required-indicator">*</span>
+                                    Position <span class="required-indicator conditional-required">*</span>
                                 </label>
                                 <select name="position" id="position"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900"
-                                    required>
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900 conditional-input"
+                                    data-initially-required="true">
                                     <option value="" disabled selected>Select...</option>
                                     @foreach ($position as $item)
                                         <option value="{{ $item->item }}">{{ $item->item }}</option>
@@ -509,11 +576,11 @@
                             <!-- Nature -->
                             <div>
                                 <label for="nature" class="block text-gray-700 font-medium mb-1">
-                                    Nature <span class="required-indicator">*</span>
+                                    Nature <span class="required-indicator conditional-required">*</span>
                                 </label>
                                 <select name="nature" id="nature" value="{{ old('emp_status') }}"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900"
-                                    required>
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900 conditional-input"
+                                    data-initially-required="true">
                                     <option value="" disabled selected>Select...</option>
                                     @foreach ($nature as $nat)
                                         <option value="{{ $nat->item }}">{{ $nat->item }}</option>
@@ -524,14 +591,14 @@
                             <!-- Tenure -->
                             <div>
                                 <label for="tenure" class="block text-gray-700 font-medium mb-2">
-                                    Tenure <span class="required-indicator">*</span>
+                                    Tenure <span class="required-indicator conditional-required">*</span>
                                 </label>
                                 <select 
                                     id="tenure" 
                                     name="tenure" 
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900 conditional-input"
                                     onchange="toggleNonTenuredField()"
-                                    required>
+                                    data-initially-required="true">
                                     <option value="" disabled selected>Select...</option>
                                     @foreach ($tenure as $ten)
                                         <option value="{{ $ten->item }}">{{ $ten->item }}</option>
@@ -542,13 +609,13 @@
                             <!-- Non-Tenured Info (Conditional) -->
                             <div id="non-tenured-field">
                                 <label for="nontenured" class="block text-gray-700 font-medium mb-2">
-                                    Non-Tenured Info <span class="required-indicator">*</span>
+                                    Non-Tenured Info <span class="required-indicator conditional-required">*</span>
                                 </label>
                                 <select 
                                     id="nontenured" 
                                     name="nontenured" 
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900"
-                                    required>
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900 conditional-input"
+                                    data-initially-required="true">
                                     <option value="" disabled selected>Select...</option>
                                     @foreach ($nontenured as $item)
                                         <option value="{{ $item->item }}">{{ $item->item }}</option>
@@ -568,93 +635,6 @@
                             </div>
                         </div>
 
-                    </div>
-
-                    <!-- Login Information -->
-                    <div class="bg-gray-100 px-4 py-6 rounded-lg shadow-sm">
-                        <h3 class="text-xl font-semibold text-gray-700 mb-4">Login Information</h3>
-
-                        <div class="space-y-4">
-                            <!-- Email -->
-                            <div>
-                                <label for="email" class="block text-gray-700 font-medium mb-1">
-                                    Email <span class="required-indicator">*</span>
-                                </label>
-                                <input type="email" name="email" id="email" value="{{ old('email') }}"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900"
-                                    required>
-                            </div>
-
-
-
-
-
-                            <!-- Password -->
-                            <div class="relative">
-                                <label for="password" class="block text-gray-700 font-medium mb-1">
-                                    Password <span class="required-indicator">*</span>
-                                </label>
-                                <input id="password" type="password" name="password" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900" required>
-                                <span onclick="togglePassword('password', 'togglePasswordIcon')" class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer">
-                                
-                            </div>
-
-                            <div class="mt-4">
-                                <label for="password_confirmation" class="block text-gray-700 font-medium mb-1">
-                                        Confirm Password <span class="required-indicator">*</span>
-                                </label>
-                                <input id="password_confirmation" type="password" name="password_confirmation" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900" required>
-                                <p id="passwordMismatch" class="text-red-500 text-sm mt-2 hidden">Passwords do not match.</p>
-                            </div>
-
-                            <!-- Show Password Checkbox -->
-                            <div class="mt-2 flex items-center">
-                                <input type="checkbox" id="showPassword" class="mr-2">
-                                <label for="showPassword" class="text-sm text-gray-700">Show Password</label>
-                            </div>
-
-
-
-
-
-                                                        <!-- former codes for Role -
-                                                        <div>
-                                                            <label for="role" class="block text-gray-700 font-medium mb-1">
-                                                                Role <span class="required-indicator">*</span>
-                                                            </label>
-                                                            <select name="role" id="role"
-                                                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900"
-                                                                required>
-                                                                <option value="Employee" {{ old('role') == 'Employee' ? 'selected' : '' }}>Employee</option>
-                                                                <option value="SuperAdmin" {{ old('role') == 'SuperAdmin' ? 'selected' : '' }}>SuperAdmin</option>
-                                                                <option value="HR" {{ old('role') == 'HR' ? 'selected' : '' }}>HR</option>
-                                                                <option value="Dean" {{ old('role') == 'Dean' ? 'selected' : '' }}>Dean</option>
-                                                            </select>
-                                                        </div> --->
-
-
-                                                        <div>
-                                <label for="role" class="block text-gray-700 font-medium mb-1">
-                                    Role <span class="required-indicator">*</span>
-                                </label>
-                                <select name="role" id="role"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900"
-                                    required>
-                                    <option value="" disabled selected>Select...</option>
-                                    @foreach($roles as $role)
-                                        <option value="{{ $role->item }}" {{ old('role') == $role->item ? 'selected' : '' }}>
-                                            {{ $role->item }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-
-
-
-
-
-                        </div>
                     </div>
                 </div>
 
@@ -681,10 +661,68 @@
             color: red;
             font-weight: bold;
         }
+        .conditional-section {
+            transition: opacity 0.3s ease, max-height 0.3s ease;
+        }
+        .conditional-section.hidden {
+            display: none;
+        }
     </style>
 
-    <!-- JavaScript for Password Matching Validation -->
+    <!-- JavaScript for Role-based Section Visibility and Form Validation -->
     <script>
+        // Define which roles should hide additional sections
+        const ROLES_WITH_LIMITED_INFO = ['SuperAdmin', 'HR Admin' , 'Dean' , 'IDC Admin' , 'ISO Document Handler'];
+        
+        // Function to toggle sections based on selected role
+        function toggleSectionsBasedOnRole() {
+            const roleSelect = document.getElementById('role');
+            const selectedRole = roleSelect.value;
+            const conditionalSections = document.querySelectorAll('.conditional-section');
+            const conditionalInputs = document.querySelectorAll('.conditional-input');
+            const conditionalRequired = document.querySelectorAll('.conditional-required');
+            
+            // Check if selected role should hide additional sections
+            const shouldHideSections = ROLES_WITH_LIMITED_INFO.includes(selectedRole);
+            
+            conditionalSections.forEach(section => {
+                const sectionName = section.dataset.section;
+                const hiddenInput = document.getElementById(`section_${sectionName}_visible`);
+                
+                if (shouldHideSections) {
+                    section.classList.add('hidden');
+                    // Update hidden input to indicate section is hidden
+                    if (hiddenInput) hiddenInput.value = '0';
+                } else {
+                    section.classList.remove('hidden');
+                    // Update hidden input to indicate section is visible
+                    if (hiddenInput) hiddenInput.value = '1';
+                }
+            });
+            
+            // Handle required attributes for inputs in conditional sections
+            conditionalInputs.forEach(input => {
+                if (shouldHideSections) {
+                    // Remove required attribute when section is hidden
+                    input.removeAttribute('required');
+                } else {
+                    // Restore required attribute based on data attribute
+                    if (input.dataset.initiallyRequired === 'true') {
+                        input.setAttribute('required', 'required');
+                    }
+                }
+            });
+            
+            // Handle visibility of required indicators
+            conditionalRequired.forEach(indicator => {
+                if (shouldHideSections) {
+                    indicator.style.display = 'none';
+                } else {
+                    indicator.style.display = 'inline';
+                }
+            });
+        }
+
         function toggleNonTenuredField() {
             const tenureValue = document.getElementById('tenure').value;
             const nonTenuredField = document.getElementById('non-tenured-field');
@@ -700,12 +738,13 @@
             }
         }
 
-        // Initialize on page load to ensure the non-tenured field is shown if needed
-        document.addEventListener('DOMContentLoaded', () => {
-            toggleNonTenuredField();
-        });
-
         document.addEventListener('DOMContentLoaded', function () {
+            const roleSelect = document.getElementById('role');
+            roleSelect.addEventListener('change', toggleSectionsBasedOnRole);
+            
+            toggleSectionsBasedOnRole();
+            toggleNonTenuredField();
+            
             const password = document.getElementById('password');
             const confirmPassword = document.getElementById('password_confirmation');
             const passwordMismatch = document.getElementById('passwordMismatch');
@@ -724,48 +763,35 @@
             password.addEventListener('input', validatePassword);
             confirmPassword.addEventListener('input', validatePassword);
 
+            document.getElementById('showPassword').addEventListener('change', function() {
+                let passwordField = document.getElementById('password');
+                let confirmPasswordField = document.getElementById('password_confirmation');
 
+                if (this.checked) {
+                    passwordField.type = "text";
+                    confirmPasswordField.type = "text";
+                } else {
+                    passwordField.type = "password";
+                    confirmPasswordField.type = "password";
+                }
+            });
 
+            document.getElementById('emp_dob').addEventListener('change', function () {
+                const dobInput = this.value;
+                const dob = new Date(dobInput);
+                const today = new Date();
+                const age = today.getFullYear() - dob.getFullYear();
+                const monthDiff = today.getMonth() - dob.getMonth();
+                const dayDiff = today.getDate() - dob.getDate();
 
-
-          
-          
-    document.getElementById('showPassword').addEventListener('change', function() {
-        let passwordField = document.getElementById('password');
-        let confirmPasswordField = document.getElementById('password_confirmation');
-
-        if (this.checked) {
-            passwordField.type = "text";
-            confirmPasswordField.type = "text";
-        } else {
-            passwordField.type = "password";
-            confirmPasswordField.type = "password";
-        }
-    });
-
-    document.getElementById('emp_dob').addEventListener('change', function () {
-        const dobInput = this.value;
-        const dob = new Date(dobInput);
-        const today = new Date();
-        const age = today.getFullYear() - dob.getFullYear();
-        const monthDiff = today.getMonth() - dob.getMonth();
-        const dayDiff = today.getDate() - dob.getDate();
-
-        if (age < 18 || (age === 18 && monthDiff < 0) || (age === 18 && monthDiff === 0 && dayDiff < 0)) {
-            document.getElementById('dobError').classList.remove('hidden');
-            this.setCustomValidity("You must be at least 18 years old.");
-        } else {
-            document.getElementById('dobError').classList.add('hidden');
-            this.setCustomValidity("");
-        }
-    });
-
-    
-
-
-
+                if (age < 18 || (age === 18 && monthDiff < 0) || (age === 18 && monthDiff === 0 && dayDiff < 0)) {
+                    document.getElementById('dobError').classList.remove('hidden');
+                    this.setCustomValidity("You must be at least 18 years old.");
+                } else {
+                    document.getElementById('dobError').classList.add('hidden');
+                    this.setCustomValidity("");
+                }
+            });
         });
-
-    
     </script>
 </x-app-layout>
