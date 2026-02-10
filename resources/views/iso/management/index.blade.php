@@ -287,19 +287,19 @@
                             </svg>
                         </button>
                     </div>
-
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse">
                             <thead>
                                 <tr class="bg-gray-50/80 border-b border-gray-200">
-                                    <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Document Code</th>
-                                    <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Document Title</th>
-                                    <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Source</th>
-                                    <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Type</th>
-                                    <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Dept/Office</th>
-                                    <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Rev.</th>
-                                    <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
-                                    <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Registered</th>
+                                    <x-iso-table-header field="document_code" label="Document Code"/>
+                                    <x-iso-table-header field="document_title" label="Document Title"/>
+                                    <x-iso-table-header field="source_type" label="Source Type"/>
+                                    <x-iso-table-header field="specific_type" label="Type"/>
+                                    <x-iso-table-header field="originating_section" label="Dept/Office"/>
+                                    <x-iso-table-header field="current_revision" label="Revision Count"/>
+                                    <x-iso-table-header field="status" label="Status"/>
+                                    <x-iso-table-header field="registered_at" label="Effectivity Date"/>
+                                    <x-iso-table-header field="superseded_at" label="Superseded Date"/>
                                 </tr>
                             </thead>
                             <tbody id="documents_table_body" class="divide-y divide-gray-100 text-sm text-gray-600">
@@ -563,10 +563,23 @@ document.getElementById('filter_form').addEventListener('submit', (e)=>{
             alert('Failed to load documents. Please try again.');
         });
 });
+// ==============================
+// Table Sorting
+// ==============================
+// Store the current documents and sort table
+let currentDocuments = [];
+let currentSortColumn = [];
+let currentSortDirection = [];
 
 function displayDocuments(documents){
     const tbody = document.getElementById('documents_table_body');
     const noResults =document.getElementById('no_results_message');
+
+    currentDocuments = documents;
+
+    currentSortColumn = null;
+    currentSortDirection = 'asc';
+    resetSortIcons();
 
     // Clear exiting rows
     tbody.innerHTML = '';
@@ -582,6 +595,70 @@ function displayDocuments(documents){
     });
 }
 
+function sortTable(column){
+    // If clicking same column, toggle direction
+    // If clicking new column, reset to ascending
+    if(currentSortColumn === column){
+        currentSortDirection = currentSortDirection === 'asc' ? 'desc': 'asc';
+    } else {
+        currentSortColumn = column;
+        currentSortDirection = 'asc';
+    }
+
+    // Update sort icons
+    resetSortIcons();
+    const icon = document.getElementById(`sort_icon_${column}`);
+    if(icon){
+        icon.classList.remove('opcacity-0', 'opacity-40', 'text-gray-400');
+        icon.classList.add('opacity-100', 'text-purple-600');
+        if(currentSortDirection === 'asc'){
+            icon.style.transform = 'rotate(0deg)';
+        } else {
+            icon.style.transform = 'rotate(180deg)';
+        }
+    }
+
+    // Sort the documents array
+    const sorted = [...currentDocuments].sort((a,b) =>{
+        let valA = a[column];
+        let valB = b[column];
+
+        // Handle null to put at the lowest of the table.
+        if(valA === null || valA === undefined) return 1;
+        if(valB === null || valB === undefined) return -1;
+
+        // Handle numeric columns
+        if(column === 'current_revision'){
+            valA = parseInt(valA);
+            valB = parseInt(valB);
+            return currentSortDirection === 'asc' ? valA - valB : valB - valA;
+        }
+
+        // Handle date columns
+        if(column === 'registered_at' || column === 'superseded_at'){
+            valA = new Date(valA);
+            valB = new Date(valB);
+            return currentSortDirection === 'asc' ? valA - valB : valB - valA;
+        }
+
+        // Handle string columns (case-insensitive)
+        valA = String(valA).toLowerCase();
+        valB = String(valB).toLowerCase();
+
+        if(valA < valB) return currentSortDirection === 'asc' ? -1 : 1;
+        if(valB < valA) return currentSortDirection === 'asc' ? 1: -1;
+        return 0;
+    });
+
+    // Re-render the table with sorted data
+    const tbody = document.getElementById('documents_table_body');
+    tbody.innerHTML = '';
+    sorted.forEach((doc) => {
+        const row = createDocumentRow(doc);
+        tbody.appendChild(row);
+    });
+}
+
 function createDocumentRow(doc){
     const tr = document.createElement('tr');
     tr.className = 'border-b bg-gray-50';
@@ -589,6 +666,7 @@ function createDocumentRow(doc){
     const hasRevisions = doc.current_revision > 0;
 
     const registeredDate = new Date(doc.registered_at).toLocaleDateString();
+    const supersededDate = doc.superseded_at ? new Date(doc.registered_at).toLocaleDateString() : 'N/A';
     // Label Mapping
     const typeLabels = {
         'eoms' : 'EOMS Manual',
@@ -635,6 +713,7 @@ function createDocumentRow(doc){
             </span>
         </td>
         <td class="px-4 py-3 text-sm text-gray-600">${registeredDate}</td>
+        <td class="px-4 py-3 text-sm text-gray-600">${supersededDate}</td>
     `;
     return tr;
 }
@@ -651,6 +730,14 @@ setTimeout(() => {
     if(msg) msg.style.display = 'none';
     if(errorMsg) errorMsg.style.display = 'none';
 }, 5000);
+
+function resetSortIcons(){
+    document.querySelectorAll('.sort-icon').forEach(icon => {
+        icon.classList.remove('opacity-100', 'text-purple-600');
+        icon.classList.add('opacity-0');
+        icon.style.transform = 'rotate(0deg)';
+    })
+}
 
 // ==============================
 // Import Modal Functions

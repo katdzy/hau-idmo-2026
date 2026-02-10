@@ -124,17 +124,9 @@ class DocumentsImport implements ToCollection, WithHeadingRow
         if(!$docToDelete){
             throw new \Exception("Cannot delete document {$row['document_code']} rev: {$row['current_revision']} - document doesn't exit or is already deleted.");
         }
-        // DEBUG: What's in superseded_at
-        \Log::info("Row {$rowNumber} superseded_at value: ",[
-            'raw_value' => $row['superseded_at'],
-            'is_empty' => empty($row['superseded_at']),
-            'type' => gettype($row['superseded_at']),
-        ]);
 
         //Check if superseded at column is filled, if not then put now.
-        $supersededAt = !empty($row['superseded_at'])
-                        ? Carbon::parse($row['superseded_at'])
-                        : now();
+        $supersededAt = $docToDelete->superseded_at ?? now();
 
         // Mark original as superseded
         $docToDelete->update([
