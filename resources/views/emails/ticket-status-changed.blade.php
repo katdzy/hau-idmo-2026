@@ -4,137 +4,101 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-        .email-container {
-            max-width: 600px;
-            margin: 20px auto;
-            background-color: #ffffff;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .email-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px 20px;
-            text-align: center;
-        }
-        .email-header h1 {
-            margin: 0;
-            font-size: 24px;
-        }
-        .email-body {
-            padding: 30px 20px;
-        }
-        .status-badge {
-            display: inline-block;
-            padding: 6px 12px;
-            border-radius: 4px;
-            font-weight: bold;
-            font-size: 14px;
-            margin: 5px;
-        }
-        .status-pending { background-color: #fef3c7; color: #92400e; }
-        .status-submitted_to_idc { background-color: #dbeafe; color: #1e40af; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #374151; margin: 0; padding: 0; background-color: #f3f4f6; }
+        .email-container { max-width: 600px; margin: 40px auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06); border-top: 6px solid #667eea; }
+        
+        .email-header { background: #ffffff; padding: 30px 20px; text-align: center; border-bottom: 1px solid #e5e7eb; }
+        .email-header h1 { margin: 0; font-size: 22px; color: #111827; letter-spacing: -0.025em; }
+        
+        .email-body { padding: 32px 40px; }
+        .intro-text { text-align: center; margin-bottom: 24px; color: #4b5563; font-size: 16px; }
+
+        /* Enhanced Status Transition */
+        .status-timeline { display: flex; align-items: center; justify-content: center; background-color: #f9fafb; padding: 20px; border-radius: 8px; margin: 20px 0; border: 1px solid #f3f4f6; }
+        .status-badge { display: inline-block; padding: 6px 14px; border-radius: 9999px; font-weight: 700; font-size: 12px; text-transform: uppercase; white-space: nowrap; }
+        .status-arrow { color: #9ca3af; margin: 0 15px; font-weight: bold; }
+
+        /* Status Colors */
+        .status-pending { background-color: #fef3c7; color: #f0bc12; }
+        .status-submitted_to_idc { background-color: #dbeafe; color: #1abdda; }
         .status-with_qmr { background-color: #e0e7ff; color: #3730a3; }
-        .status-approved { background-color: #d1fae5; color: #065f46; }
+        .status-approved { background-color: #d1fae5; color: #0a9b1d; }
         .status-on_hold { background-color: #fee2e2; color: #991b1b; }
-        .info-box {
-            background-color: #f9fafb;
-            border-left: 4px solid #667eea;
-            padding: 15px;
-            margin: 20px 0;
-        }
-        .info-row {
-            margin: 10px 0;
-        }
-        .info-label {
-            font-weight: bold;
-            color: #6b7280;
-            display: inline-block;
-            width: 140px;
-        }
-        .button {
-            display: inline-block;
-            padding: 12px 24px;
-            background-color: #667eea;
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
-            margin: 20px 0;
-            font-weight: bold;
-        }
-        .footer {
-            background-color: #f9fafb;
-            padding: 20px;
-            text-align: center;
-            font-size: 12px;
-            color: #6b7280;
+
+        /* Info Grid */
+        .info-box { margin: 24px 0; border-top: 1px solid #f3f4f6; padding-top: 20px; }
+        .info-row { display: flex; margin-bottom: 12px; font-size: 14px; }
+        .info-label { font-weight: 600; color: #6b7280; width: 150px; flex-shrink: 0; }
+        .info-value { color: #111827; font-weight: 500; }
+   
+        .footer { padding: 30px; text-align: center; font-size: 12px; color: #9ca3af; }
+        .footer strong { color: #6b7280; }
+
+        @media only screen and (max-width: 480px) {
+            .email-body { padding: 20px; }
+            .info-row { flex-direction: column; }
+            .info-label { width: 100%; margin-bottom: 2px; }
+            .status-timeline { flex-direction: column; gap: 10px; }
+            .status-arrow { transform: rotate(90deg); margin: 5px 0; }
         }
     </style>
 </head>
 <body>
     <div class="email-container">
         <div class="email-header">
-            <h1> ISO Ticket Status Update</h1>
+            <h1>ISO Ticket Update</h1>
         </div>
+        
         <div class="email-body">
-            <p>A ticket status has been updated in the ISO Document Management System.</p>
-        </div>
-        <!-- Status Change display -->
-        <div style="text-align: center; margin: 30px 0;">
-            <span class="status-badge status-{{ $oldStatus }}">
-                {{ ucwords(str_replace('_', ' ', $oldStatus)) }}
-            </span>
-            <span style="font-size: 24px; margin: 0 10px;">-></span>
-            <span class="status-badge status-{{ $ticket->status }}">
-                {{ ucwords(str_replace('_', ' ', $ticket->status)) }}
-            </span>
-        </div>
+            <p class="intro-text">The following ticket has been transitioned to a new stage in the <strong>ISO Document Management System</strong>.</p>
 
-        <!-- Ticket Information -->
-        <div class="info-box">
-            <div class="info-row">
-                <span class="info-label">Ticket ID:</span>
-                <span>{{ $ticket->ticket_number }}</span>
+            <div class="status-timeline">
+                <span class="status-badge status-{{ $oldStatus }}">
+                    {{ str_replace('_', ' ', $oldStatus) }}
+                </span>
+                <span class="status-arrow">→</span>
+                <span class="status-badge status-{{ $ticket->status }}">
+                    {{ str_replace('_', ' ', $ticket->status) }}
+                </span>
             </div>
-            <div class="info-row">
-                <span class="info-label">Department/Office:</span>
-                <span>{{ $ticket->originating_section }}</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">Submitted by:</span>
-                <span>{{ $ticket->creator->name ?? 'N/A' }}</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">Status changed by:</span>
-                <span>{{ $changedBy}}</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">Date & Time:</span>
-                <span>{{ now()->format('F j, Y - g:i A') }}</span>
-            </div>
-        </div>
 
-        <p style="color: #6b7280; font-size: 14px; margin-top: 30px;">
-            This is an automated notification from the ISO Document Management System.
-        </p>
+            <div class="info-box">
+                <div class="info-row">
+                    <span class="info-label">Ticket ID:</span>
+                    <span class="info-value">#{{ $ticket->ticket_number }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Originating Dept.:</span>
+                    <span class="info-value">{{ $ticket->originating_section }}</span>
+                </div>
+                @if ($ticket->creator->name)
+                    <div class="info-row">
+                        <span class="info-label">Ticket Owner:</span>
+                        <span class="info-value">{{ $ticket->creator->name}}</span>
+                    </div>
+                @endif
+                @if ($changedBy)
+                    <div class="info-row">
+                        <span class="info-label">Updated By:</span>
+                        <span class="info-value">{{ $changedBy }}</span>
+                    </div>
+                @endif
+                <div class="info-row">
+                    <span class="info-label">Timestamp:</span>
+                    <span class="info-value">{{ now()->format('M j, Y — h:i A') }}</span>
+                </div>
+            </div>
+
+            <p style="text-align: center; color: #9ca3af; font-size: 13px; margin-top: 40px; border-top: 1px solid #f3f4f6; padding-top: 20px;">
+                This is an automated system notification. Please do not reply to this email.
+            </p>
+        </div>
     </div>
 
-    <!-- Footer -->
     <div class="footer">
         <p><strong>Holy Angel University</strong><br>
-        Office of Institutional Effectiveness - IDMO</p>
-        <p style="margin-top: 10px;">
-            © {{ date('Y') }} HAU-OIE. All rights reserved.
-        </p>
+        Office of Institutional Effectiveness</p>
+        <p>© {{ date('Y') }} HAU-OIE. All rights reserved.</p>
     </div>
 </body>
 </html>

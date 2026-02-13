@@ -172,7 +172,7 @@ function getStatusColor($status){
                                     </td>
                                     <td class="px-4 py-3 text-sm">
                                         <span class="inline-block px-2 py-1 rounded text-xs {{ getStatusColor($ticket->status) }}">
-                                            {{ ucfirst(str_replace('_', ' ', $ticket->status)) }}
+                                            {{ str_replace(['Idc', 'Qmr'], ['IDC', 'QMR'], ucwords(str_replace('_', ' ', $ticket->status))) }}
                                         </span>
                                     </td>
                                     <td class="px-4 py-3 text-sm text-gray-600">
@@ -432,8 +432,12 @@ function getStatusColor($status){
 
     // Helper Functions
     function formatStatusText(status){
-        const text = status.replace(/_/g, ' ');
-        return text.charAt(0).toUpperCase() + text.slice(1);
+        let text = status.replace(/_/g, ' ');
+        text = text.charAt(0).toUpperCase() + text.slice(1);
+        if(status.includes('idc') || status.includes('qmr')){
+            text = text.replace(/idc/gi, 'IDC').replace(/qmr/gi, 'QMR');
+        }
+        return text;
     }
 
     function getStatusColorJS(status){

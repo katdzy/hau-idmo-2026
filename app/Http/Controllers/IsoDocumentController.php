@@ -181,13 +181,19 @@ class IsoDocumentController extends Controller
         // Testing Feature: Generate ticketing number
         $ticketNumber = $this->generateTicketNumber();
 
+        // Save old status for email
+        $oldStatus = $ticket->status;
+
         // Update ticket Status
         $ticket->update([
             'status' => 'submitted_to_idc',
             'ticket_number' => $ticketNumber,
             'submitted_at' => now()
         ]);
-
+        // This is null at first because no one technically 'updated' it.
+        $changedBy = null;
+        // Email the IDC Document Handlers
+        $this->sendTicketStatusNotification($ticket, $oldStatus, $changedBy);
         return redirect()->route('iso.document')->with('success','Ticket #' . $ticketNumber . ' submitted to IDC successfully!');
     }
 
@@ -343,7 +349,7 @@ class IsoDocumentController extends Controller
                 $this->sendTicketStatusNotification(
                     $ticket,
                     $oldStatus,
-                    'IDC Admin'
+                    'IDC Admin - ' . auth()->user()->name
                 );
             }
             return;
@@ -361,7 +367,7 @@ class IsoDocumentController extends Controller
                 $this->sendTicketStatusNotification(
                     $ticket,
                     $oldStatus,
-                    'IDC Admin'
+                    'IDC Admin - ' . auth()->user()->name
                 );
             }
             return;
@@ -371,8 +377,7 @@ class IsoDocumentController extends Controller
     private function sendTicketStatusNotification($ticket, $oldStatus, $changedBy){
         // Email the Document Handler (Ticket owner)
         Mail::to($ticket->creator->email)
-            ->queue(new TicketStatusChanged($ticket, $oldStatus, $changedBy));
-        \Log::info("Email of: " .$ticket->creator . ". Is: " . $ticket->creator->email);
+            ->send(new TicketStatusChanged($ticket, $oldStatus, $changedBy));
         // Delay for the free trial of Mailtrap
         usleep(500000);
 
