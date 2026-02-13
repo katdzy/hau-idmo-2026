@@ -172,11 +172,12 @@
 
                             <!-- Date of Birth -->
                             <div>
-                            <label for="emp_dob" class="block text-gray-700 font-medium mb-1">
-                                    Date of Birth <span class="required-indicator">*</span>
+                                <label for="emp_dob" class="block text-gray-700 font-medium mb-1">
+                                    Date of Birth <span class="required-indicator conditional-required" id="dob-required-indicator">*</span>
                                 </label>
                                 <input type="date" name="emp_dob" id="emp_dob" value="{{ old('emp_dob') }}"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900 conditional-personal-input"
+                                    data-initially-required="true"
                                     required>
                                 <p id="dobError" class="text-red-500 text-sm mt-2 hidden">You must be at least 18 years old.</p>
                             </div>
@@ -184,10 +185,11 @@
                             <!-- Place of Birth -->
                             <div>
                                 <label for="emp_pob" class="block text-gray-700 font-medium mb-1">
-                                    Place of Birth <span class="required-indicator">*</span>
+                                    Place of Birth <span class="required-indicator conditional-required" id="pob-required-indicator">*</span>
                                 </label>
                                 <input type="text" name="emp_pob" id="emp_pob" value="{{ old('emp_pob') }}"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-900 conditional-personal-input"
+                                    data-initially-required="true"
                                     required>
                             </div>
 
@@ -682,6 +684,11 @@
             const conditionalInputs = document.querySelectorAll('.conditional-input');
             const conditionalRequired = document.querySelectorAll('.conditional-required');
             
+            // Handle Date of Birth and Place of Birth fields
+            const dobInput = document.getElementById('emp_dob');
+            const pobInput = document.getElementById('emp_pob');
+            const conditionalPersonalInputs = document.querySelectorAll('.conditional-personal-input');
+            
             // Check if selected role should hide additional sections
             const shouldHideSections = ROLES_WITH_LIMITED_INFO.includes(selectedRole);
             
@@ -707,6 +714,19 @@
                     input.removeAttribute('required');
                 } else {
                     // Restore required attribute based on data attribute
+                    if (input.dataset.initiallyRequired === 'true') {
+                        input.setAttribute('required', 'required');
+                    }
+                }
+            });
+            
+            // Handle Date of Birth and Place of Birth based on role
+            conditionalPersonalInputs.forEach(input => {
+                if (shouldHideSections) {
+                    
+                    input.removeAttribute('required');
+                } else {
+                    
                     if (input.dataset.initiallyRequired === 'true') {
                         input.setAttribute('required', 'required');
                     }
