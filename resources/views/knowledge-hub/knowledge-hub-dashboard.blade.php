@@ -93,16 +93,16 @@
                                                     <li class="mb-8">
                                                         <div class="flex flex-row">
                                                             @php
-                                                                $imageClass = 'w-48 h-48'; // default
+                                                                $imageClass = 'w-60 h-60'; // default
                                                                 if ($link->type === 'Document') {
-                                                                    $imageClass = 'w-36 h-48';
+                                                                    $imageClass = 'w-48 h-68';
                                                                 } elseif ($link->type === 'Video') {
-                                                                    $imageClass = 'w-56 h-36';
+                                                                    $imageClass = 'w-72 h-48';
                                                                 }
                                                             @endphp
                                                             <img src="{{ asset($link->image_path) }}" class="{{ $imageClass }}" alt="{{ $link->title }}" data-type="{{ $link->type }}"/>
                                                             <div class="flex flex-col px-6">
-                                                                <div class="text-xl text-[#70121D] font-bold mb-4">
+                                                                <div class="text-2xl text-[#70121D] font-bold mb-4">
                                                                     {{ $link->title }}
                                                                 </div>
                                                                 <a href="{{ $link->url }}" target="_blank" title="{{ $link->description ?? '' }}">
@@ -120,16 +120,16 @@
                                                     <li class="mb-8">
                                                         <div class="flex flex-row">
                                                             @php
-                                                                $imageClass = 'w-48 h-48'; // default
+                                                                $imageClass = 'w-60 h-60'; // default
                                                                 if ($link->type === 'Document') {
-                                                                    $imageClass = 'w-36 h-48';
+                                                                    $imageClass = 'w-48 h-68';
                                                                 } elseif ($link->type === 'Video') {
-                                                                    $imageClass = 'w-56 h-36';
+                                                                    $imageClass = 'w-72 h-48';
                                                                 }
                                                             @endphp
                                                             <img src="{{ asset($link->image_path) }}" class="{{ $imageClass }}" alt="{{ $link->title }}" data-type="{{ $link->type }}"/>
                                                             <div class="flex flex-col px-6">
-                                                                <div class="text-xl text-[#70121D] font-bold mb-4">
+                                                                <div class="text-2xl text-[#70121D] font-bold mb-4">
                                                                     {{ $link->title }}
                                                                 </div>
                                                                 <a href="{{ $link->url }}" target="_blank" title="{{ $link->description ?? '' }}">
@@ -252,7 +252,7 @@
 
         allLinkContainers.forEach(container => {
             // Get the title element
-            const titleElement = container.querySelector('.text-xl.font-bold');
+            const titleElement = container.querySelector('.text-2xl.font-bold');
             if (!titleElement) return;
             
             const title = titleElement.textContent.trim();
@@ -272,11 +272,11 @@
                 const linkTitle = link ? link.getAttribute('title') : '';
                 
                 // Determine image class based on type
-                let imageClass = 'w-48 h-48'; // default
+                let imageClass = 'w-60 h-60'; // default
                 if (imgType === 'Document') {
-                    imageClass = 'w-36 h-48';
+                    imageClass = 'w-48 h-68';
                 } else if (imgType === 'Video') {
-                    imageClass = 'w-56 h-36';
+                    imageClass = 'w-72 h-48';
                 }
                 
                 // Get subcategory if exists
@@ -300,7 +300,7 @@
                         <div class="flex flex-row">
                             <img src="${imgSrc}" class="${imageClass}" alt="${title}"/>
                             <div class="flex flex-col px-6">
-                                <div class="text-xl text-[#70121D] font-bold mb-4">
+                                <div class="text-2xl text-[#70121D] font-bold mb-4">
                                     ${highlightText(title, searchTerm)}
                                 </div>
                                 ${subCategoryOriginal ? `<div class="text-sm text-gray-600 mb-2">Sub-category: ${subCategoryOriginal}</div>` : ''}
