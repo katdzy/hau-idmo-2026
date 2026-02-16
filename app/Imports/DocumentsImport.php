@@ -118,8 +118,6 @@ class DocumentsImport implements ToCollection, WithHeadingRow
             'superseded_at' => $supersededAt,
             'deleted_at' => $deletedAt,
             'source' => 'excel',
-            'ticket_id' => null,
-            'ticket_document_id' => null,
         ]);
     }
 
@@ -163,8 +161,6 @@ class DocumentsImport implements ToCollection, WithHeadingRow
             'registered_at' => $row['registered_at'],
             'deleted_at' => $deletedAt,
             'source' => 'excel',
-            'ticket_id' => null,
-            'ticket_document_id' => null,
         ]);
     }
 

@@ -306,6 +306,7 @@ function getStatusColor($status){
         width: 90%;
         max-width: 800px;
         max-height: 90vh;
+        z-index: 10;
         overflow-y: auto;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
@@ -437,7 +438,8 @@ function getStatusColor($status){
             '(CFS-CMO) Campus Ministry Office'
         ],
         hro: [
-            '(HRO-HRD) Human Resource Development',
+            '(HRO) Human Resource Management',
+            '(HRO-HRD) Human Resource Development Office',
             '(HRO-HRM) Recruitment and Maintenance'
         ],
         frm: [

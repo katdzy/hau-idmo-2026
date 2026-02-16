@@ -55,6 +55,7 @@ return [
         'CFS-CMO' => '(CFS-CMO) Campus Ministry Office',
 
         // HRO
+        'HRO'     =>'(HRO) Human Resource Management Office',
         'HRO-HRD' => '(HRO-HRD) Human Resource Development',
         'HRO-HRM' => '(HRO-HRM) Recruitment and Maintenance',
 

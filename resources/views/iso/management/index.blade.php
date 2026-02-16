@@ -434,6 +434,7 @@ const specificOfficeOptions = {
         '(CFS-CMO) Campus Ministry Office'
     ],
     hro: [
+        '(HRO) Human Resource Management Office',
         '(HRO-HRD) Human Resource Development',
         '(HRO-HRM) Recruitment and Maintenance'
     ],
