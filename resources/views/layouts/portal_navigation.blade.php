@@ -55,7 +55,7 @@
                     </div>
                 </a>
                 @if(Auth::user()->role === 'IDC Admin' || Auth::user()->role === 'SuperAdmin' || Auth::user()->role === 'ISO Document Handler')
-                    <!-- A LINK NAVIGATION Can only be seen by IDC Admin and SuperAdmin-->
+                    <!-- A LINK NAVIGATION Can only be seen by IDC Admin, SuperAdmin and ISO Document Handler-->
                     <a href="{{ route('iso.document') }}" class="{{ request()->routeIs('iso*') ? 'font-semibold' : '' }}">
                         <div class="nav-link">
                                 <img src="{{ asset('images/icons/portal_nav/iso.png') }}" />
@@ -249,14 +249,14 @@
                         </div>
                     </a> 
                     
-                    @if(Auth::user()->role !== 'Employee')
-                    <!-- A LINK NAVIGATION  -->
-                    <div class="w-full flex justify-center my-4">
-                        <a href="{{route('dashboard')}}" class="w-[90%] flex items-center justify-center px-4 py-1 gap-2 bg-white hover:bg-gray-200 rounded-xl">
-                        <img src="{{asset('images/icons/back_maroon.png')}}" alt="" class="w-[20px] h-[20px">
-                            <span class="text-red-900 font-semibold">Back to Main Dashboard</span>
-                        </a>
-                    </div>
+                    @if(!in_array(auth()->user()->role, ['Employee', 'IDC Admin', 'ISO Document Handler']))
+                        <!-- A LINK NAVIGATION  -->
+                        <div class="w-full flex justify-center my-4">
+                            <a href="{{route('dashboard')}}" class="w-[90%] flex items-center justify-center px-4 py-1 gap-2 bg-white hover:bg-gray-200 rounded-xl">
+                            <img src="{{asset('images/icons/back_maroon.png')}}" alt="" class="w-[20px] h-[20px">
+                                <span class="text-red-900 font-semibold">Back to Main Dashboard</span>
+                            </a>
+                        </div>
                     @endif
                 @endif
                    

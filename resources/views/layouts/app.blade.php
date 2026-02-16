@@ -200,9 +200,10 @@
         <div class="sidebar">
             @php
                 $currentPath = request()->path();
+                $user = Auth::user()
             @endphp
 
-            @if (Str::contains($currentPath, 'hau_ep') || (Auth::user()->role === 'Employee'))
+            @if (Str::contains($currentPath, 'hau_ep') || in_array($user->role,(['ISO Document Handler', 'IDC Admin', 'Employee'])))
                 @include('layouts.portal_navigation')
             @elseif (Str::contains($currentPath, 'admin'))
                 @include('layouts.admin_nav')
