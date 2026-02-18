@@ -8,7 +8,14 @@
             <form id="filter_form">
                 <!-- Source Type Filter -->
                 <div class="mb-4">
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Source Type</label>
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Source Type</label>
+                        <button type="button"
+                                onclick="toggleAllCheckboxes('source_type', this)"
+                                class="text-xs text-purple-600 hover:text-purple-800 font-semibold underline">
+                            Select All
+                        </button>
+                    </div>
                     <div class="grid grid-cols-3 gap-2">
                         @php
                             $sourceTypes = \App\Models\IsoMasterDocument::distinct()
@@ -49,7 +56,14 @@
                 </div>
                 <!-- Offices Checkboxes -->
                 <div class="mb-4" id="offices_container"style="display:none;">
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Specific Offices</label>
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Specific Offices</label>
+                        <button type="button"
+                                    onclick="toggleAllCheckboxes('originating_section', this)"
+                                    class="text-xs text-purple-600 hover:text-purple-800 font-semibold underline">
+                                Select All
+                        </button>
+                    </div>
                     <div class="max-h-60 overflow-y-auto border border-gray-200 rounded-lg p-3 bg-gray-50">
                         <div id="offices_checkboxes">
                             <!-- Will be populated via JS -->
@@ -83,7 +97,14 @@
                 <div class="mb-4">
                     <div class="flex justify-between items-center mb-2">
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Document Status</label>
-                        <span class="text-xs text-gray-400 italic">Uncheck to exclude from filter</span>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs text-gray-400 italic mr-2">Uncheck to exclude from the filter. </span>
+                            <button type="button"
+                                        onclick="toggleAllCheckboxes('status', this)"
+                                        class="text-xs text-purple-600 hover:text-purple-800 font-semibold underline">
+                                    Select All
+                            </button>
+                        </div>
                     </div>
                     <div class="grid grid-cols-3 gap-2">
                         <label class="flex items-center bg-green-50 p-2 rounded hover:bg-green-100 cursor-pointer">

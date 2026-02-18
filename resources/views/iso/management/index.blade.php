@@ -937,4 +937,32 @@ async function exportDocuments(){
 function downloadTemplate(){
     window.location.href = '/iso/management/template';
 }
+
+// =================================
+// Toggle All Checkboxes
+// =================================
+function toggleAllCheckboxes(groupName, button){
+    let checkboxes;
+
+    // Find checkboxes based on group name
+    if(groupName === 'source_type'){
+        checkboxes = document.querySelectorAll('input[name="source_type[]"]');
+    } else if(groupName === 'status'){
+        checkboxes = document.querySelectorAll('input[name="status[]"]');
+    } else if(groupName === 'originating_section'){
+        checkboxes = document.querySelectorAll('input[name="originating_section[]"]');
+    }
+
+    if(!checkboxes || checkboxes.length === 0) return;
+    
+    // Check if all are currently checked
+    const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+
+    // Toggle: if all checked, uncheck all. Otherwise, check all.
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = !allChecked;
+    });
+
+    button.textContent = allChecked ? 'Select All' : 'Deselect All';
+}
 </script>
