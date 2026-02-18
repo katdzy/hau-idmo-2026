@@ -30,11 +30,10 @@ class IsoManagementController extends Controller
         $byClassification = IsoMasterDocument::selectRaw('source_type, COUNT(*) as count')
             ->groupBy('source_type')
             ->get();
-        // Top 10 departments
+        // Top departments
         $byDepartment = IsoMasterDocument::selectRaw('originating_section, COUNT(*) as count')
             ->groupBy('originating_section')
             ->orderBy('count', 'desc')
-            ->limit(10)
             ->get();
         return view('iso.management.index', compact(
             'totalDocuments',
@@ -68,7 +67,19 @@ class IsoManagementController extends Controller
             }
         }
         $documents = $query->orderBy('registered_at','desc')->get();
-        return response()->json($documents);
+        // Calculate stats based on filtered results
+        $stats = [
+            'totalDocuments' => $documents->count(),
+            'activeDocuments' => $documents->where('status', 'Active')->count(),
+            'supersededDocuments' => $documents->where('status', 'Superseded')->count(),
+            'deletedDocuments' => $documents->where('status', 'Deleted')->count(),
+            'originalDocuments' => $documents->where('is_original', true)->count(),
+            'revisedDocuments' => $documents->where('current_revision', '>', 0)->count(),
+            ];
+        return response()->json([
+            'documents' => $documents,
+            'stats' => $stats
+        ]);
     }
     // ===============================
     // Import and Export Documents Function

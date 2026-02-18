@@ -56,6 +56,9 @@
                                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                                         </svg>
                                     </x-slot:icon>
+                                    <x-slot:value>
+                                        <span data-stat="activeDocuments">{{ number_format($activeDocuments) }}</span>
+                                    </x-slot:value>
                             </x-stat-card>
                             <!-- Superseded Documents -->
                             <x-stat-card
@@ -69,6 +72,9 @@
                                             <path fill-rule="evenodd" d="m3.087 9 .54 9.176A3 3 0 0 0 6.62 21h10.757a3 3 0 0 0 2.995-2.824L20.913 9H3.087Zm6.163 3.75A.75.75 0 0 1 10 12h4a.75.75 0 0 1 0 1.5h-4a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd" />
                                         </svg>
                                     </x-slot:icon>
+                                    <x-slot:value>
+                                        <span data-stat="supersededDocuments">{{ number_format($supersededDocuments) }}</span>
+                                    </x-slot:value>
                             </x-stat-card>
                             <!-- Deleted Documents -->
                             <x-stat-card
@@ -81,6 +87,9 @@
                                             <path fill-rule="evenodd" d="M16.5 4.478v.227a48.816 48.816 0 0 1 3.878.512.75.75 0 1 1-.256 1.478l-.209-.035-1.005 13.07a3 3 0 0 1-2.991 2.77H8.084a3 3 0 0 1-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 0 1-.256-1.478A48.567 48.567 0 0 1 7.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 0 1 3.369 0c1.603.051 2.815 1.387 2.815 2.951Zm-6.136-1.452a51.196 51.196 0 0 1 3.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 0 0-6 0v-.113c0-.794.609-1.428 1.364-1.452Zm-.355 5.945a.75.75 0 1 0-1.5.058l.347 9a.75.75 0 1 0 1.499-.058l-.346-9Zm5.48.058a.75.75 0 1 0-1.498-.058l-.347 9a.75.75 0 0 0 1.5.058l.345-9Z" clip-rule="evenodd" />
                                         </svg>
                                     </x-slot:icon>
+                                    <x-slot:value>
+                                        <span data-stat="deletedDocuments">{{ number_format($deletedDocuments) }}</span>
+                                    </x-slot:value>
                             </x-stat-card>
                         </div>
                         <hr class="w-full opacity-100">
@@ -97,6 +106,9 @@
                                     <path d="M3 8a2 2 0 012-2v10h8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/>
                                 </svg> 
                             </x-slot:icon>
+                            <x-slot:value>
+                                <span data-stat="totalDocuments">{{ number_format($totalDocuments) }}</span>
+                            </x-slot:value>
                         </x-stat-card>
                     </div>
                     <!-- Middle Column: Document Type Breakdown -->
@@ -114,6 +126,9 @@
                                             <path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V8z" clip-rule="evenodd"/>
                                         </svg>
                                     </x-slot:icon>
+                                    <x-slot:value>
+                                        <span data-stat="originalDocuments">{{ number_format($originalDocuments) }}</span>
+                                    </x-slot:value>
                             </x-stat-card>
                             <!-- Revised Documents -->
                             <x-stat-card
@@ -126,6 +141,9 @@
                                             <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
                                         </svg>
                                     </x-slot:icon>
+                                    <x-slot:value>
+                                        <span data-stat="revisedDocuments">{{ number_format($revisedDocuments) }}</span>
+                                    </x-slot:value>
                             </x-stat-card>
                         </div>
                     </div>
@@ -566,7 +584,8 @@ document.getElementById('filter_form').addEventListener('submit', (e)=>{
             return response.json();
         })
         .then(data=>{
-            displayDocuments(data);
+            displayDocuments(data.documents);
+            updateStatCards(data.stats);
             filterModal.classList.remove('active');
             document.getElementById('documents_table_section').style.display = 'block';
         })
@@ -575,6 +594,15 @@ document.getElementById('filter_form').addEventListener('submit', (e)=>{
             alert('Failed to load documents. Please try again.');
         });
 });
+
+function updateStatCards(stats){
+    document.querySelector('[data-stat="totalDocuments"]').textContent = stats.totalDocuments.toLocaleString();
+    document.querySelector('[data-stat="activeDocuments"]').textContent = stats.activeDocuments.toLocaleString();
+    document.querySelector('[data-stat="supersededDocuments"]').textContent = stats.supersededDocuments.toLocaleString();
+    document.querySelector('[data-stat="deletedDocuments"]').textContent = stats.deletedDocuments.toLocaleString();
+    document.querySelector('[data-stat="originalDocuments"]').textContent = stats.originalDocuments.toLocaleString();
+    document.querySelector('[data-stat="revisedDocuments"]').textContent = stats.revisedDocuments.toLocaleString();
+}
 // ==============================
 // Table Sorting
 // ==============================
