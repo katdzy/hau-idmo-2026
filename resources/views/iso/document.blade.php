@@ -17,18 +17,17 @@ function getStatusColor($status){
 <div class="container mx-auto">
     <div class="con-box">
         @if (session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <div class="w-full bg-green-600 text-white rounded-xl px-4 py-2 mb-4 text-center" id="success">
             {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> 
         </div>
         @endif
         @if (session('msg'))
-            <div class="w-full bg-green-600 text-white rounded-xl px-4 py-2 mb-4" id ="msg">
+            <div class="w-full bg-green-600 text-white rounded-xl px-4 py-2 mb-4 text-center" id ="msg">
                 {{ session('msg') }}
             </div>
         @endif
         @if(session('error'))
-            <div class="w-full bg-red-600 text-white rounded-xl px-4 py-2 mb-4" id="error-msg">
+            <div class="w-full bg-red-600 text-white rounded-xl px-4 py-2 mb-4 text-center" id="error-msg">
                 {{ session('error') }}
             </div>
         @endif
@@ -845,6 +844,9 @@ function getStatusColor($status){
 
     // Auto-hide messages in 5 seconds or 5000 milliseconds
     setTimeout(() =>{
+        const successElement = document.getElementById('success');
+        if(successElement) successElement.style.display = 'none';
+
         const msgElement = document.getElementById('msg');
         if(msgElement) msgElement.style.display = 'none';
 
