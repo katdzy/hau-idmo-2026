@@ -2,287 +2,184 @@
     <!-- Sidebar for employees / employee sidebar -->
     <aside class="bg-white dark:bg-gray-900 w-64 md:w-80 border-r border-gray-200 dark:border-gray-700 flex flex-col items-center justify-center flex-shrink-0 main gap-0 leading-tight">
 
-    <div class = "w-full flex flex-col items-center mt-8"> 
-        <h1 class="mb-2 font-extrabold text-xl">HAU-IDMO Portal</h1>
+        <div class = "w-full flex flex-col items-center mt-8"> 
 
-        <!-- profile card -->
-
-        <div class="w-[90%] grid grid-cols-[20%_80%] bg-red-800 rounded-md py-2 px-1 text-white border border-white border-opacity-10">
+            <h1 class="mb-2 font-extrabold text-xl">HAU-IDMO Portal</h1>
+            <!-- profile card -->
+            <div class="w-[90%] grid grid-cols-[20%_80%] bg-red-800 rounded-md py-2 px-1 text-white border border-white border-opacity-10">
                 <div class="flex justify-center items-center">
                     @if(Auth::user()->user->profile_picture == '')
                     <img src = "{{asset('images/blankdp.jpg')}}" class="w-[35px] h-[35px] rounded-xl ">
-                    
                     @else
                     <img src = "{{asset('storage/profile_pictures/' . Auth::user()->user->profile_picture)}}" class="w-[35px] h-[35px] rounded-full">
                     @endif
                 </div>
-
                 <div class="w-full flex flex-col justify-start items-start">
                     <h1 class="font-bold text-sm break-words">{{ Auth::user()->user->emp_lname . ', ' . Auth::user()->user->emp_fname . ' ' . Auth::user()->user->emp_mname }}</h1>
                     <h1 class="text-gray-100 text-[0.8rem] break-words">{{ Auth::user()->email }}</h1>
                 </div>
-
-
             </div>
-
         </div> 
 
+        <hr class="w-[90%] rounded-xl opacity-1 my-4">
 
-    <hr class="w-[90%] rounded-xl opacity-1 my-4">
+        <div class = "navigation_links flex flex-col items-center py-2"> 
+            <x-navigation.side-nav-card
+                nav="portal"
+                route="portal.dashboard" 
+                icon="images/icons/nav/dashboard.svg" 
+                title="Dashboard" 
+            />
 
-    <div class = "navigation_links flex flex-col items-center py-2"> 
+            <x-navigation.side-nav-card
+                nav="portal"
+                route="portal.profile" 
+                icon="images/icons/portal_nav/profile.svg" 
+                title="Profile"
+            />
 
+            <x-navigation.side-nav-card
+                nav="portal"
+                route="portal.loads" 
+                icon="images/icons/portal_nav/loads.png" 
+                title="Teaching Loads" 
+                :excludedRoles="['ISO Document Handler']"
+            />
+
+            <x-navigation.side-nav-card
+                nav="portal"
+                route="portal.hiring" 
+                icon="images/icons/portal_nav/hiring.png" 
+                title="Hiring History" 
+                :excludedRoles="['ISO Document Handler']"
+            />
+
+            <x-navigation.side-nav-card
+                nav="portal"
+                route="portal.org" 
+                icon="images/icons/portal_nav/organization.svg" 
+                title="Organizations" 
+                :excludedRoles="['ISO Document Handler']"
+            />
+
+            <x-navigation.side-nav-card
+                nav="portal"
+                route="portal.respub" 
+                icon="images/icons/portal_nav/research.svg" 
+                title="Research & Publication" 
+                :excludedRoles="['ISO Document Handler']"
+            />
+
+            <x-navigation.side-nav-card
+                nav="portal"
+                route="portal.certifications" 
+                icon="images/icons/portal_nav/cert.svg" 
+                title="Certifications" 
+                :excludedRoles="['ISO Document Handler']"
+            />
+
+            <x-navigation.side-nav-card
+                nav="portal"
+                route="portal.training" 
+                icon="images/icons/portal_nav/training.svg" 
+                title="Trainings" 
+                :excludedRoles="['ISO Document Handler']"
+            />
+
+            <x-navigation.side-nav-card
+                nav="portal"
+                route="portal.license" 
+                icon="images/icons/portal_nav/license.png" 
+                title="Licenses" 
+                :excludedRoles="['ISO Document Handler']"
+            />
+
+            <x-navigation.side-nav-card
+                nav="portal"
+                route="portal.edu-bg" 
+                icon="images/icons/portal_nav/education.png" 
+                title="Educational Background" 
+                :excludedRoles="['ISO Document Handler']"
+            />
+
+            <x-navigation.side-nav-card
+                nav="portal"
+                route="portal.employment" 
+                icon="images/icons/portal_nav/employment.png" 
+                title="Employment" 
+                :excludedRoles="['ISO Document Handler']"
+            />
+
+            <x-navigation.side-nav-card
+                nav="portal"
+                route="portal.dependencies" 
+                icon="images/icons/portal_nav/dep.svg" 
+                title="Dependents" 
+                :excludedRoles="['ISO Document Handler']"
+            />
+
+            <x-navigation.side-nav-card
+                nav="portal"
+                route="portal.pending" 
+                icon="images/icons/portal_nav/pending.svg" 
+                title="Pending Requests" 
+                :excludedRoles="['ISO Document Handler']"
+            />
+
+            <x-navigation.side-nav-card
+                nav="portal"
+                route="portal.filing.type" 
+                icon="images/icons/portal_nav/send.svg" 
+                title="Filing Application" 
+                :excludedRoles="['ISO Document Handler']"
+            />
+
+            <x-navigation.side-nav-card
+                nav="portal"
+                route="sharepoint-sites.dashboard" 
+                icon="images/icons/nav/sharepoint.svg" 
+                title="SharePoint Sites" 
+                :excludedRoles="['ISO Document Handler']"
+            />
+
+            <x-navigation.side-nav-card
+                nav="portal"
+                route="knowledge-hub.dashboard" 
+                icon="images/icons/nav/knowledge.svg" 
+                title="Knowledge Hub" 
+                :excludedRoles="['ISO Document Handler']"
+            />
+
+            <x-navigation.side-nav-card
+                nav="portal"
+                route="kpis.dashboard" 
+                icon="images/icons/nav/kpi.png" 
+                title="KPIs" 
+                :excludedRoles="['ISO Document Handler']"
+            />
+
+            <x-navigation.side-nav-card
+                nav="portal"
+                route="iso.document" 
+                icon="images/icons/portal_nav/iso.png" 
+                title="ISO Document Handling" 
+                :excludedRoles="['Employee', 'Dean', 'HR Admin']"
+            />
+
+            @if(Auth::user()->role !== 'Employee' && Auth::user()->role !== 'ISO Document Handler' && Auth::user()->role !== 'IDC Admin')
                 <!-- A LINK NAVIGATION  -->
-                <a href="{{ route('portal.dashboard') }}" class="{{ request()->routeIs('portal.dashboard*') ? 'font-semibold' : '' }}">
-                    <div class="nav-link">
-                       
-                            <img src="{{ asset('images/icons/nav/dashboard.svg') }}" />
-                     
-                     
-                            <h3>Dashboard</h3>
-            
-                    </div>
-                </a> 
-
-                <a href="{{ route('portal.profile') }}" class="{{ request()->routeIs('portal.profile*') ? 'font-semibold' : '' }}">
-                    <div class="nav-link">
-                       
-                            <img src="{{ asset('images/icons/portal_nav/profile.svg') }}" />
-                     
-                     
-                            <h3>Profile</h3>
-            
-                    </div>
-                </a>
-                @if(Auth::user()->role === 'IDC Admin' || Auth::user()->role === 'SuperAdmin' || Auth::user()->role === 'ISO Document Handler')
-                    <!-- A LINK NAVIGATION Can only be seen by IDC Admin, SuperAdmin and ISO Document Handler-->
-                    <a href="{{ route('iso.document') }}" class="{{ request()->routeIs('iso*') ? 'font-semibold' : '' }}">
-                        <div class="nav-link">
-                                <img src="{{ asset('images/icons/portal_nav/iso.png') }}" />
-                                <h3>ISO Document Handling</h3>
-                        </div>
-                    </a> 
-                @endif
-
-                @if (Auth::user()->role !== 'ISO Document Handler')
-                        <!-- A LINK NAVIGATION  -->
-                    <a href="{{ route('portal.loads') }}" class="{{ request()->routeIs('portal.loads*') ? 'font-semibold' : '' }}">
-                        <div class="nav-link">
-                        
-                                <img src="{{ asset('images/icons/portal_nav/loads.svg') }}" />
-                        
-                        
-                                <h3>Teaching Loads</h3>
-                
-                        </div>
-                    </a> 
-
-                        <!-- A LINK NAVIGATION  -->
-                        <a href="{{ route('portal.hiring') }}" class="{{ request()->routeIs('portal.hiring*') ? 'font-semibold' : '' }}">
-                        <div class="nav-link">
-                        
-                                <img src="{{ asset('images/icons/portal_nav/hiring.png') }}" />
-                        
-                        
-                                <h3>Hiring History</h3>
-                
-                        </div>
-                    </a> 
-
-
-
-
-                    <!-- A LINK NAVIGATION  -->
-                    <a href="{{ route('portal.org') }}" class="{{ request()->routeIs('portal.org*') ? 'font-semibold' : '' }}">
-                        <div class="nav-link">
-                            
-                                <img src="{{ asset('images/icons/portal_nav/organization.svg') }}" />
-                        
-                        
-                                <h3>Organizations</h3>
-                        
-                        </div>
-                    </a> 
-
-
-
-                    <!-- A LINK NAVIGATION  -->
-                    <a href="{{ route('portal.respub') }}" class="{{ request()->routeIs('portal.respub*') ? 'font-semibold' : '' }}">
-                        <div class="nav-link">
-                            
-                                <img src="{{ asset('images/icons/portal_nav/research.svg') }}" />
-                        
-                        
-                                <h3>Research & Publication</h3>
-                            
-                        </div>
-                    </a> 
-
-                    <a href="{{ route('portal.certifications') }}" class="{{ request()->routeIs('portal.certifications*') ? 'font-semibold' : '' }}">
-                        <div class="nav-link">
-                            
-                                <img src="{{ asset('images/icons/portal_nav/cert.svg') }}" />
-                        
-                                <h3> Certifications </h3>
-                        
-                        </div>
-                    </a> 
-
-            
-                    <a href="{{ route('portal.training') }}" class="{{ request()->routeIs('portal.training*') ? 'font-semibold' : '' }}">
-                        <div class="nav-link">
-                            
-                                <img src="{{ asset('images/icons/portal_nav/training.svg') }}" />
-                    
-                        
-                                <h3> Trainings </h3>
-                    
-                        </div>
-                    </a> 
-
-
-                    <a href="{{ route('portal.license') }}" class="{{ request()->routeIs('portal.license*') ? 'font-semibold' : '' }}">
-                        <div class="nav-link">
-                            
-                                <img src="{{ asset('images/icons/portal_nav/license.png') }}" />
-                        
-                                <h3>Licenses</h3>
-                        
-                        </div>
-                    </a> 
-
-                    
-                    <a href="{{ route('portal.edu-bg') }}" class="{{ request()->routeIs('portal.edu-bg') ? 'font-semibold' : '' }}">
-                        <div class="nav-link">
-                            
-                                <img src="{{ asset('images/icons/portal_nav/education.png') }}" />
-                        
-                                <h3> Educational Background</h3>
-                        
-                        </div>
-                    </a> 
-
-
-
-                    <a href="{{ route('portal.employment') }}" class="{{ request()->routeIs('portal.employment*') ? 'font-semibold' : '' }}">
-                        <div class="nav-link">
-                            
-                                <img src="{{ asset('images/icons/portal_nav/employment.png') }}" />
-                        
-                                <h3> Employment</h3>
-                        
-                        </div>
-                    </a> 
-
-                    <!-- A LINK NAVIGATION  -->
-                    <a href="{{ route('portal.dependencies') }}" class="{{ request()->routeIs('portal.dependencies*') ? 'font-semibold' : '' }}">
-                        <div class="nav-link">
-                            
-                                <img src="{{ asset('images/icons/portal_nav/dep.svg') }}" />
-                    
-                                <h3>Dependents </h3>
-                            
-                        </div>
-                    </a> 
-
-                    
-                    <!-- A LINK NAVIGATION  -->
-                    <a href="{{ route('portal.pending') }}" class="{{ request()->routeIs('portal.pending*') ? 'font-semibold' : '' }}">
-                        <div class="nav-link">
-                            
-                                <img src="{{ asset('images/icons/portal_nav/pending.svg') }}" />
-                    
-                                <h3>Pending Requests</h3>
-
-
-                            
-                    
-                        </div>
-                    </a> 
-
-
-                    <!-- A LINK NAVIGATION  -->
-                    <a href="{{ route('portal.filing.type') }}" class="{{ request()->routeIs('portal.filing*') ? 'font-semibold' : '' }}">
-                        <div class="nav-link">
-                            
-                                <img src="{{ asset('images/icons/portal_nav/send.svg') }}" />
-                        
-                        
-                                <h3>Filing Application</h3>
-                        
-                        </div>
+                <div class="w-full flex justify-center my-4">
+                    <a href="{{route('dashboard')}}" class="w-[90%] flex items-center justify-center px-4 py-1 gap-2 bg-white hover:bg-gray-200 rounded-xl">
+                    <img src="{{asset('images/icons/back_maroon.png')}}" alt="" class="w-[20px] h-[20px">
+                        <span class="text-red-900 font-semibold">Back to Main Dashboard</span>
                     </a>
-
-                    <!-- A LINK NAVIGATION  -->
-                    <a href="{{ route('sharepoint-sites.dashboard') }}" class="{{ request()->routeIs('sharepoint-sites*') ? 'font-semibold' : '' }}">
-                        <div class="nav-link">
-                            
-                                <img src="{{ asset('images/icons/nav/sharepoint.svg') }}" />
-                        
-                        
-                                <h3>SharePoint Sites</h3>
-                        
-                        </div>
-                    </a> 
-
-                    <!-- A LINK NAVIGATION  -->
-                    <a href="{{ route('knowledge-hub.dashboard') }}" class="{{ request()->routeIs('knowledge-hub*') ? 'font-semibold' : '' }}">
-                        <div class="nav-link">
-                            
-                                <img src="{{ asset('images/icons/nav/knowledge.svg') }}" />
-                        
-                        
-                                <h3>Knowledge Hub</h3>
-                        
-                        </div>
-                    </a>
-
-                    <!-- A LINK NAVIGATION  -->
-                    <a href="{{ route('kpis.dashboard') }}" class="{{ request()->routeIs('kpis*') ? 'font-semibold' : '' }}">
-                        <div class="nav-link">
-                            
-                                <img src="{{ asset('images/icons/nav/kpi.png') }}" />
-                        
-                        
-                                <h3>KPIs</h3>
-                        
-                        </div>
-                    </a> 
-                    
-                    @if(!in_array(auth()->user()->role, ['Employee', 'IDC Admin', 'ISO Document Handler']))
-                        <!-- A LINK NAVIGATION  -->
-                        <div class="w-full flex justify-center my-4">
-                            <a href="{{route('dashboard')}}" class="w-[90%] flex items-center justify-center px-4 py-1 gap-2 bg-white hover:bg-gray-200 rounded-xl">
-                            <img src="{{asset('images/icons/back_maroon.png')}}" alt="" class="w-[20px] h-[20px">
-                                <span class="text-red-900 font-semibold">Back to Main Dashboard</span>
-                            </a>
-                        </div>
-                    @endif
-                @endif
-                   
-
-
-
-              
-
-    </div> 
-   
-
-
-   
-    </div>
-
-    
-    
-    
+                </div>
+            @endif
+        </div> 
     </aside>
-
-   
 </div>
 
-
 <style> 
-
 
 @media only screen and (max-width: 1024px) {
     .title { 
@@ -300,7 +197,6 @@
     }
 }
 
-
 @media only screen and (max-width: 768px) {
     .nav-link h3 { 
         display: none;
@@ -313,28 +209,21 @@
     }
 }
 
-
 .navigation_links { 
-
-
     overflow-y: auto;
     overflow-x: hidden;
 }
 
 .sidebar{ 
-    /* border: 1px solid red; */
     width: 100%;
     color: white;
 } 
-
 
 .main {
     width: 20%; 
     height: 100%;  
     background-color: #70121D;
 }    
-
-
 
 hr { 
     opacity: 0.3;
@@ -362,7 +251,6 @@ hr {
 }
 
 .b2d .nav-link{
-   
     width: 100%; 
     height: 100%;
     display: grid; 
@@ -374,12 +262,9 @@ hr {
     padding-right: 0.5rem;
  }
 
-
-
 .title, .navigation_links, .sidebar-title{ 
     width: 100%;
     height: 100%; 
-    /* border: 1px solid yellow; */
 }
 
 .sidebar-title { 
@@ -391,8 +276,6 @@ hr {
 
 .sidebar-title h1 { 
     text-transform: uppercase;
-    /* font-style: italic; */
-    /* font-style: oblique; */
     font-weight: bold;
     font-size: clamp(0.8rem, 2vw + 0.5rem, 1.2rem);
     margin-bottom: 1rem;
@@ -405,7 +288,6 @@ hr {
     padding: 1rem 0;
 }
 
-
 .title img { 
     width: 145px; 
     height: 145px;
@@ -415,8 +297,6 @@ hr {
     width: 145px; 
     height: 145px;
 }
-
-
 
 .navigation_links  a{
 
@@ -432,7 +312,6 @@ hr {
     font-weight: 700;
 }
 
-
 #total { 
     background-color: white; 
     color: maroon;
@@ -441,8 +320,6 @@ hr {
     border-radius: 10px;
     margin-left: 0.3rem;
 }
-
-
 
 .nav-link:hover  { 
     background-color: #8A2B36;
@@ -468,8 +345,6 @@ hr {
     margin: 0.7rem;
     height: 25px; 
 }
-
-
 
 .change_dp button { 
     margin: 1rem 0;

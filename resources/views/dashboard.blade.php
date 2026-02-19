@@ -1,10 +1,5 @@
-<?php
-$mname = ''; 
-
-     
-?>
 <!-- This is the Super Admin Dashboard -->
-    <x-app-layout>
+<x-app-layout>
     <div class= "min-h-screen">
         <div class = "profile_card" > 
             <div class = "profile_card_box">
@@ -49,160 +44,80 @@ $mname = '';
                     
             </div>         
         </div> 
-
-
-        <div class = "navigation-cards">
-            @if (Auth::user()->role !== 'Employee' && Auth::user()->role !== 'Dean' && Auth::user()->role !== 'HR Admin') 
-            <div class = "navigation-cards-box">
-                <!-- a card slot  -->
-                <a href = "{{route('manage-emps.dashboard')}}">
-                    <div class = "nav-card"> 
-                        <div class = "nav-card-icon"> <img src = "{{asset('images/icons/nav/employees.png')}}"/> </div>
-                        <div class  = "nav-card-title"> <h3> Manage Employees</h3> </div> 
-                    </div> 
-                </a> 
-                <!-- end of card slot  -->
-
-
-                <!-- a card slot  -->
-                <a href = "{{route('construction')}}">
-                    <div class = "nav-card"> 
-                        <div class = "nav-card-icon"> <img src = "{{asset('images/icons/nav/scholarships.png')}}"/> </div>
-                        <div class  = "nav-card-title"> <h3> Scholarships and Grants</h3> </div> 
-                    </div> 
-                </a> 
-                <!-- end of card slot  -->
-
-                <!-- a card slot  -->
-                <a href = "{{route('construction')}}">
-                    <div class = "nav-card"> 
-                        <div class = "nav-card-icon"> <img src = "{{asset('images/icons/nav/outreach.png')}}"/> </div>
-                        <div class  = "nav-card-title"> <h3> Outreach Programs</h3> </div> 
-                    </div> 
-                </a> 
-                <!-- end of card slot  -->
-
-
-                <!-- a card slot  -->
-                <a href = "{{route('construction')}}">
-                    <div class = "nav-card"> 
-                        <div class = "nav-card-icon"> <img src = "{{asset('images/icons/nav/accreditation.png')}}"/> </div>
-                        <div class  = "nav-card-title"> <h3> Accreditations</h3> </div> 
-                    </div> 
-                </a> 
-                <!-- end of card slot  -->
-
-
-                <!-- a card slot  -->
-                <a href = "{{route('construction')}}">
-                    <div class = "nav-card"> 
-                        <div class = "nav-card-icon"> <img src = "{{asset('images/icons/nav/research.png')}}"/> </div>
-                        <div class  = "nav-card-title"> <h3> Research</h3> </div> 
-                    </div> 
-                </a> 
-                <!-- end of card slot  -->
-
-
-                <!-- a card slot  -->
-                <a href = "{{route('admin.prc')}}">
-                    <div class = "nav-card"> 
-                        <div class = "nav-card-icon"> <img src = "{{asset('images/icons/portal_nav/prc.png')}}" class = "w-24 h-24"/> </div>
-                        <div class  = "nav-card-title"> <h3> PRC Results</h3> </div> 
-                    </div> 
-                </a> 
-                <!-- end of card slot  -->
-
-
-                <!-- a card slot  -->
-                <a href = "{{route('sharepoint-sites.dashboard')}}">
-                    <div class = "nav-card"> 
-                        <div class = "nav-card-icon"> <img src = "{{asset('images/icons/nav/sharepoint.png')}}" class = "w-24 h-24"/> </div>
-                        <div class  = "nav-card-title"> <h3> SharePoint Sites</h3> </div> 
-                    </div> 
-                </a> 
-                <!-- end of card slot  -->
-
+        
+        <div class="w-full flex justify-center py-4">
+            <div class="w-[95%] grid grid-cols-8 gap-4 auto-rows-[200px]">
                 
-                <!-- a card slot  -->
-                <a href = "{{route('kpis.dashboard')}}">
-                    <div class = "nav-card"> 
-                        <div class = "nav-card-icon"> <img src = "{{asset('images/icons/nav/kpi.png')}}" class = "w-24 h-24"/> </div>
-                        <div class  = "nav-card-title"> <h3> KPIs</h3> </div> 
-                    </div> 
-                </a> 
-                <!-- end of card slot  -->
+                <x-navigation.nav-card 
+                    route="manage-emps.dashboard" 
+                    icon="images/icons/nav/employees.svg" 
+                    title="Manage Employees"
+                />
+
+                <x-navigation.nav-card 
+                    route="construction" 
+                    icon="images/icons/nav/scholarships.svg" 
+                    title="Scholarships and Grants" 
+                />
+
+                <x-navigation.nav-card 
+                    route="construction" 
+                    icon="images/icons/nav/outreach.svg" 
+                    title="Outreach Programs" 
+                />
+
+                <x-navigation.nav-card 
+                    route="construction" 
+                    icon="images/icons/nav/accreditation.svg" 
+                    title="Accreditations" 
+                />
+
+                <x-navigation.nav-card 
+                    route="construction" 
+                    icon="images/icons/nav/research.svg" 
+                    title="Research" 
+                />
+
+                <x-navigation.nav-card 
+                    route="admin.prc" 
+                    icon="images/icons/portal_nav/prc.png" 
+                    title="PRC Results" 
+                    :excludedRoles="['Dean', 'HR Admin']"
+                />
+
+                <x-navigation.nav-card 
+                    route="sharepoint-sites.dashboard" 
+                    icon="images/icons/nav/sharepoint.svg" 
+                    title="SharePoint Sites" 
+                />
+
+                <x-navigation.nav-card 
+                    route="knowledge-hub.dashboard" 
+                    icon="images/icons/nav/knowledge.svg" 
+                    title="Knowledge Hub" 
+                />
+
+                <x-navigation.nav-card 
+                    route="kpis.dashboard" 
+                    icon="images/icons/nav/kpi.png" 
+                    title="KPIs" 
+                />
+
+                <x-navigation.nav-card 
+                    route="visitor-count.dashboard" 
+                    icon="images/icons/nav/visitor_count.svg" 
+                    title="Visitor Counter" 
+                    :excludedRoles="['Dean', 'HR Admin']"
+                />
+                
+                <x-navigation.nav-card
+                    route="iso.document" 
+                    icon="images/icons/portal_nav/iso.png" 
+                    title="ISO Document Handling" 
+                    :excludedRoles="['Dean', 'HR Admin']"
+                />
             </div>
-            @else
-            <div class = "navigation-cards-box">
-
-                <!-- a card slot  -->
-                <a href = "{{route('manage-emps.dashboard')}}">
-                    <div class = "nav-card"> 
-                        <div class = "nav-card-icon"> <img src = "{{asset('images/icons/nav/employees.png')}}"/> </div>
-                        <div class  = "nav-card-title"> <h3> Manage Employees</h3> </div> 
-                    </div> 
-                </a> 
-                <!-- end of card slot  -->
-
-
-                <!-- a card slot  -->
-                <a href = "{{route('construction')}}">
-                    <div class = "nav-card"> 
-                        <div class = "nav-card-icon"> <img src = "{{asset('images/icons/nav/scholarships.png')}}"/> </div>
-                        <div class  = "nav-card-title"> <h3> Scholarships and Grants</h3> </div> 
-                    </div> 
-                </a> 
-                <!-- end of card slot  -->
-
-                <!-- a card slot  -->
-                <a href = "{{route('construction')}}">
-                    <div class = "nav-card"> 
-                        <div class = "nav-card-icon"> <img src = "{{asset('images/icons/nav/outreach.png')}}"/> </div>
-                        <div class  = "nav-card-title"> <h3> Outreach Programs</h3> </div> 
-                    </div> 
-                </a> 
-                <!-- end of card slot  -->
-
-
-                <!-- a card slot  -->
-                <a href = "{{route('construction')}}">
-                    <div class = "nav-card"> 
-                        <div class = "nav-card-icon"> <img src = "{{asset('images/icons/nav/accreditation.png')}}"/> </div>
-                        <div class  = "nav-card-title"> <h3> Accreditations</h3> </div> 
-                    </div> 
-                </a> 
-                <!-- end of card slot  -->
-
-
-                <!-- a card slot  -->
-                <a href = "{{route('construction')}}">
-                    <div class = "nav-card"> 
-                        <div class = "nav-card-icon"> <img src = "{{asset('images/icons/nav/research.png')}}" class = "w-24 h-24"/> </div>
-                        <div class  = "nav-card-title"> <h3> Research</h3> </div> 
-                    </div> 
-                </a> 
-                <!-- end of card slot  -->
-
-                <!-- a card slot  -->
-                <a href = "{{route('sharepoint-sites.dashboard')}}">
-                    <div class = "nav-card"> 
-                        <div class = "nav-card-icon"> <img src = "{{asset('images/icons/nav/sharepoint.png')}}" class = "w-24 h-24"/> </div>
-                        <div class  = "nav-card-title"> <h3> SharePoint Sites</h3> </div> 
-                    </div> 
-                </a> 
-                <!-- end of card slot  -->
-
-                <!-- a card slot  -->
-                <a href = "{{route('kpis.dashboard')}}">
-                    <div class = "nav-card"> 
-                        <div class = "nav-card-icon"> <img src = "{{asset('images/icons/nav/kpi.png')}}" class = "w-24 h-24"/> </div>
-                        <div class  = "nav-card-title"> <h3> KPIs</h3> </div> 
-                    </div> 
-                </a> 
-                <!-- end of card slot  -->
-                </div>
-            @endif
-        </div> 
+        </div>
     </div>
 </x-app-layout>
 
@@ -211,7 +126,6 @@ $mname = '';
         padding: 1rem 0;
         width: 100%;
         height: 320px; 
-        /* border: 1px solid red; */
         display: flex; 
         justify-content: center;
         align-items: center;
@@ -219,11 +133,9 @@ $mname = '';
 
     .profile_card_box { 
         position: relative;
-
         width: 85%; 
         height: 85%;
         border-radius: 15px;
-   
         background-color: white;
         display: grid; 
         grid-template-columns: 30% 70%;
@@ -232,7 +144,6 @@ $mname = '';
     }
 
     .left, .right { 
-        /* border: 1px solid yellow; */
         width: 100%; 
         height: 100%; 
     }
@@ -259,7 +170,6 @@ $mname = '';
         height: 100%; 
     }
 
-
     .profile_info { 
         display: flex; 
         flex-direction: column;
@@ -274,9 +184,7 @@ $mname = '';
     }
 
     .sub-name { 
-        /* border: 1px solid red; */
         color: #333333;
-
         font-size: 2rem;
         text-transform: uppercase;
         line-height: 3.5rem;
@@ -295,18 +203,12 @@ $mname = '';
         border-radius: 10px;
         color: white;
         font-weight: 500;
-        
         display: flex; 
-
         width: 30%;
-        
         background-color: #70121D;
     }
     
-
-
     .logo { 
-        /* border: 1px solid red; */
         display: flex; 
         justify-content: center; 
         align-items: center;
@@ -328,58 +230,4 @@ $mname = '';
         top: 2rem;
     }
 
-    .navigation-cards { 
-        width: 100%; 
-        height: 250px; 
-        /* border: 1px solid yellow; */
-        display: flex;
-        justify-content: center;
-        
-    }
-
-    .navigation-cards + .navigation-cards {
-        margin-top: -50px;
-    }
-
-    .navigation-cards-box { 
-        position: relative;
-
-        width: 95%; 
-        height: 85%;
-        border-radius: 15px;
-   
-        /* background-color: white; */
-        display: grid; 
-        grid-template-columns: repeat(8, 1fr); 
-        /* box-shadow: 5px 5px 5px rgb(0,0,0,0.1); */
-        overflow: hidden;
-    }
-
-    .navigation-cards-box a { 
-        width: 100%; 
-        height: 100%;
-        display: flex; 
-        justify-content: center;
-        align-items: center; 
-    }
-
-    .nav-card { 
-        /* border: 1px solid red; */
-        width: 90%; 
-        height: 90%; 
-        display: flex; 
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        background-color: #70121D;
-        border-radius: 25px; 
-        color: white;
-        text-align: center;
-        line-height: 1rem;
-        transition: 300ms;
-    }
-
-    .nav-card:hover { 
-        background-color: #8B2B39;
-    }
 </style> 
