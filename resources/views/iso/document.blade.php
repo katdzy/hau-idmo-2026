@@ -665,7 +665,7 @@ function getStatusColor($status){
         const preview = document.getElementById('selected_doc_preview');
 
         if(selectedOption.value){
-            const specifcType = selectedOption.dataset.specificType || null;
+            const specificType = selectedOption.dataset.specificType || null;
             // show document preview with data from option
             document.getElementById('preview_code').textContent = selectedOption.dataset.code;
             document.getElementById('preview_title').textContent = selectedOption.dataset.title;
