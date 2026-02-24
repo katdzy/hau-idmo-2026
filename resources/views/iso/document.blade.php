@@ -490,6 +490,97 @@ function getStatusColor($status){
             '(IAT) Internal Audit Team'
         ]
     }
+    // ======================================
+    // Document Prefix Function
+    // ======================================
+    // Document code prefix
+    function getOfficeCode(officeValue){
+        // Extracts the Code from the originating_section
+        // e.g., extracts "AAC-SOC" from "(AAC-SOC) School of Computing"
+        const match = officeValue.match(/\(([^)]+)\)/);
+        return match ? match[1] : null;
+    }
+    function generateDocCodePrefix(){
+        const source = document.getElementById('doc_source').value;
+        const office = currentSelectedOffice;
+        const officeCode = getOfficeCode(office);
+
+        if(!source || !officeCode) return;
+
+        switch(source){
+            case 'forms':
+                return `FM-${officeCode}`;
+            case 'procedures':
+                return `PD-${officeCode}`;
+            case 'eoms':{
+                const specificType = document.getElementById('doc_specific_type').value;
+                if(!specificType) return ''; // wait until specific type is selected.
+                return `${specificType} ${officeCode}`;
+            }
+            case 'records':{
+                const specificType = document.getElementById('doc_specific_type').value;
+                if(!specificType) return '';
+                const formattedType = specificType.replace('0','');
+                return `${formattedType}RMM ${officeCode}`;
+            }
+            case 'others':
+                return null; //skip auto-fill for others
+            default:
+                return '';
+        }
+    }
+    function updateDocField(){
+        const docCodeInput = document.getElementById('doc_code');
+        const newPrefix = generateDocCodePrefix();
+
+        // null for "others"
+        if(newPrefix === null){
+            docCodeInput.value = '';
+            docCodeInput.dataset.prefix = '';
+            return;
+        }
+
+        if(!newPrefix) return; //Incomplete don't update yet
+
+        const oldPrefix = docCodeInput.dataset.prefix || '';
+        const currentValue = docCodeInput.value;
+
+        if(oldPrefix && currentValue.startsWith(oldPrefix)){
+            const userSuffix = currentValue.slice(oldPrefix.length);
+            docCodeInput.value = newPrefix + userSuffix;
+        } else {
+            docCodeInput.value = newPrefix;
+        }
+
+        docCodeInput.dataset.prefix = newPrefix;
+    }
+    // Prevent the user from deleting the prefix
+    document.getElementById('doc_code').addEventListener('keydown', (e)=>{
+        const input = e.target;
+        const prefix = input.dataset.prefix || '';
+
+        // If cursor is within the prefix area and user tries to delete, block it.
+        if((e.key === 'Backspace'|| e.key === 'Delete')&& input.selectionStart <= prefix.length){
+            e.preventDefault();
+        }
+    });
+
+    // Also guard against paste/cut that could corrupt the prefix
+    document.getElementById('doc_code').addEventListener('input', (e)=>{
+        const input = e.target;
+        const prefix = input.dataset.prefix || '';
+
+        if(!input.value.startsWith(prefix)){
+            // Restore the prefix if it was removed
+            input.value = prefix;
+        }
+    });
+    specificTypeSelect.addEventListener('change', ()=>{
+        updateDocField();
+    });
+    // ======================================
+    // Cluster/Department and Offices
+    // ======================================
     // Cluster and Office Logic
     const ticketClusterDropdown = document.getElementById('ticket_cluster');
     const ticketOfficeDropdown = document.getElementById('ticket_office');
@@ -510,6 +601,7 @@ function getStatusColor($status){
         // Reset downstream state
         currentSelectedOffice = null;
         clearDocumentForm();
+        toggleClassification(null);
         document.getElementById('addition_fields').style.display = 'none';
         document.getElementById('existing_doc_fields').style.display = 'none';
 
@@ -542,9 +634,6 @@ function getStatusColor($status){
             ticketOfficeDropdown.classList.add('opacity-50', 'cursor-not-allowed');
             ticketOfficeDropdown.disabled = true;
 
-            classificationSelect.innerHTML = '<option value="">Select...</option>';
-            classificationSelect.classList.add('opacity-50', 'cursor-not-allowed');
-            classificationSelect.disabled = true;
             toggleClassification(null);
         }
     });
@@ -555,8 +644,8 @@ function getStatusColor($status){
         clearDocumentForm();
         document.getElementById('addition_fields').style.display = 'none';
         document.getElementById('existing_doc_fields').style.display = 'none';
-
         toggleClassification(currentSelectedOffice);
+        updateDocField(); // Autofill function
     });
 
     classificationSelect.addEventListener('change', (e)=>{
@@ -614,6 +703,7 @@ function getStatusColor($status){
             specificTypeSelect.value = '';
             customSourceInput.value = '';
         }
+        updateDocField(); //Autofill function
     });
 
 
@@ -1089,7 +1179,7 @@ function getStatusColor($status){
         const preview = document.getElementById('edit_selected_doc_preview');
 
         if(selectedOption.value){
-            const specificType = selectedOption.dataset.specifcType || null;
+            const specificType = selectedOption.dataset.specificType || null;
 
             document.getElementById('edit_preview_code').textContent = selectedOption.dataset.code;
             document.getElementById('edit_preview_title').textContent = selectedOption.dataset.title;
@@ -1457,7 +1547,6 @@ function getStatusColor($status){
         // Addition, input fields.
         document.getElementById('doc_code').value = '';
         document.getElementById('doc_title').value = '';
-        // document.getElementById('doc_classification').value = '';
         document.getElementById('doc_source').value = '';
         document.getElementById('doc_specific_type').value = '';
         document.getElementById('doc_custom_source').value = '';
@@ -1465,6 +1554,11 @@ function getStatusColor($status){
 
         document.getElementById('specific_type_section').style.display = 'none';
         document.getElementById('custom_source_section').style.display = 'none';
+        document.getElementById('selected_doc_preview').style.display = 'none';
+        //Document Autofill
+        const docCodeInput = document.getElementById('doc_code');
+        docCodeInput.value = '';
+        docCodeInput.dataset.prefix = '';
     }
     // Formatting Status Texts
     function formatStatusText(status){

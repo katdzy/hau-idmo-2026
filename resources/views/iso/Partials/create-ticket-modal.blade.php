@@ -68,6 +68,15 @@
                                 <option value="others">Others</option>
                             </select>
                         </div>
+                        <!-- Specific Type (conditional) -->
+                        <div id="specific_type_section" class="form-group mb-2" style="display: none;">
+                            <label class="form-label text-sm">Specific Type</label>
+                            <select id="doc_specific_type" class="form-input">
+                                <option value="">Select...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
                         <!-- Document Code -->
                         <div class="form-group mb-2">
                             <label class="form-label text-sm">Document Code</label>
@@ -77,13 +86,6 @@
                         <div class="form-group mb-2">
                             <label class="form-label text-sm">Document Title</label>
                             <input type="text" id="doc_title" class="form-input" placeholder="Enter Document Title">
-                        </div>
-                        <!-- Specific Type (conditional) -->
-                        <div id="specific_type_section" class="form-group mb-2" style="display: none;">
-                            <label class="form-label text-sm">Specific Type</label>
-                            <select id="doc_specific_type" class="form-input">
-                                <option value="">Select...</option>
-                            </select>
                         </div>
                         <!-- Custom Source Input (for "Others") -->
                         <div id="custom_source_section" class="form-group mb-2 col-span-2" style="display: none;">
