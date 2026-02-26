@@ -565,6 +565,9 @@ Route::middleware('auth','revalidate')->group(function () {
     // PATCH route updates the ticket status (Meant only for partial updates on the ticket)
     Route::patch('/iso/document/{ticket}/submit', [IsoDocumentController::class,'submitToIDC'])
         ->name('iso.document.submit');
+    // Check for already existing documents on management page.
+    Route::get('/iso/documents/check-code', [IsoDocumentController::class, 'checkDocumentCode'])
+        ->name('iso.documents.check-code');
 
     /*------------------------------------------------------------------
     | 22. ISO IDC Document Handling

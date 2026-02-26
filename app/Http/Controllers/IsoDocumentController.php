@@ -68,6 +68,14 @@ class IsoDocumentController extends Controller
         }
     }
 
+    public function checkDocumentCode(Request $request){
+        $request -> validate([
+            'document_code' => 'required|string'
+        ]);
+        $exists = IsoMasterDocument::where('document_code', $request->document_code)->exists();
+        return response()->json(['exists' => $exists]);
+    }
+
     public function editDocument(IsoTicket $ticket){
         // Auth Check
         $this->authTicketCheck($ticket);
@@ -559,7 +567,7 @@ class IsoDocumentController extends Controller
             });
 
             return redirect()->route('iso.idc.dashboard')
-                ->with('msg','Ticket #'.$ticket->id . ' has been registered successfully!');
+                ->with('msg','Ticket no:'.$ticket->ticket_number . ' has been registered successfully!');
         } catch (\Exception $e){
             \Log::error('Register ticket failed: '. $e->getMessage());
 

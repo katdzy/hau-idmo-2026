@@ -352,23 +352,11 @@ function getStatusColor($status){
     // ============================================
     // CREATE TICKET MODAL
     // ============================================
+    // Variable Instantiation
+    // --------------------------------------------
     const modal = document.getElementById('ticket_modal');
     const createBtn = document.getElementById('create_ticket_btn');
     const closeBtn = document.getElementById('close_modal');
-
-    createBtn.addEventListener('click', ()=> {
-        modal.classList.add('active');
-    });
-
-    closeBtn.addEventListener('click', () =>{
-        modal.classList.remove('active');
-    })
-    // Close modal when clicking outside
-    modal.addEventListener('click', (e) =>{
-        if (e.target === modal){
-            modal.classList.remove('active');
-        }
-    });
 
     // Document Management
     let documents = [];
@@ -490,98 +478,16 @@ function getStatusColor($status){
             '(IAT) Internal Audit Team'
         ]
     }
-    // ======================================
-    // Document Prefix Function
-    // ======================================
-    // Document code prefix
-    function getOfficeCode(officeValue){
-        // Extracts the Code from the originating_section
-        // e.g., extracts "AAC-SOC" from "(AAC-SOC) School of Computing"
-        const match = officeValue.match(/\(([^)]+)\)/);
-        return match ? match[1] : null;
-    }
-    function generateDocCodePrefix(){
-        const source = document.getElementById('doc_source').value;
-        const office = currentSelectedOffice;
-        const officeCode = getOfficeCode(office);
+    // --------------------------------------------
+    // Prefix Logic
+    // --------------------------------------------
+    // Create Modal - Prefix
+    const docCodeInput = document.getElementById('doc_code');
+    attachDocCodeProtected(docCodeInput);
 
-        if(!source || !officeCode) return;
-
-        switch(source){
-            case 'forms':
-                return `FM-${officeCode}`;
-            case 'procedures':
-                return `PD-${officeCode}`;
-            case 'eoms':{
-                const specificType = document.getElementById('doc_specific_type').value;
-                if(!specificType) return ''; // wait until specific type is selected.
-                return `${specificType} ${officeCode}`;
-            }
-            case 'records':{
-                const specificType = document.getElementById('doc_specific_type').value;
-                if(!specificType) return '';
-                const formattedType = specificType.replace('0','');
-                return `${formattedType}RMM ${officeCode}`;
-            }
-            case 'others':
-                return null; //skip auto-fill for others
-            default:
-                return '';
-        }
-    }
-    function updateDocField(){
-        const docCodeInput = document.getElementById('doc_code');
-        const newPrefix = generateDocCodePrefix();
-
-        // null for "others"
-        if(newPrefix === null){
-            docCodeInput.value = '';
-            docCodeInput.dataset.prefix = '';
-            return;
-        }
-
-        if(!newPrefix) return; //Incomplete don't update yet
-
-        const oldPrefix = docCodeInput.dataset.prefix || '';
-        const currentValue = docCodeInput.value;
-
-        if(oldPrefix && currentValue.startsWith(oldPrefix)){
-            const userSuffix = currentValue.slice(oldPrefix.length);
-            docCodeInput.value = newPrefix + userSuffix;
-        } else {
-            docCodeInput.value = newPrefix;
-        }
-
-        docCodeInput.dataset.prefix = newPrefix;
-    }
-    // Prevent the user from deleting the prefix
-    document.getElementById('doc_code').addEventListener('keydown', (e)=>{
-        const input = e.target;
-        const prefix = input.dataset.prefix || '';
-
-        // If cursor is within the prefix area and user tries to delete, block it.
-        if((e.key === 'Backspace'|| e.key === 'Delete')&& input.selectionStart <= prefix.length){
-            e.preventDefault();
-        }
-    });
-
-    // Also guard against paste/cut that could corrupt the prefix
-    document.getElementById('doc_code').addEventListener('input', (e)=>{
-        const input = e.target;
-        const prefix = input.dataset.prefix || '';
-
-        if(!input.value.startsWith(prefix)){
-            // Restore the prefix if it was removed
-            input.value = prefix;
-        }
-    });
-    specificTypeSelect.addEventListener('change', ()=>{
-        updateDocField();
-    });
-    // ======================================
-    // Cluster/Department and Offices
-    // ======================================
+    // --------------------------------------------
     // Cluster and Office Logic
+    // --------------------------------------------
     const ticketClusterDropdown = document.getElementById('ticket_cluster');
     const ticketOfficeDropdown = document.getElementById('ticket_office');
 
@@ -595,24 +501,131 @@ function getStatusColor($status){
     // New Doc Classification logic
     let currentSelectedOffice = null;
 
+    // ============================================
+    // Event Listerners
+    // ============================================
+    // Create Ticket Modal
+    createBtn.addEventListener('click', ()=> {
+        modal.classList.add('active');
+    });
 
+    closeBtn.addEventListener('click', () =>{
+        modal.classList.remove('active');
+    })
+    // Close modal when clicking outside
+    modal.addEventListener('click', (e) =>{
+        if (e.target === modal){
+            modal.classList.remove('active');
+        }
+    });
+
+    // ======================================
+    // Document Prefix Function
+    // ======================================
+    // Document code prefix
+    function getOfficeCode(officeValue){
+        // Extracts the Code from the originating_section
+        // e.g., extracts "AAC-SOC" from "(AAC-SOC) School of Computing"
+        const match = officeValue.match(/\(([^)]+)\)/);
+        return match ? match[1] : null;
+    }
+    function generateDocCodePrefix(source, officeValue, specificType){
+        const officeCode = getOfficeCode(officeValue);
+
+        if(!source || !officeCode) return;
+
+        switch(source){
+            case 'forms':
+                return `FM-${officeCode}`;
+            case 'procedures':
+                return `PD-${officeCode}`;
+            case 'eoms':
+                return specificType ? `${specificType} ${officeCode}` : '';
+            case 'records':
+                return specificType ? `${specificType.replace('0', '')}RMM ${officeCode}` : '';
+            case 'others':
+                return null; //skip auto-fill for others
+            default:
+                return '';
+        }
+    }
+    function updateDocField(inputElement, source, officeValue, specificType){
+        const newPrefix = generateDocCodePrefix(source, officeValue, specificType);
+
+        // null for "others"
+        if(newPrefix === null){
+            inputElement.value = '';
+            inputElement.dataset.prefix = '';
+            return;
+        }
+
+        if(!newPrefix) return; //Incomplete don't update yet
+
+        const oldPrefix = inputElement.dataset.prefix || '';
+        const currentValue = inputElement.value;
+
+        if(oldPrefix && currentValue.startsWith(oldPrefix)){
+            const userSuffix = currentValue.slice(oldPrefix.length);
+            inputElement.value = newPrefix + userSuffix;
+        } else {
+            inputElement.value = newPrefix;
+        }
+
+        inputElement.dataset.prefix = newPrefix;
+    }
+    function attachDocCodeProtected(inputElement){
+        // Prevent the user from deleting the prefix
+        inputElement.addEventListener('keydown', (e) =>{
+            const prefix = inputElement.dataset.prefix || '';
+            if((e.key === 'Backspace' || e.key === 'Delete') && inputElement.selectionStart <= prefix.length){
+                e.preventDefault();
+            }
+        });
+        // Guard against paste/cut that could corrupt the prefix
+        inputElement.addEventListener('input', ()=>{
+            const prefix = inputElement.dataset.prefix || '';
+            if(!inputElement.value.startsWith(prefix)){
+                inputElement.value = prefix;
+            }
+        });
+    }
+    
+    specificTypeSelect.addEventListener('change', ()=>{
+        updateDocField(docCodeInput,
+            docSource.value,
+            currentSelectedOffice,
+            specificTypeSelect.value
+        );
+    });
+    // ======================================
+    // Cluster/Department and Offices
+    // ======================================
     ticketClusterDropdown.addEventListener('change', ()=> {
-        const selectedCluster = ticketClusterDropdown.value;
+        const newValue = ticketClusterDropdown.value;
+        const oldValue = ticketClusterDropdown.dataset.lastValue || null;
+        if(!clearAllDocuments()){
+            // User cancelled - Revert the dropdown to its previous value
+            ticketClusterDropdown.value = oldValue;
+            return;
+        }
+        ticketClusterDropdown.dataset.lastValue = newValue;
         // Reset downstream state
         currentSelectedOffice = null;
         clearDocumentForm();
+        // console.log("Before toggleClassification method");
         toggleClassification(null);
+        // console.log("After toggleClassification method");
         document.getElementById('addition_fields').style.display = 'none';
         document.getElementById('existing_doc_fields').style.display = 'none';
 
-        if(selectedCluster !== ''){
+        if(newValue !== ''){
             // Reset office dropdown when choosing a department
             ticketOfficeDropdown.innerHTML = '<option value="">Select Office...</option>';
             ticketOfficeDropdown.classList.remove('opacity-50', 'cursor-not-allowed')
     
             // If a cluser is selected, populate the office choices
-            if (specificOfficeOptions[selectedCluster]){
-                const offices = specificOfficeOptions[selectedCluster];
+            if (specificOfficeOptions[newValue]){
+                const offices = specificOfficeOptions[newValue];
     
                 offices.forEach(office => {
                     const option = document.createElement('option');
@@ -638,14 +651,26 @@ function getStatusColor($status){
         }
     });
     ticketOfficeDropdown.addEventListener('change', ()=>{
-        currentSelectedOffice = ticketOfficeDropdown.value || null;
+        const newValue = ticketOfficeDropdown.value;
+        const oldValue = ticketOfficeDropdown.dataset.lastValue || null;
+        if(!clearAllDocuments()){
+            ticketOfficeDropdown.value = oldValue;
+            return;
+        }
+        currentSelectedOffice = newValue || null;
+        ticketOfficeDropdown.dataset.lastValue = currentSelectedOffice;
 
         classificationSelect.value = '';
         clearDocumentForm();
         document.getElementById('addition_fields').style.display = 'none';
         document.getElementById('existing_doc_fields').style.display = 'none';
         toggleClassification(currentSelectedOffice);
-        updateDocField(); // Autofill function
+        updateDocField(
+            docCodeInput,
+            docSource.value,
+            currentSelectedOffice,
+            specificTypeSelect.value
+        ); // Autofill function
     });
 
     classificationSelect.addEventListener('change', (e)=>{
@@ -703,7 +728,12 @@ function getStatusColor($status){
             specificTypeSelect.value = '';
             customSourceInput.value = '';
         }
-        updateDocField(); //Autofill function
+        updateDocField(       //Autofill function
+            docCodeInput,
+            docSource.value,
+            currentSelectedOffice,
+            specificTypeSelect.value
+        ); 
     });
 
 
@@ -785,7 +815,7 @@ function getStatusColor($status){
         }
     });
 
-    function addNewDocument(){
+    async function addNewDocument(){
         const code = document.getElementById('doc_code').value.trim();
         const title = document.getElementById('doc_title').value.trim();
         const classification = 'addition';
@@ -794,6 +824,12 @@ function getStatusColor($status){
         const customSource = document.getElementById('doc_custom_source').value.trim();
 
         if (!validationCheckForm(code, title, classification, source, specificType, customSource)){
+            return;
+        }
+        // Check for duplicate before adding
+        const isDuplicate = await checkDocumentCodeExists(code);
+        if (isDuplicate){
+            alert(`Document code "${code}" already exists in the system. Please use a different code.`);
             return;
         }
 
@@ -810,6 +846,17 @@ function getStatusColor($status){
         documents.push(doc);
         updateDocumentsList();
         clearDocumentForm();
+    }
+    async function checkDocumentCodeExists(code){
+        try{
+            const response = await fetch(`/iso/documents/check-code?document_code=${encodeURIComponent(code)}`);
+            if(!response.ok) throw new Error('Check failed'); // TODO: Replace this with the error message with HTML
+            const data = await response.json();
+            return data.exists;
+        } catch (error){
+            console.error('Error checking document code: ', error);
+            return false;
+        }
     }
 
     function addExistingDocument(classification){
@@ -1033,9 +1080,37 @@ function getStatusColor($status){
     const editTicketClusterDropdown = document.getElementById('edit_ticket_cluster');
     const editTicketOfficeDropdown = document.getElementById('edit_ticket_office');
 
+    // Event Listerners
+    // Close edit modal
+    closeEditBtn.addEventListener('click', ()=> {
+        editModalClose();
+    });
+
+    cancelEditBtn.addEventListener('click', ()=> {
+        editModalClose();
+    });
+
+    // Close when clicking outside
+    editModal.addEventListener('click', (e)=> {
+        if (e.target === editModal){
+            editModalClose();
+        }
+    });
+
+    // Edit Modal - Prefix
+    const editDocCodeInput = document.getElementById('edit_doc_code');
+    attachDocCodeProtected(editDocCodeInput);
+
     // Start of New Originating Section Edit function
     editTicketClusterDropdown.addEventListener('change', ()=>{
-        const selectedCluster = editTicketClusterDropdown.value;
+        const newValue = editTicketClusterDropdown.value;
+        const oldValue = editTicketClusterDropdown.dataset.lastValue || null;
+        // Clear document if user didn't confirm
+        if(!clearAllDocuments(true)){ // true because the parameter of the method is edit mode
+            editTicketClusterDropdown.value = oldValue;
+            return;
+        }
+        editTicketClusterDropdown.dataset.lastValue = newValue;
         if(!isProgrammaticChange){
             currentEditOffice = null;
             document.getElementById('edit_doc_classification').value = '';
@@ -1047,8 +1122,8 @@ function getStatusColor($status){
         editTicketOfficeDropdown.innerHTML = '<option value="">Select Office...</option>';
         editTicketOfficeDropdown.disabled = true;
         
-        if(selectedCluster && specificOfficeOptions[selectedCluster]){
-            const offices = specificOfficeOptions[selectedCluster];
+        if(newValue && specificOfficeOptions[newValue]){
+            const offices = specificOfficeOptions[newValue];
 
             offices.forEach(office => {
                 const option = document.createElement('option');
@@ -1068,12 +1143,25 @@ function getStatusColor($status){
     // End of New Originating Section Edit function
 
     editTicketOfficeDropdown.addEventListener('change', ()=>{
-        currentEditOffice = editTicketOfficeDropdown.value || null;
+        const newValue = editTicketOfficeDropdown.value;
+        const oldValue = editTicketOfficeDropdown.dataset.lastValue || null;
+        if(!clearAllDocuments(true)){
+            editTicketOfficeDropdown.value = oldValue;
+            return;
+        }
+        editTicketOfficeDropdown.dataset.lastValue = newValue;
+        currentEditOffice = newValue || null;
 
         document.getElementById('edit_doc_classification').value = '';
         document.getElementById('edit_addition_fields').style.display = 'none';
         document.getElementById('edit_existing_doc_fields').style.display = 'none';
         clearEditDocumentForm();
+        updateDocField(
+            editDocCodeInput,
+            editDocSource.value,
+            currentEditOffice,
+            editSpecificTypeSelect.value
+        );
     });
 
     document.getElementById('edit_doc_classification').addEventListener('change', (e)=>{
@@ -1131,7 +1219,20 @@ function getStatusColor($status){
             editCustomSourceSection.style.display = 'none';
             editSpecificTypeSelect.value = '';
         }
+        updateDocField(editDocCodeInput,
+            editDocSource.value,
+            currentEditOffice,
+            editSpecificTypeSelect.value
+        );
     });
+    editSpecificTypeSelect.addEventListener('change', ()=>{
+        updateDocField(
+            editDocCodeInput,
+            editDocSource.value,
+            currentEditOffice,
+            editSpecificTypeSelect.value
+        )
+    })
 
     async function loadExistingDocumentsForEdit(office){
         const selectElement = document.getElementById('edit_existing_doc_select');
@@ -1192,21 +1293,7 @@ function getStatusColor($status){
             preview.style.display = 'none';
         }
     });
-    // Close edit modal
-    closeEditBtn.addEventListener('click', ()=> {
-        editModalClose();
-    });
-
-    cancelEditBtn.addEventListener('click', ()=> {
-        editModalClose();
-    });
-
-    // Close when clicking outside
-    editModal.addEventListener('click', (e)=> {
-        if (e.target === editModal){
-            editModalClose();
-        }
-    });
+    
 
     function editModalClose(){
         editModal.classList.add('hidden');
@@ -1233,7 +1320,7 @@ function getStatusColor($status){
     });
     
     // Function to add NEW document in edit mode
-    function addEditNewDocument(){
+    async function addEditNewDocument(){
         const code = document.getElementById('edit_doc_code').value.trim();
         const title = document.getElementById('edit_doc_title').value.trim();
         const classification = 'addition';
@@ -1242,6 +1329,12 @@ function getStatusColor($status){
         const customSource =document.getElementById('edit_doc_custom_source').value.trim();
 
         if(!validationCheckForm(code, title, classification, source, specificType, customSource)){
+            return;
+        }
+        // Same duplicate check from adding new document
+        const isDuplicate = await checkDocumentCodeExists(code);
+        if(isDuplicate){
+            alert(`Document code "${code}" already exists in the system. Please use a different document code.`);
             return;
         }
 
@@ -1399,27 +1492,7 @@ function getStatusColor($status){
             tbody.appendChild(row);
         });
     }
-    // Remove Document from Edit List
-    function removeEditDocument(id){
-        editDocuments = editDocuments.filter(doc => String(doc.id) !== String(id));
-        updateEditDocumentsList();
-    }
-
-    // Clear Edit Document Form
-    function clearEditDocumentForm(){
-        // The title and code needs to be swapped.
-        document.getElementById('edit_doc_title').value = '';
-        document.getElementById('edit_doc_code').value = '';
-        document.getElementById('edit_doc_source').value = '';
-        document.getElementById('edit_doc_specific_type').value = '';
-        document.getElementById('edit_doc_custom_source').value = '';
-        
-        document.getElementById('edit_addition_fields').style.display = 'none';
-        document.getElementById('edit_existing_doc_fields').style.display = 'none';
-        document.getElementById('edit_specific_type_section').style.display = 'none';
-        document.getElementById('edit_custom_source_section').style.display = 'none';
-        document.getElementById('edit_selected_doc_preview').style.display = 'none';
-    }
+    
 
     // Reset Entire edit form
     function resetEditForm(){
@@ -1542,7 +1615,32 @@ function getStatusColor($status){
         documents = documents.filter(doc => doc.id !== id);
         updateDocumentsList();
     }
+    // Remove Document from Edit List
+    function removeEditDocument(id){
+        editDocuments = editDocuments.filter(doc => String(doc.id) !== String(id));
+        updateEditDocumentsList();
+    }
+    function clearAllDocuments(isEditMode = false){
+        const targetArray = isEditMode ? editDocuments : documents;
+        const updateUI = isEditMode ? updateEditDocumentsList : updateDocumentsList;
 
+        if(targetArray.length === 0) return true;
+
+        const confirmed = confirm(
+            'Changing the department or office will remove all documents you have added.'
+        );
+        if(!confirmed) return false;
+
+        if(isEditMode){
+            editDocuments = [];
+        } else {
+            documents = [];
+        }
+
+        updateUI();
+    }
+
+    // Clear - Create Ticket form
     function clearDocumentForm(){
         // Addition, input fields.
         document.getElementById('doc_code').value = '';
@@ -1559,6 +1657,22 @@ function getStatusColor($status){
         const docCodeInput = document.getElementById('doc_code');
         docCodeInput.value = '';
         docCodeInput.dataset.prefix = '';
+    }
+
+    // Clear - Edit Document Form
+    function clearEditDocumentForm(){
+        // The title and code needs to be swapped.
+        document.getElementById('edit_doc_title').value = '';
+        document.getElementById('edit_doc_code').value = '';
+        document.getElementById('edit_doc_source').value = '';
+        document.getElementById('edit_doc_specific_type').value = '';
+        document.getElementById('edit_doc_custom_source').value = '';
+        
+        document.getElementById('edit_addition_fields').style.display = 'none';
+        document.getElementById('edit_existing_doc_fields').style.display = 'none';
+        document.getElementById('edit_specific_type_section').style.display = 'none';
+        document.getElementById('edit_custom_source_section').style.display = 'none';
+        document.getElementById('edit_selected_doc_preview').style.display = 'none';
     }
     // Formatting Status Texts
     function formatStatusText(status){
@@ -1591,6 +1705,7 @@ function getStatusColor($status){
         return null;
     }
     function toggleClassification(selectedOffice){
+        // console.log("I Enter toggleClassification");
         if(!selectedOffice){
             // visually + functionally disable
             classificationSelect.classList.add('opacity-50', 'cursor-not-allowed');

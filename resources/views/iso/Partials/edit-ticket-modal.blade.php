@@ -87,22 +87,14 @@
                             <label class="block text-xs text-gray-600 mb-1">Nature of Document Modification</label>
                             <select id="edit_doc_classification" class="w-full px-2 py-1 border rounded text-sm">
                                 <option value="">Select...</option>
-                                <option value="revision">Revision</option>
                                 <option value="addition">Addition</option>
+                                <option value="revision">Revision</option>
                                 <option value="deletion">Deletion</option>
                             </select>
                         </div>
                         <!-- FOR ADDITION: Show all manual input fields -->
                         <div id="edit_addition_fields" style="display:none;">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
-                                <div>
-                                    <label class="block text-xs text-gray-600 mb-1">Document Code</label>
-                                    <input type="text" id="edit_doc_code" class="w-full px-2 py-1 border rounded text-sm" placeholder="Enter Document Code">
-                                </div>
-                                <div>
-                                    <label class="block text-xs text-gray-600 mb-1">Document Title</label>
-                                    <input type="text" id="edit_doc_title" class="w-full px-2 py-1 border rounded text-sm" placeholder="Enter Document Title">
-                                </div>
                                 <div>
                                     <label class="block text-xs text-gray-600 mb-1">Source Type</label>
                                     <select id="edit_doc_source" class="w-full px-2 py-1 border rounded text-sm">
@@ -114,13 +106,24 @@
                                         <option value="others">Others</option>
                                     </select>
                                 </div>
-                            </div>
-                            <!-- Specific Type (shown only when Source Type is "EOMS Manual" or "Records Management") -->
-                            <div id="edit_specific_type_section" style="display: none;" class="mb-3">
-                                <label class="block text-xs text-gray-600 mb-1">Specific Type</label>
-                                <select id="edit_doc_specific_type" class="w-full px-2 py-1 border rounded text-sm">
-                                    <option value="">Select...</option>
-                                </select>
+                                <div>
+                                    <!-- Specific Type (shown only when Source Type is "EOMS Manual" or "Records Management") -->
+                                    <div id="edit_specific_type_section" style="display: none;" class="mb-3">
+                                        <label class="block text-xs text-gray-600 mb-1">Specific Type</label>
+                                        <select id="edit_doc_specific_type" class="w-full px-2 py-1 border rounded text-sm">
+                                            <option value="">Select...</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-gray-600 mb-1">Document Code</label>
+                                    <input type="text" id="edit_doc_code" class="w-full px-2 py-1 border rounded text-sm" placeholder="Enter Document Code">
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-gray-600 mb-1">Document Title</label>
+                                    <input type="text" id="edit_doc_title" class="w-full px-2 py-1 border rounded text-sm" placeholder="Enter Document Title">
+                                </div>
+                                
                             </div>
                             <!-- Custom Source input for Edit modal -->
                             <div id="edit_custom_source_section" style="display: none;" class="col-span-2 mb-3">
