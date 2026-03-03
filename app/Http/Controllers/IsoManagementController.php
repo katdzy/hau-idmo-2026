@@ -50,6 +50,15 @@ class IsoManagementController extends Controller
     public function getDocuments(Request $request)
     {
         $query = IsoMasterDocument::query();
+        if($request->has('search') && !empty($request->search)){
+            $search = $request->search;
+            $query->where(function($q) use ($search){
+                $q->where('document_code', 'ilike', "%{$search}")
+                ->orWhere('document_title', 'ilike', "%{$search}")
+                ->orWhere('source_type', 'ilike', "%{$search}")
+                ->orWhere('specific_type', 'ilike', "%{$search}");
+            });
+        }
         if($request->has('source_type') && !empty($request->source_type)){
             $query->whereIn('source_type', $request->source_type);
         }

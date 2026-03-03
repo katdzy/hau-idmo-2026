@@ -563,7 +563,29 @@ document.getElementById('clear_all_filters').addEventListener('click', ()=>{
     document.getElementById('filter_form').reset();
     officesContainer.style.display = 'none';
     officesCheckboxes.innerHTML = '';
+    document.getElementById('search_input').value = '';
 });
+
+document.getElementById('search_input').addEventListener('input', (e)=>{
+    toggleSearchBar(e.target);
+})
+// ==============================
+// Search Field Helpers
+// ==============================
+function toggleSearchBar(input){
+    const clearBtn = document.getElementById('clear_search_button');
+    if(input.value.length > 0){
+        clearBtn.classList.remove('hidden');
+    } else {
+        clearBtn.classList.add('hidden');
+    }
+}
+
+function clearSearch(){
+    const searchInput = document.getElementById('search_input');
+    searchInput.value = '';
+    document.getElementById('clear_search_button').classList.add('hidden');
+}
 
 // Apply Filters (AJAX)
 document.getElementById('filter_form').addEventListener('submit', (e)=>{

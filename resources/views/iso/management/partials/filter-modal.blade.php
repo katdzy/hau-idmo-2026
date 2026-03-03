@@ -6,6 +6,30 @@
         </div>
         <div class="modal-body">
             <form id="filter_form">
+                <!-- Search Filter -->
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Search Documents</label>
+                    <div class="relative">
+                        <input type="text"
+                                name="search"
+                                id="search_input"
+                                placeholder="Search by code, title, or type..."
+                                class="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                        <svg class="absolute left-3 top-3 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                        <button type="button"
+                                id="clear_search_button"
+                                onclick="clearSearch()"
+                                class="hidden absolute right-3 top-3 text-gray-400 hover:text-gray-600">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1">Search in: Document Code, Document Title, Source Type or Specific Type</p>
+                </div>
+                <hr class="my-4">
                 <!-- Source Type Filter -->
                 <div class="mb-4">
                     <div class="flex justify-between items-center mb-2">

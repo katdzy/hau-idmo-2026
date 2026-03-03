@@ -132,7 +132,7 @@ function getStatusColor($status){
                     </thead>
                     <tbody>
                         @foreach ($tickets as $ticket)
-                            <tr class="border-b hover:bg-gray-50 cursor-pointer">
+                            <tr class="border-b hover:bg-gray-50">
                                 <td class="px-4 py-3 text-sm font-mono text-blue-600">
                                     @if($ticket->ticket_number)
                                         {{ $ticket->ticket_number }}
@@ -507,16 +507,19 @@ function getStatusColor($status){
     // Create Ticket Modal
     createBtn.addEventListener('click', ()=> {
         modal.classList.add('active');
+        document.body.classList.add('overflow-hidden');
     });
 
     closeBtn.addEventListener('click', () =>{
         modal.classList.remove('active');
+        document.body.classList.remove('overflow-hidden');
     })
     // Close modal when clicking outside
     modal.addEventListener('click', (e) =>{
         if (e.target === modal){
             modal.classList.remove('active');
         }
+        document.body.classList.remove('overflow-hidden');
     });
 
     // ======================================
@@ -612,9 +615,7 @@ function getStatusColor($status){
         // Reset downstream state
         currentSelectedOffice = null;
         clearDocumentForm();
-        // console.log("Before toggleClassification method");
         toggleClassification(null);
-        // console.log("After toggleClassification method");
         document.getElementById('addition_fields').style.display = 'none';
         document.getElementById('existing_doc_fields').style.display = 'none';
 
@@ -699,7 +700,7 @@ function getStatusColor($status){
             additionFields.style.display = 'none';
             existingDocFields.style.display = 'none';
         }
-    })
+    });
 
     // Show/hide specific type dropdown
     docSource.addEventListener('change', () => {
@@ -736,50 +737,6 @@ function getStatusColor($status){
         ); 
     });
 
-
-    async function loadExistingDocuments(office){
-        const selectElement = document.getElementById('existing_doc_select');
-
-        // Show loading state
-        selectElement.innerHTML = '<option value="">Loading Documents...</option>';
-        selectElement.disabled = true;
-
-        try{
-            const response = await fetch(`/iso/documents/by-office?office=${encodeURIComponent(office)}`);
-
-            if(!response.ok){
-                throw new Error('Failed to load documents');
-            }
-            const documents = await response.json();
-
-            selectElement.innerHTML = '<option value="">Select a document...</option>'
-
-            if(documents.length === 0){
-                selectElement.innerHTML = '<option value="">No documents found for this office</option>';
-            } else {
-                documents.forEach(doc => {
-                    const option = document.createElement('option');
-                    option.value = doc.id;
-                    option.textContent = `${doc.document_code} | ${doc.document_title}`;
-
-                    // Store document data in data attributes
-                    option.dataset.code = doc.document_code;
-                    option.dataset.title = doc.document_title;
-                    option.dataset.source = doc.source_type;
-                    option.dataset.specificType = doc.specific_type || '';
-
-                    selectElement.appendChild(option);
-                });
-            }
-
-            selectElement.disabled = false;
-        } catch (error) {
-            console.error('Error loading documents: ', error);
-            selectElement.innerHTML = '<option value="">Error loading documents</option>';
-            alert('Failed to load documents. Please try again.');
-        }
-    }
-
     document.getElementById('existing_doc_select').addEventListener('change', (e)=>{
         const selectedOption = e.target.options[e.target.selectedIndex];
         const preview = document.getElementById('selected_doc_preview');
@@ -814,73 +771,6 @@ function getStatusColor($status){
             addExistingDocument(classification);
         }
     });
-
-    async function addNewDocument(){
-        const code = document.getElementById('doc_code').value.trim();
-        const title = document.getElementById('doc_title').value.trim();
-        const classification = 'addition';
-        const source = document.getElementById('doc_source').value;
-        const specificType = document.getElementById('doc_specific_type').value;
-        const customSource = document.getElementById('doc_custom_source').value.trim();
-
-        if (!validationCheckForm(code, title, classification, source, specificType, customSource)){
-            return;
-        }
-        // Check for duplicate before adding
-        const isDuplicate = await checkDocumentCodeExists(code);
-        if (isDuplicate){
-            alert(`Document code "${code}" already exists in the system. Please use a different code.`);
-            return;
-        }
-
-        // Create document object
-        const doc = {
-            code,
-            title,
-            classification,
-            source,
-            specificType: source === 'others' ? customSource : (specificType || null),
-            id: Date.now(),
-            revisingMasterId: null //New documents doesn't revise anything
-        };
-        documents.push(doc);
-        updateDocumentsList();
-        clearDocumentForm();
-    }
-    async function checkDocumentCodeExists(code){
-        try{
-            const response = await fetch(`/iso/documents/check-code?document_code=${encodeURIComponent(code)}`);
-            if(!response.ok) throw new Error('Check failed'); // TODO: Replace this with the error message with HTML
-            const data = await response.json();
-            return data.exists;
-        } catch (error){
-            console.error('Error checking document code: ', error);
-            return false;
-        }
-    }
-
-    function addExistingDocument(classification){
-        const selectElement = document.getElementById('existing_doc_select');
-        const selectedOption = selectElement.options[selectElement.selectedIndex];
-
-        if(!selectedOption.value){
-            alert('Please select a document');
-            return;
-        }
-
-        const doc = {
-            code: selectedOption.dataset.code,
-            title: selectedOption.dataset.title,
-            classification: classification,
-            source: selectedOption.dataset.source,
-            specificType: selectedOption.dataset.specificType || null,
-            id: Date.now(),
-            revisingMasterId: selectedOption.value
-        };
-        documents.push(doc);
-        updateDocumentsList();
-        clearDocumentForm();
-    }
 
     function updateDocumentsList() {
         const tbody = document.getElementById('documents_list');
@@ -997,10 +887,7 @@ function getStatusColor($status){
             let ticketDocuments = [];
             try{
                 ticketDocuments = JSON.parse(documentsJson)
-                console.log('Parsed Succesfully:', documents);
             } catch(error){
-                console.error('JSON parse failed:', error);
-                console.error('Failed string:', documentsJson);
                 alert('Error loading ticket documents. Check console.');
                 return;
             }
@@ -1178,8 +1065,8 @@ function getStatusColor($status){
             additionFields.style.display = 'none';
             existingDocFields.style.display = 'block';
 
-            if(currentEditOffice){
-                loadExistingDocumentsForEdit(currentEditOffice);
+            if(!isProgrammaticChange && currentEditOffice){
+                loadExistingDocuments(currentEditOffice, true);
             } else{
                 alert('Please select an office first');
                 e.target.value = '';
@@ -1234,46 +1121,6 @@ function getStatusColor($status){
         )
     })
 
-    async function loadExistingDocumentsForEdit(office){
-        const selectElement = document.getElementById('edit_existing_doc_select');
-
-        selectElement.innerHTML = '<option value="">Loading Documents...</option>';
-        selectElement.disabled = true;
-
-        try{
-            const response = await fetch(`/iso/documents/by-office?office=${encodeURIComponent(office)}`);
-
-            if(!response.ok){
-                throw new Error('Failed to load documents');
-            }
-
-            const documents = await response.json();
-            selectElement.innerHTML = '<option value="">Select a document...</option>';
-
-            if(documents.length === 0){
-                selectElement.innerHTML = '<option value="">No documents found for this office</option>';
-            } else {
-                documents.forEach(doc =>{
-                    const option = document.createElement('option');
-                    option.value = doc.id;
-                    option.textContent = `${doc.document_code} - ${doc.document_title}`;
-
-                    option.dataset.code = doc.document_code;
-                    option.dataset.title = doc.document_title;
-                    option.dataset.source = doc.source_type;
-                    option.dataset.specificType = doc.specific_type || '';
-
-                    selectElement.appendChild(option);
-                });
-            }
-            selectElement.disabled = false;
-        } catch (error){
-            console.error('Error loading documents:', error);
-            selectElement.innerHTML = '<option value="">Error loading documents</option>';
-            alert('Failed to load documents. Please try again.');
-        }
-    }
-
     // Handle existing document selection in edit mode
     document.getElementById('edit_existing_doc_select').addEventListener('change',(e)=>{
         const selectedOption = e.target.options[e.target.selectedIndex];
@@ -1313,69 +1160,11 @@ function getStatusColor($status){
         }
 
         if(classification === 'addition'){
-            addEditNewDocument();
+            addNewDocument(true);
         } else if (classification === 'revision' || classification === 'deletion'){
-            addEditExistingDocument(classification);
+            addExistingDocument(classification, true);
         }
     });
-    
-    // Function to add NEW document in edit mode
-    async function addEditNewDocument(){
-        const code = document.getElementById('edit_doc_code').value.trim();
-        const title = document.getElementById('edit_doc_title').value.trim();
-        const classification = 'addition';
-        const source = document.getElementById('edit_doc_source').value;
-        const specificType = document.getElementById('edit_doc_specific_type').value;
-        const customSource =document.getElementById('edit_doc_custom_source').value.trim();
-
-        if(!validationCheckForm(code, title, classification, source, specificType, customSource)){
-            return;
-        }
-        // Same duplicate check from adding new document
-        const isDuplicate = await checkDocumentCodeExists(code);
-        if(isDuplicate){
-            alert(`Document code "${code}" already exists in the system. Please use a different document code.`);
-            return;
-        }
-
-        const doc = {
-            code,
-            title,
-            classification,
-            source,
-            specificType: source === 'others' ? customSource: (specificType || null),
-            id:Date.now() + Math.random(),
-            revisingMasterId : null //Addition has no revising Id's
-        };
-        editDocuments.push(doc);
-        updateEditDocumentsList();
-        clearEditDocumentForm();
-    }
-
-    function addEditExistingDocument(classification){
-        const selectElement = document.getElementById('edit_existing_doc_select');
-        const selectedOption = selectElement.options[selectElement.selectedIndex];
-
-        if(!selectedOption.value || !selectedOption.value){
-            alert('Please select a document');
-            return;
-        }
-
-        const doc = {
-            code: selectedOption.dataset.code,
-            title: selectedOption.dataset.title,
-            classification: classification,
-            source: selectedOption.dataset.source,
-            specificType: selectedOption.dataset.specificType || null,
-            id: Date.now() + Math.random(),
-            revisingMasterId: selectedOption.value
-        };
-        editDocuments.push(doc);
-        updateEditDocumentsList();
-        document.getElementById('edit_existing_doc_select').value = '';
-        document.getElementById('edit_selected_doc_preview').style.display = 'none';
-    }
-
 
     // Open Edit Modal and fetch ticket data
     function openEditModal(ticketId){
@@ -1389,7 +1178,12 @@ function getStatusColor($status){
                 }
                 return response.json();
             })
-            .then(ticket=> {
+            .then(async ticket=> {
+                // console.log('Full ticket data:', ticket);
+                // console.log('Documents:', ticket.documents);
+                // if(ticket.documents.length > 0){
+                //     console.log('First document fields:', ticket.documents[0]);
+                // }
                 // Fill form with existing data                
                 // Start of new Originating section Logic
                 // Find which cluster the office belongs to
@@ -1422,9 +1216,15 @@ function getStatusColor($status){
                     classification: doc.classification,
                     source: doc.source_type,
                     specificType: doc.specific_type,
+                    revisingMasterId: doc.revising_master_document_id ?? null,
                     id: Date.now() + Math.random() //Unique ID for removal
                 }));
                 updateEditDocumentsList();
+
+                const hasExistingDocs = editDocuments.some(doc => doc.revisingMasterId);
+                if(hasExistingDocs){
+                    await loadExistingDocuments(currentEditOffice, true);
+                }
 
                 // Show modal
                 editModal.classList.remove('hidden');
@@ -1484,7 +1284,7 @@ function getStatusColor($status){
                 </td>
                 <td class="px-2 py-2">${sourceLabel}</td>
                 <td class="px-2 py-2 text-center">
-                    <button type="button" onclick="removeEditDocument('${doc.id}')" class="text-red-600 hover:text-red-800 text-sm">
+                    <button type="button" onclick="removeDocument('${doc.id}', true)" class="text-red-600 hover:text-red-800 text-sm">
                         Remove
                     </button>
                 </td>
@@ -1610,16 +1410,38 @@ function getStatusColor($status){
         };
         return colors[classification] || 'bg-gray-200 text-gray-800';
     }
+    function restoreOption(id, isEdit = false){
+        const sourceArray = isEdit ? editDocuments : documents;
+        const doc = sourceArray.find(d => String(d.id) === String(id));
+        if(doc && doc.revisingMasterId){
+            // Restore the option back to the dropdown
+            const selectId = isEdit ? 'edit_existing_doc_select' : 'existing_doc_select';
+            const selectElement = document.getElementById(selectId);
+            
+            if (!selectElement) return;
 
-    function removeDocument(id){
-        documents = documents.filter(doc => doc.id !== id);
-        updateDocumentsList();
+            const option = document.createElement('option');
+            option.value = doc.revisingMasterId;
+            option.textContent = `${doc.code} | ${doc.title}`;
+            option.dataset.code = doc.code;
+            option.dataset.title = doc.title;
+            option.dataset.source = doc.source;
+            option.dataset.specificType = doc.specificType || '';
+            selectElement.appendChild(option);
+        }
     }
-    // Remove Document from Edit List
-    function removeEditDocument(id){
-        editDocuments = editDocuments.filter(doc => String(doc.id) !== String(id));
-        updateEditDocumentsList();
+    //Remove document on list.
+    function removeDocument(id, isEdit = false){
+        restoreOption(id, isEdit);
+        if(isEdit){
+            editDocuments = editDocuments.filter(doc => String(doc.id) !== String(id));
+            updateEditDocumentsList();
+        } else{
+            documents = documents.filter(doc => String(doc.id) !== String(id));
+            updateDocumentsList();
+        }
     }
+
     function clearAllDocuments(isEditMode = false){
         const targetArray = isEditMode ? editDocuments : documents;
         const updateUI = isEditMode ? updateEditDocumentsList : updateDocumentsList;
@@ -1638,6 +1460,7 @@ function getStatusColor($status){
         }
 
         updateUI();
+        return true;
     }
 
     // Clear - Create Ticket form
@@ -1718,6 +1541,144 @@ function getStatusColor($status){
             // Enable
             classificationSelect.classList.remove('opacity-50','cursor-not-allowed');
             classificationSelect.removeAttribute('disabled');
+        }
+    }
+
+    async function loadExistingDocuments(office, isEdit = false){
+        const selectId = isEdit ? 'edit_existing_doc_select' : 'existing_doc_select';
+        const activeDocuments = isEdit ? editDocuments : documents;
+        const selectElement = document.getElementById(selectId);
+
+        if(!selectElement) return;
+
+        // Show loading state
+        selectElement.innerHTML = '<option value="">Loading Documents...</option>';
+        selectElement.disabled = true;
+
+        try{
+            const response = await fetch(`/iso/documents/by-office?office=${encodeURIComponent(office)}`);
+
+            if(!response.ok){
+                throw new Error('Failed to load documents');
+            }
+            const fetchedDocuments = await response.json();
+            // Get IDs of documents already added to the ticket
+            const addedIds = activeDocuments
+                .filter(doc => doc.revisingMasterId !== null)
+                .map(doc => String(doc.revisingMasterId));
+            
+            // Filter out already-added documents
+            const availableDocs = fetchedDocuments.filter(doc=> !addedIds.includes(String(doc.id)));
+
+            if(fetchedDocuments.length === 0){
+                selectElement.innerHTML = '<option value="">No documents found for this office</option>';
+            } else if (availableDocs.length === 0){
+                selectElement.innerHTML = '<option value="">All office documents already added</option>';
+            } else {
+                selectElement.innerHTML = '<option value="">Select a document...</option>';
+                availableDocs.forEach(doc => {
+                    const option = document.createElement('option');
+                    option.value = doc.id;
+                    option.textContent = `${doc.document_code} | ${doc.document_title}`;
+                    option.dataset.code = doc.document_code;
+                    option.dataset.title = doc.document_title;
+                    option.dataset.source = doc.source_type;
+                    option.dataset.specificType = doc.specific_type ?? '';
+                    selectElement.appendChild(option);
+                });
+            }
+
+            selectElement.disabled = false;
+        } catch (error) {
+            console.error('Error loading documents: ', error);
+            selectElement.innerHTML = '<option value="">Error loading documents</option>';
+            alert('Failed to load documents. Please try again.');
+        } finally{
+            selectElement.disabled = false;
+        }
+    }
+    async function addNewDocument(isEdit = false){
+        const prefix = isEdit ? 'edit_doc':'doc';
+
+        const code = document.getElementById(`${prefix}_code`).value.trim();
+        const title = document.getElementById(`${prefix}_title`).value.trim();
+        const source = document.getElementById(`${prefix}_source`).value;
+        const specificType = document.getElementById(`${prefix}_specific_type`).value;
+        const customSource = document.getElementById(`${prefix}_custom_source`).value.trim();
+        const classification = 'addition';
+
+        if (!validationCheckForm(code, title, classification, source, specificType, customSource)){
+            return;
+        }
+        // Check for duplicate before adding
+        const isDuplicate = await checkDocumentCodeExists(code);
+        if (isDuplicate){
+            alert(`Document code "${code}" already exists in the system. Please use a different code.`);
+            return;
+        }
+
+        // Create document object
+        const doc = {
+            code,
+            title,
+            classification,
+            source,
+            specificType: source === 'others' ? customSource : (specificType || null),
+            id: isEdit ? Date.now() + Math.random() : Date.now(),
+            revisingMasterId: null //New documents doesn't revise anything
+        };
+        // TODO: get rid of this if else, in the future. Make it simpler.
+        if(isEdit){
+            editDocuments.push(doc);
+            updateEditDocumentsList();
+            clearEditDocumentForm();
+        } else {
+            documents.push(doc);
+            updateDocumentsList();
+            clearDocumentForm();
+        }
+    }
+    async function checkDocumentCodeExists(code){
+        try{
+            const response = await fetch(`/iso/documents/check-code?document_code=${encodeURIComponent(code)}`);
+            if(!response.ok) throw new Error('Check failed'); // TODO: Replace this with the error message with HTML
+            const data = await response.json();
+            return data.exists;
+        } catch (error){
+            console.error('Error checking document code: ', error);
+            return false;
+        }
+    }
+    function addExistingDocument(classification, isEdit = false){
+        const prefix = isEdit ? 'edit_' : '';
+        const selectElement = document.getElementById(`${prefix}existing_doc_select`);
+        const selectedOption = selectElement.options[selectElement.selectedIndex];
+
+        if(!selectedOption.value){
+            alert('Please select a document');
+            return;
+        }
+
+        const doc = {
+            code: selectedOption.dataset.code,
+            title: selectedOption.dataset.title,
+            classification: classification,
+            source: selectedOption.dataset.source,
+            specificType: selectedOption.dataset.specificType || null,
+            id: isEdit ? Date.now() + Math.random() : Date.now(),
+            revisingMasterId: selectedOption.value
+        };
+        if(isEdit){
+            editDocuments.push(doc);
+            selectedOption.remove();
+            updateEditDocumentsList();
+            document.getElementById('edit_existing_doc_select').value = '';
+            document.getElementById('edit_selected_doc_preview').style.display = 'none';
+        } else{
+            documents.push(doc);
+            selectedOption.remove();
+            updateDocumentsList();
+            clearDocumentForm();
         }
     }
 </script>

@@ -32,7 +32,7 @@ class TicketStatusChanged extends Mailable
      * Build the message.
      */
     public function build(){
-        return $this->subject('ISO Ticket #' .$this->ticket->id. ' -Status Updated to '.$this->ticket->status)
+        return $this->subject('ISO Ticket: ' .$this->ticket->ticket_number. ' -Status Updated to '.$this->ticket->status)
         ->view('emails.ticket-status-changed')
         ->with([
             'recipientName' => 'User'

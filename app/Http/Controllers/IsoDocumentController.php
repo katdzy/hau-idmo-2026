@@ -81,7 +81,19 @@ class IsoDocumentController extends Controller
         $this->authTicketCheck($ticket);
 
         // Load the ticket with its documents relationship
-        $ticket -> load('documents');
+        $ticket -> load(['documents' => function($query){
+            $query->select(
+                'id',
+                'ticket_id',
+                'document_code',
+                'document_title',
+                'classification',
+                'source_type',
+                'specific_type',
+                'status',
+                'revising_master_document_id'
+            );
+        }]);
 
         // Return the ticket data as JSON for the model
         return response()->json($ticket);
