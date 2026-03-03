@@ -53,10 +53,10 @@ class IsoManagementController extends Controller
         if($request->has('search') && !empty($request->search)){
             $search = $request->search;
             $query->where(function($q) use ($search){
-                $q->where('document_code', 'ilike', "%{$search}")
-                ->orWhere('document_title', 'ilike', "%{$search}")
-                ->orWhere('source_type', 'ilike', "%{$search}")
-                ->orWhere('specific_type', 'ilike', "%{$search}");
+                $q->whereRaw('LOWER(document_code) LIKE ?' , ['%' . strtolower($search) . '%'])
+                ->orWhereRaw('LOWER(document_title) LIKE ?' , ['%' . strtolower($search) . '%'])
+                ->orWhereRaw('LOWER(source_type) LIKE ?' , ['%' . strtolower($search) . '%'])
+                ->orWhereRaw('LOWER(specific_type) LIKE ?' , ['%' . strtolower($search) . '%']);
             });
         }
         if($request->has('source_type') && !empty($request->source_type)){
