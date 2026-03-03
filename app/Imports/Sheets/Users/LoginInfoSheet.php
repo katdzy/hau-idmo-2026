@@ -49,7 +49,13 @@ class LoginInfoSheet implements ToCollection, WithHeadingRow, WithValidation, Sk
                 'email',
                 Rule::unique('tbl_login', 'email'),
             ],
-            'role' => 'required|in:Employee,SuperAdmin,HR Admin,Dean,IDC Admin,ISO Document Handler',
+            'role' => [
+                'required',
+                Rule::exists('tbl_tags', 'item')
+                    ->where(function ($query) {
+                        $query->where('category', 'role');
+                    }),
+            ],
             'password' => 'required'
         ];
     }
@@ -61,7 +67,7 @@ class LoginInfoSheet implements ToCollection, WithHeadingRow, WithValidation, Sk
             'email.email' => 'Login Info: Email must be valid',
             'email.unique' => 'Login Info: Email must be unique',
             'role.required' => 'Login Info: Role is required',
-            'role.in' => 'Login Info: Role must be Employee, SuperAdmin, HR Admin, Dean, IDC Admin, or ISO Document Handler',
+            'role.exists' => 'Login Info: Role does not exist in the system',
             'password.required' => 'Login Info: Password is required',
         ];
     }
