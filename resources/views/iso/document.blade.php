@@ -469,7 +469,6 @@ function getStatusColor($status){
             '(CSD-ECM) Engineering Construction and Maintenance',
             '(CSD-MCM) Motorpool/Campus Maintenance',
             '(CSD-PCO) Property Custodianship Office',
-            '(CSD-PUO) Purchasing Office',
             '(CSD-SEC) Campus Security',
             '(CSD-VLO) Venues and Logistics Office'
         ],

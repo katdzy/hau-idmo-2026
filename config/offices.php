@@ -94,7 +94,6 @@ return [
         'CSD-ECM' => '(CSD-ECM) Engineering Construction and Maintenance',
         'CSD-MCM' => '(CSD-MCM) Motorpool/Campus Maintenance',
         'CSD-PCO' => '(CSD-PCO) Property Custodianship Office',
-        'CSD-PUO' => '(CSD-PUO) Purchasing Office',
         'CSD-SEC' => '(CSD-SEC) Campus Security',
         'CSD-VLO' => '(CSD-VLO) Venues and Logistics Office',
 
