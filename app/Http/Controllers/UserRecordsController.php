@@ -417,13 +417,15 @@ class UserRecordsController extends Controller
 
         $dep = dependencies::where('emp_id',$id)->get();
         $hasdep = Departments::where('code', $data->emp_dept)->exists();
+        $departments = Departments::orderBy('dept')->get();
 
         // Simply pass $section to the view
         return view('admin.records.users.edit-info')->with([
             'dep'=> $hasdep,
             'data'=> $data,
             'dependencies'=> $dep,
-            'section' => $section   // Pass the section so blade can decide which UI to show
+            'section' => $section,  // Pass the section so blade can decide which UI to show
+            'dept' => $departments,
         ]);
     }
 
@@ -442,6 +444,7 @@ class UserRecordsController extends Controller
                         'emp_fname'=>'required|string|max:255',
                         'emp_mname' => 'nullable|string|max:255',
                         'emp_lname'=>'required|string|max:255',
+                        'emp_dept' => 'required|exists:departments,code',
                         'emp_gender' => 'nullable|string|max:50',
                         'emp_dob' => 'nullable|date',
                         'emp_pob' => 'nullable|string|max:255',
@@ -453,6 +456,7 @@ class UserRecordsController extends Controller
                         'emp_fname' => $request->emp_fname,
                         'emp_mname' => $request->emp_mname,
                         'emp_lname' => $request->emp_lname,
+                        'emp_dept'  => $request->emp_dept,
                         'emp_gender'=> $request->emp_gender,
                         'emp_dob'   => $request->emp_dob,
                         'emp_pob'   => $request->emp_pob,

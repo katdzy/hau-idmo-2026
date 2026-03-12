@@ -57,6 +57,23 @@
                                value="{{ old('emp_lname', $data->emp_lname) }}" required>
                     </div>
                     <div>
+                        <label for="emp_dept" class="block text-sm font-semibold text-gray-700">
+                            Department
+                        </label>
+
+                        <select id="emp_dept" name="emp_dept"
+                            class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:ring-red-900 focus:border-red-900">
+
+                            @foreach ($dept as $department)
+                                <option value="{{ $department->code }}"
+                                    {{ old('emp_dept', $data->emp_dept) == $department->code ? 'selected' : '' }}>
+                                    {{ $department->dept }}
+                                </option>
+                            @endforeach
+
+                        </select>
+                    </div>
+                    <div>
                         <label for="emp_gender" class="block text-sm font-semibold text-gray-700">Gender</label>
                         <select id="emp_gender" name="emp_gender" 
                                 class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:ring-red-900 focus:border-red-900">
