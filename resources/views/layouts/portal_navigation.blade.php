@@ -81,8 +81,8 @@
                 <!-- A LINK NAVIGATION  -->
                 <div class="w-full flex justify-center my-4">
                     <a href="{{route('dashboard')}}" class="w-[90%] flex items-center justify-center px-4 py-1 gap-2 bg-white hover:bg-gray-200 rounded-xl">
-                    <img src="{{asset('images/icons/back_maroon.png')}}" alt="" class="w-[20px] h-[20px">
-                        <span class="text-red-900 font-semibold">Back to Main Dashboard</span>
+                    <img src="{{asset('images/icons/back_maroon.png')}}" alt="" class="w-[20px] h-[20px]">
+                        <h1 class="text-red-900 font-semibold">Back to Main Dashboard</h1>
                     </a>
                 </div>
             @endif
