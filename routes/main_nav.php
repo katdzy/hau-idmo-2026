@@ -34,5 +34,4 @@ Route::middleware(['admin','revalidate'])->group(function() {
         return view('construction');
     })->name('construction');
 
-
-    });
+});

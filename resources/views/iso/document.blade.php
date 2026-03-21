@@ -309,7 +309,7 @@ function getStatusColor($status){
         border-radius: 10px;
         width: 90%;
         max-width: 800px;
-        max-height: 90vh;
+        max-height: 75vh;
         z-index: 10;
         overflow-y: auto;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);

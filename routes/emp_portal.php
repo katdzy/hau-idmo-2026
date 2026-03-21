@@ -33,7 +33,7 @@ use App\Http\Controllers\certificationController;
 use App\Http\Controllers\UpdatesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SharepointController;
-use App\Http\Controllers\KnowledgeHubController;
+use App\Http\Controllers\InformationHubController;
 use App\Http\Controllers\IsoDocumentController;
 use App\Http\Controllers\IsoManagementController;
 use App\Http\Controllers\VisitorController;
@@ -522,9 +522,9 @@ Route::middleware('auth','revalidate')->group(function () {
     Route::get('sharepoint-sites/dashboard', [SharepointController::class, 'index'])->name('sharepoint-sites.dashboard');
 
     /*------------------------------------------------------------------
-    | 19. Knowledge Hub
+    | 19. Information Hub
     |------------------------------------------------------------------*/
-    Route::get('knowledge-hub/dashboard', [KnowledgeHubController::class, 'index'])->name('knowledge-hub.dashboard');
+    Route::get('information-hub/dashboard', [InformationHubController::class, 'index'])->name('information-hub.dashboard');
     
     /*------------------------------------------------------------------
     | 20. KPI Library
@@ -599,14 +599,5 @@ Route::middleware('auth','revalidate')->group(function () {
         ->name('iso.management.export');
     Route::get('iso/management/template', [IsoManagementController::class, 'downloadTemplate'])
         ->name('iso.management.template');
-
-    /*------------------------------------------------------------------
-    | 24. Visit Counter
-    |------------------------------------------------------------------*/
-    Route::get('/visitor-count/visitors', [VisitorController::class, 'index'])
-        ->name('visitor-count.dashboard');
-    Route::post('/visitor-count/visitors/homepage-period', [VisitorController::class, 'setHomepagePeriod'])
-        ->name('visitor-count.homepage-period');
-    Route::delete('/visitor-count/clear', [VisitorController::class, 'clearAll'])
-        ->name('visitor-count.clear');
+        
 });

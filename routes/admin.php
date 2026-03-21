@@ -11,6 +11,7 @@ use App\Http\Controllers\SharepointController;
 use App\Http\Controllers\InformationHubController;
 use App\Http\Controllers\UserRecordsController;
 use App\Http\Controllers\UserTerminationController;
+use App\Http\Controllers\VisitorController;
 use App\Models\Employee;
 use App\Models\Departments;
 use Illuminate\Support\Facades\Route;
@@ -237,7 +238,13 @@ Route::middleware(['superAdmin','revalidate'])->group(function() {
     Route::put('/dimensions/{id}', [KpiDimensionController::class, 'update'])->name('dimensions.update');
     Route::delete('/dimensions/{id}', [KpiDimensionController::class, 'destroy'])->name('dimensions.destroy');
 
-
+    /******************** Visit Counter ********************/
+    Route::get('/visitor-count/visitors', [VisitorController::class, 'index'])
+        ->name('visitor-count.dashboard');
+    Route::post('/visitor-count/visitors/homepage-period', [VisitorController::class, 'setHomepagePeriod'])
+        ->name('visitor-count.homepage-period');
+    Route::delete('/visitor-count/clear', [VisitorController::class, 'clearAll'])
+        ->name('visitor-count.clear');
 }); })
 
 ?>
