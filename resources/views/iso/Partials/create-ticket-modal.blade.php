@@ -17,7 +17,7 @@
                             <option value="">Select Cluster/Department...</option>
                             <option value="aac">Academic Affairs Cluster (AAC)</option>
                             <option value="aie">Institute for Academic Innovation & Entrepreneurship (AIE)</option>
-                            <option value="cfs">Institute for Christian Formation & Social Integration (CFS)</option>
+                            <option value="icfsi">Institute for Christian Formation & Social Integration (ICFSI)</option>
                             <option value="csd">Campus Services & Development Office (CSD)</option>
                             <option value="eac">External Affairs Cluster (EAC)</option>
                             <option value="frm">Finance & Resources Management Services (FRM)</option>
@@ -167,7 +167,7 @@
             <div class="form-group">
                 <label class="form-label">SharePoint Folder Link <span class="text-red-500">*</span></label>
                 <input type="url" name="sharepoint_link" class="form-input" placeholder="https://hau.sharepoint.com/..." required>
-                <small class="text-gray-500">Provide the link to the SharePoint folder containing the DMCN and actual document</small>
+                <small class="text-gray-500 block mb-1">Provide the link to the SharePoint folder containing the DMCN and actual document</small>
             </div>
 
             <!-- Email Message to IDC -->

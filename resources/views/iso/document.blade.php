@@ -17,18 +17,21 @@ function getStatusColor($status){
 <div class="container mx-auto">
     <div class="con-box">
         @if (session('success'))
-        <div class="w-full bg-green-600 text-white rounded-xl px-4 py-2 mb-4 text-center" id="success">
-            {{ session('success') }}
+        <div class="w-full bg-green-600 text-white rounded-xl px-4 py-2 mb-4 flex items-center justify-between" id="success">
+            <span class="flex-grow text-center">{{ session('success') }}</span>
+            <button type="button" class="text-white hover:text-gray-200 font-bold ml-2 px-2 focus:outline-none" onclick="document.getElementById('success').style.display='none'">×</button>
         </div>
         @endif
         @if (session('msg'))
-            <div class="w-full bg-green-600 text-white rounded-xl px-4 py-2 mb-4 text-center" id ="msg">
-                {{ session('msg') }}
+            <div class="w-full bg-green-600 text-white rounded-xl px-4 py-2 mb-4 flex items-center justify-between" id ="msg">
+                <span class="flex-grow text-center">{{ session('msg') }}</span>
+                <button type="button" class="text-white hover:text-gray-200 font-bold ml-2 px-2 focus:outline-none" onclick="document.getElementById('msg').style.display='none'">×</button>
             </div>
         @endif
         @if(session('error'))
-            <div class="w-full bg-red-600 text-white rounded-xl px-4 py-2 mb-4 text-center" id="error-msg">
-                {{ session('error') }}
+            <div class="w-full bg-red-600 text-white rounded-xl px-4 py-2 mb-4 flex items-center justify-between" id="error-msg">
+                <span class="flex-grow text-center">{{ session('error') }}</span>
+                <button type="button" class="text-white hover:text-gray-200 font-bold ml-2 px-2 focus:outline-none" onclick="document.getElementById('error-msg').style.display='none'">×</button>
             </div>
         @endif
 
@@ -383,105 +386,18 @@ function getStatusColor($status){
         ]
     };
 
-    // Specific Office options
-    const specificOfficeOptions = {
-        oop: [
-            "(OOP) Office of the President",
-            "(OOP-AVI) Aviation Insitute",
-            "(OOP-CKS) Center for Kapampangan Studies",
-            "(OOP-DPO) Data Privacy Office",
-            "(OOP-ITC) Institutional Testing and Evaluation Center",
-            "(OOP-ITS) Information Technology Systems & Services",
-            "(OOP-OIA) Office of International Affairs",
-            "(OOP-TRO) Treasury Office",
-            "(OOP-UCO) University Chaplain Office"
-        ],
-        aac: [
-            '(AAC) Academic Affairs Office',
-            '(AAC-BED) School of Basic Education',
-            '(AAC-CJE) College of Criminal Justice Education & Forensics',
-            '(AAC-CTL) Center for Teaching & Learning',
-            '(AAC-GSR) Graduate Studies & Research',
-            '(AAC-HAT) Holy Angel Travel Services',
-            '(AAC-IRB) Institutional Review Board',
-            '(AAC-LIB) Library Department',
-            '(AAC-LMS) Learning Management System',
-            '(AAC-SAS) School of Arts & Sciences',
-            '(AAC-SBA) School of Business & Accountancy',
-            '(AAC-SEA) School of Engineering & Architecture',
-            '(AAC-SED) School of Education',
-            '(AAC-SNA) SChool of Nursing & Allied Medical Sciences',
-            '(AAC-SOC) School of Computing',
-            '(AAC-STM) School of Hospitality & Tourism Management',
-            '(AAC-URO) University Research Office'
-        ],
-        oie: [
-            '(OIE) Office of the Institutional Effectiveness',
-            '(OIE-DMO) Institutional Database Management Office',
-            '(OIE-IDC) Insitutional Document Controller',
-            '(OIE-IPR) Institutional Research, Planning & Publications Office',
-            '(OIE-QAO) Quality Assurance Office'
-        ],
-        cfs: [
-            '(CFS) Institute for Catholic Formation & Social Integration',
-            '(CFS-CES) Office of the Community Extension Services',
-            '(CFS-CEP) Character Education Program Desk',
-            '(CFS-CLE) Christian Living Education',
-            '(CFS-CMO) Campus Ministry Office'
-        ],
-        hro: [
-            '(HRO) Human Resource Management',
-            '(HRO-HRD) Human Resource Development Office',
-            '(HRO-HRM) Recruitment and Maintenance'
-        ],
-        frm: [
-            '(FRM) Finance and Resource Management Office',
-            '(FRM-ACC) Accounts & Collection',
-            '(FRM-ASA) Ancillary Services Accounting',
-            '(FRM-ASE) Ancillary Services',
-            '(FRM-ATO) Accounting',
-            '(FRM-GRT) Grants Accountant',
-            '(FRM-PAO) Payroll'
-        ],
-        rss: [
-            '(RSS) Records Systems & Services',
-            '(RSS-ADO) Admissions Office'
-        ],
-        ssa: [
-            '(SSA-CPO) Career and Placement Office',
-            '(SSA-MDS) Medical and Dental Services',
-            '(SSA-SAO) Student Affairs',
-            '(SSA-SGO) Scholarships & Grants',
-            '(SSA-UGC) University Guidance Center',
-            '(SSA-USO) University Sports'
-        ],
-        eac: [
-            '(EAC) External Affairs Office',
-            '(EAC-ARO) Alumni Relations Office',
-            '(EAC-CRE) Creative Services',
-            '(EAC-PAM) Performing Arts and Events Management',
-            '(EAC-PRO) Public Relations Office'
-        ],
-        csd: [
-            '(CSD) Campus Services & Development Office',
-            '(CSD-CPO) Central Purchasing Office',
-            '(CSD-CSO) Campus Services Office',
-            '(CSD-ECM) Engineering Construction and Maintenance',
-            '(CSD-MCM) Motorpool/Campus Maintenance',
-            '(CSD-PCO) Property Custodianship Office',
-            '(CSD-SEC) Campus Security',
-            '(CSD-VLO) Venues and Logistics Office'
-        ],
-        aie: [
-            '(AIE) Institute for academic Innovation & Entrepreneurship',
-            '(AIE-ETA) Expanded Tertiary Education, Equivalency & Accreditation',
-            '(AIE-SPL) School of Professional Education and Lifelong Learning',
-            '(AIE-TBI) Technology Business Incubator - KITTO'
-        ],
-        iat: [
-            '(IAT) Internal Audit Team'
-        ]
-    }
+    // Specific Office options loaded dynamically from database
+    @php
+        $dbDepartments = \App\Models\Departments::orderBy('code', 'asc')->get();
+        $jsOptions = [];
+        foreach ($dbDepartments as $d) {
+            $parts = explode('-', $d->code);
+            $cluster = strtolower($parts[0]);
+            $formatted = "({$d->code}) {$d->dept}";
+            $jsOptions[$cluster][] = $formatted;
+        }
+    @endphp
+    const specificOfficeOptions = @json($jsOptions);
     // --------------------------------------------
     // Prefix Logic
     // --------------------------------------------
@@ -834,24 +750,32 @@ function getStatusColor($status){
     }
 
     //Form submission Validation
+    let isCreatingTicket = false;
     document.getElementById('ticket_form').addEventListener('submit', (e) => {
         if (documents.length === 0){
             e.preventDefault();
             alert('Please add at least one document to the ticket');
             return false;
         }
-    })
+        if (isCreatingTicket) {
+            e.preventDefault();
+            return false;
+        }
+        isCreatingTicket = true;
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = 'Creating Ticket...';
+        }
+    });
 
-    // Auto-hide messages in 5 seconds or 5000 milliseconds
+    // Auto-hide success/info messages in 5 seconds or 5000 milliseconds (excluding error messages)
     setTimeout(() =>{
         const successElement = document.getElementById('success');
         if(successElement) successElement.style.display = 'none';
 
         const msgElement = document.getElementById('msg');
         if(msgElement) msgElement.style.display = 'none';
-
-        const errorElement = document.getElementById('error-msg');
-        if(errorElement) errorElement.style.display = 'none';
     }, 5000);
 
     // ============================================
@@ -1310,11 +1234,22 @@ function getStatusColor($status){
     }
 
     // Form submission Validation
+    let isEditingTicket = false;
     document.getElementById('edit_ticket_form').addEventListener('submit', (e)=>{
         if (editDocuments.length === 0){
             e.preventDefault();
             alert('Please add at least one document to the ticket');
             return false;
+        }
+        if (isEditingTicket) {
+            e.preventDefault();
+            return false;
+        }
+        isEditingTicket = true;
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = 'Updating Ticket...';
         }
     });
 

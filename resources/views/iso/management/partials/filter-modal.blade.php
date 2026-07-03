@@ -67,7 +67,7 @@
                         <option value="">All Departments</option>
                         <option value="aac">Academic Affairs Cluster (AAC)</option>
                         <option value="aie">Institute for Academic Innovation & Entrepreneurship (AIE)</option>
-                        <option value="cfs">Institute for Christian Formation & Social Integration (CFS)</option>
+                        <option value="icfsi">Institute for Christian Formation & Social Integration (ICFSI)</option>
                         <option value="csd">Campus Services & Development Office (CSD)</option>
                         <option value="eac">External Affairs Cluster (EAC)</option>
                         <option value="frm">Finance & Resources Management Services (FRM)</option>
