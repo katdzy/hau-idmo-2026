@@ -213,4 +213,149 @@ class IsoManagementController extends Controller
             'iso_documents_template.xlsx'
         );
     }
+
+    /**
+     * ISO Departments CRUD Methods
+     */
+    public function listDepartments(Request $request)
+    {
+        $userRole = auth()->user()->role;
+        $allowedRoles = ['IDC Admin', 'SuperAdmin'];
+        if(!in_array($userRole, $allowedRoles)){
+            return redirect()->back()->with('error', 'Unauthorized Action');
+        }
+
+        $query = $request->get('query');
+        $cluster = $request->get('cluster');
+
+        $dbQuery = \App\Models\Departments::query();
+
+        if (!empty($query)) {
+            $dbQuery->where(function($q) use ($query) {
+                $q->where('code', 'LIKE', "%{$query}%")
+                  ->orWhere('dept', 'LIKE', "%{$query}%");
+            });
+        }
+
+        if (!empty($cluster)) {
+            $dbQuery->where(function($q) use ($cluster) {
+                $q->where('code', 'LIKE', "{$cluster}-%")
+                  ->orWhere('code', $cluster);
+            });
+        }
+
+        $departments = $dbQuery->orderBy('dept', 'asc')->paginate(10);
+
+        return view('iso.management.departments.index', compact('departments', 'query', 'cluster'));
+    }
+
+    public function createDepartment()
+    {
+        $userRole = auth()->user()->role;
+        $allowedRoles = ['IDC Admin', 'SuperAdmin'];
+        if(!in_array($userRole, $allowedRoles)){
+            return redirect()->back()->with('error', 'Unauthorized Action');
+        }
+
+        return view('iso.management.departments.create');
+    }
+
+    public function storeDepartment(Request $request)
+    {
+        $userRole = auth()->user()->role;
+        $allowedRoles = ['IDC Admin', 'SuperAdmin'];
+        if(!in_array($userRole, $allowedRoles)){
+            return redirect()->back()->with('error', 'Unauthorized Action');
+        }
+
+        $request->validate([ 
+            'code'=> 'required|string|unique:departments,code',
+            'dept'=> 'required|string' 
+        ]); 
+
+        \App\Models\Departments::create([ 
+            'code'=> $request->code, 
+            'dept'=> $request->dept
+        ]); 
+
+        return redirect()->route('iso.management.departments.index')->with([ 
+            'success'=> 'Department record created successfully.'
+        ]); 
+    }
+
+    public function editDepartment($id)
+    {
+        $userRole = auth()->user()->role;
+        $allowedRoles = ['IDC Admin', 'SuperAdmin'];
+        if(!in_array($userRole, $allowedRoles)){
+            return redirect()->back()->with('error', 'Unauthorized Action');
+        }
+
+        $dept = \App\Models\Departments::findOrFail($id);
+        return view('iso.management.departments.edit', compact('dept'));
+    }
+
+    public function updateDepartment(Request $request, $id)
+    {
+        $userRole = auth()->user()->role;
+        $allowedRoles = ['IDC Admin', 'SuperAdmin'];
+        if(!in_array($userRole, $allowedRoles)){
+            return redirect()->back()->with('error', 'Unauthorized Action');
+        }
+
+        $request->validate([ 
+            'code'=> 'required|string|unique:departments,code,' . $id,
+            'dept'=> 'required|string' 
+        ]); 
+
+        $dept = \App\Models\Departments::findOrFail($id); 
+        $oldCode = $dept->code;
+        $oldName = $dept->dept;
+
+
+
+        $newCode = $request->code;
+        $newName = $request->dept;
+
+        $dept->update([ 
+            'code'=> $newCode, 
+            'dept'=> $newName
+        ]); 
+
+        // Cascading Updates for user profiles:
+        \Illuminate\Support\Facades\DB::table('tbl_info')
+            ->where('emp_dept', $oldCode)
+            ->orWhere('emp_dept', $oldName)
+            ->update(['emp_dept' => $newCode]);
+
+        // Cascading Updates for existing registered ISO documents:
+        \Illuminate\Support\Facades\DB::table('iso_master_documents')
+            ->where('originating_section', 'LIKE', "%({$oldCode})%")
+            ->orWhere('originating_section', 'LIKE', "%{$oldName}%")
+            ->update(['originating_section' => "({$newCode}) {$newName}"]);
+
+        // Cascading Updates for tickets:
+        \Illuminate\Support\Facades\DB::table('iso_tickets')
+            ->where('originating_section', 'LIKE', "%({$oldCode})%")
+            ->orWhere('originating_section', 'LIKE', "%{$oldName}%")
+            ->update(['originating_section' => "({$newCode}) {$newName}"]);
+
+        return redirect()->route('iso.management.departments.index')->with([ 
+            'success'=> 'Department record updated successfully and all related profiles/ISO records were synchronized.'
+        ]); 
+    }
+
+    public function destroyDepartment($id)
+    {
+        $userRole = auth()->user()->role;
+        $allowedRoles = ['IDC Admin', 'SuperAdmin'];
+        if(!in_array($userRole, $allowedRoles)){
+            return redirect()->back()->with('error', 'Unauthorized Action');
+        }
+
+        \App\Models\Departments::destroy($id);
+        return redirect()->route('iso.management.departments.index')->with([
+            'success'=> "Department successfully deleted. The record has been removed from the system."
+        ]); 
+    }
 }

@@ -179,10 +179,11 @@ function getStatusColor($status){
                                         {{ $ticket->created_at->format('M d, Y') }}
                                     </td>
                                     <td class="px-4 py-3 text-center">
-                                        <div class="flex gap-2 justify-center">
-                                            <!-- View Details button (Always visible) -->
-                                            <button 
-                                                class="view-details-btn text-blue-600 hover:text-blue-800 text-sm font-semibold"
+                                        <div class="flex gap-2 justify-center items-center">
+                                            <!-- Single combined action button (pencil SVG icon) -->
+                                            <button
+                                                class="view-details-btn pencil-btn"
+                                                title="View Details & Manage"
                                                 data-ticket-id='{{ $ticket->id }}'
                                                 data-ticket-number='{{ $ticket->ticket_number }}'
                                                 data-ticket-section='{{ $ticket->originating_section }}'
@@ -194,19 +195,16 @@ function getStatusColor($status){
                                                 data-ticket-documents='@json($ticket->documents)'
                                                 data-ticket-registered='{{ $ticket->is_registered ? "true" : "false" }}'
                                             >
-                                                View Details
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                                </svg>
                                             </button>
-                                            <!-- Change Status Button - Only if not registered -->
-                                             @if (!$ticket->is_registered)
-                                                <button onclick="openStatusModal({{ $ticket->id }}, '{{ $ticket->status }}')"
-                                                    class="bg-purple-500 hover:bg-purple-600 text-white px-3 py-1 rounded text-sm">
-                                                    Change Status
-                                                </button>
-                                            @endif
+
                                             <!-- Register Ticket Button - Only for APPROVED and NOT registered -->
                                             @if ($ticket->status === 'approved' && !$ticket->is_registered)
-                                                <button onclick="confirmRegister({{ $ticket->id }})"
-                                                    class="bg-green-600 hover::bg-green-700 text-white px-3 py-1 rounded text-sm font-semibold">
+                                                <button onclick="confirmRegister({{ $ticket->id }}, '{{ $ticket->ticket_number }}')"
+                                                    class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm font-semibold">
                                                     Register
                                                 </button>
                                             @endif
@@ -218,7 +216,7 @@ function getStatusColor($status){
                                                 </span>
                                             @endif
                                         </div>
-                                    </td> 
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -235,6 +233,7 @@ function getStatusColor($status){
 @include('iso.partials.idc-admin.view-details-modal')
 @include('iso.partials.idc-admin.change-status-modal')
 @include('iso.partials.idc-admin.reset-ticketing-system-modal')
+@include('iso.partials.idc-admin.register-ticket-modal')
 
 </x-app-layout>
 
@@ -266,153 +265,299 @@ function getStatusColor($status){
         background-color: rgb(230,230,230);
     }
 
+    /* ── Modal Overlay ── */
     .modal-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-    justify-content: center;
-    align-items: center;
-    overflow-y: auto;
-    padding: 2rem 0;
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.45);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        z-index: 99999;                /* very high — direct body child now */
+        justify-content: center;
+        align-items: flex-start;
+        overflow-y: auto;
+        padding: 12vh 1rem 3rem;       /* top clears the fixed page header */
     }
-
     .modal-overlay.active {
         display: flex;
     }
 
+    /* ── Modal Card ── */
     .modal-content {
-        background: white;
-        border-radius: 10px;
-        width: 90%;
-        max-width: 800px;
-        max-height: 90vh;
-        overflow-y: auto;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        background: #fff;
+        border-radius: 16px;
+        width: 100%;
+        max-width: 860px;
+        max-height: 85vh;              /* cap at 85% of viewport */
+        display: flex;
+        flex-direction: column;        /* header + action-bar + body stacked */
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.22);
+        overflow: hidden;              /* clip child radii */
     }
 
+    /* ── Modal Header ── */
     .modal-header {
         display: flex;
         justify-content: space-between;
+        align-items: flex-start;
+        padding: 1.4rem 1.6rem 1.2rem;
+        border-bottom: 1px solid #f0f0f0;
+        flex-shrink: 0;                /* never shrink — always fully visible */
+        border-radius: 16px 16px 0 0;
+        background: white;
+    }
+    .modal-icon-box {
+        width: 38px;
+        height: 38px;
+        min-width: 38px;
+        background: #fef2f2;
+        border-radius: 9px;
+        display: flex;
         align-items: center;
-        padding: 1.5rem;
-        border-bottom: 1px solid #e5e7eb;
+        justify-content: center;
+        color: #ef4444;
+        margin-top: 2px;
+    }
+    .modal-title {
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: #111827;
+        line-height: 1.3;
+    }
+    .modal-subtitle {
+        font-size: 0.7rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        color: #9ca3af;
+        margin-top: 2px;
+        text-transform: uppercase;
+    }
+    .modal-close-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        min-width: 32px;
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
+        background: #f9fafb;
+        color: #6b7280;
+        cursor: pointer;
+        transition: background 0.15s, color 0.15s, border-color 0.15s;
+        margin-top: 2px;
+    }
+    .modal-close-btn:hover {
+        background: #fee2e2;
+        border-color: #fca5a5;
+        color: #ef4444;
     }
 
+    /* ── Action Bar ── */
+    .modal-action-bar {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding: 0.6rem 1.6rem;
+        background: #fafafa;
+        border-bottom: 1px solid #f0f0f0;
+        flex-shrink: 0;                /* never shrink */
+    }
+
+    /* ── Modal Body ── */
     .modal-body {
-        padding: 1.5rem;
+        padding: 1.5rem 1.6rem;
+        overflow-y: auto;              /* ONLY the body scrolls */
+        flex: 1;                       /* take remaining height inside modal-content */
+    }
+
+    /* ── Info Cards ── */
+    .info-card {
+        background: #f9fafb;
+        border: 1px solid #f0f0f0;
+        border-radius: 12px;
+        padding: 1rem 1.2rem;
+    }
+    .info-card--blue {
+        background: #eff6ff;
+        border-color: #bfdbfe;
+    }
+    .info-card--purple {
+        background: #faf5ff;
+        border-color: #e9d5ff;
+    }
+
+    /* ── Field labels ── */
+    .field-label {
+        font-size: 0.7rem;
+        font-weight: 600;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        color: #9ca3af;
+        margin-bottom: 2px;
+    }
+    .field-value {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: #111827;
+    }
+    .section-label {
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: #374151;
+    }
+
+    /* ── Pencil icon button in table ── */
+    .pencil-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 6px;
+        border-radius: 6px;
+        color: #9ca3af;
+        transition: color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+    }
+    .pencil-btn:hover {
+        color: #ef4444;
+        background-color: #fff1f1;
+        box-shadow: 0 0 8px rgba(239, 68, 68, 0.45);
+    }
+
+    /* ── Delete Ticket button in action bar ── */
+    .delete-ticket-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 14px;
+        border: 1.5px solid #ef4444;
+        border-radius: 8px;
+        color: #ef4444;
+        background: white;
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.18s, color 0.18s;
+    }
+    .delete-ticket-btn:hover {
+        background: #ef4444;
+        color: white;
     }
 </style>
 
 <script>
-    // TODO: Make a helper function js for both idc admin and document handler same functions
-    // import {formatStatusText, getStatusColor} from '../../../js/helpers/helpers'
     // Auto-hide messages after 5 seconds
     setTimeout(() => {
         const msgElement = document.getElementById('msg');
         if(msgElement) msgElement.style.display = 'none';
         const errorElement = document.getElementById('error-msg');
-        if(errorElement) errorElement.styledisplay = 'none';
-    }, 5000)
+        if(errorElement) errorElement.style.display = 'none';
+    }, 5000);
 
     // ============================================
-    // VIEW DETAILS MODAL
+    // COMBINED VIEW DETAILS + CHANGE STATUS MODAL
     // ============================================
     const detailsModal = document.getElementById('details_modal');
-    const closeDetailsBtn = document.getElementById('close_details_modal');
 
-    // Close details modal
-    closeDetailsBtn.addEventListener('click', ()=> {
+    // ── CRITICAL FIX: Move modal to <body> to escape the page's stacking context.
+    // The .content wrapper has z-index:4, which places it BELOW the fixed .header
+    // (z-index:5). By appending the modal directly to body it gets its own
+    // top-level stacking context and z-index:99999 works globally.
+    document.body.appendChild(detailsModal);
+
+    const closeDetailsBtn = document.getElementById('close_details_modal');
+    const statusForm = document.getElementById('status_form');
+    const deleteTicketBtn = document.getElementById('delete_ticket_btn');
+    let currentTicketId = null;
+
+    // Close modal
+    closeDetailsBtn.addEventListener('click', () => {
         detailsModal.classList.remove('active');
-    })
+    });
 
     // Close when clicking outside
-    detailsModal.addEventListener('click', (e)=>{
-        if(e.target === detailsModal){
+    detailsModal.addEventListener('click', (e) => {
+        if (e.target === detailsModal) {
             detailsModal.classList.remove('active');
         }
     });
 
-    // Handle "View Details" button clicks
-    document.addEventListener('click', (e)=> {
-        if (e.target.classList.contains('view-details-btn')){
-            // const ticketId = e.target.dataset.ticketId;
-            const ticketNumber = e.target.dataset.ticketNumber;
-            const section = e.target.dataset.ticketSection;
-            const status = e.target.dataset.ticketStatus;
-            const created = e.target.dataset.ticketCreated;
-            const creator = e.target.dataset.ticketCreator;
-            const sharepoint = e.target.dataset.ticketSharepoint;
-            const message = e.target.dataset.ticketMessage;
-            const documentsJson = e.target.dataset.ticketDocuments;
-            const isRegistered = e.target.dataset.ticketRegistered === 'true';
+    // Handle pencil icon button clicks
+    document.addEventListener('click', (e) => {
+        const btn = e.target.closest('.view-details-btn');
+        if (!btn) return;
 
-            // Parse documents json
-            let ticketDocuments = [];
-            try{
-                ticketDocuments = JSON.parse(documentsJson);
-            } catch(error) {
-                console.error('JSON parse failed: ', error);
-                alert('Error loading ticket documents.');
-                return;
-            }
+        const ticketId = btn.dataset.ticketId;
+        const ticketNumber = btn.dataset.ticketNumber;
+        const section = btn.dataset.ticketSection;
+        const status = btn.dataset.ticketStatus;
+        const created = btn.dataset.ticketCreated;
+        const creator = btn.dataset.ticketCreator;
+        const sharepoint = btn.dataset.ticketSharepoint;
+        const message = btn.dataset.ticketMessage;
+        const documentsJson = btn.dataset.ticketDocuments;
+        const isRegistered = btn.dataset.ticketRegistered === 'true';
 
-            // Fill modal with data
-            // document.getElementById('detail_ticket_id').textContent = '#' + ticketId;
-            document.getElementById('detail_ticket_number').textContent = ticketNumber;
-            document.getElementById('detail_section').textContent = section;
-            document.getElementById('detail_created').textContent = created;
-            document.getElementById('detail_creator').textContent = creator;
-            document.getElementById('detail_message').textContent = message;
+        // Store current ticket id globally for delete/status actions
+        currentTicketId = ticketId;
 
-            // Set SharePoint Link
-            const sharepointLink = document.getElementById('detail_sharepoint');
-            sharepointLink.href = sharepoint;
-            sharepointLink.textContent = sharepoint
+        // Parse documents JSON
+        let ticketDocuments = [];
+        try {
+            ticketDocuments = JSON.parse(documentsJson);
+        } catch (error) {
+            console.error('JSON parse failed: ', error);
+            alert('Error loading ticket documents.');
+            return;
+        }
 
-            // Format and display status
-            const statusElement = document.getElementById('detail_status');
-            const statusText = status.replace(/_/g, ' ');
-            const statusFormatted = statusText.charAt(0).toUpperCase() + statusText.slice(1);
-            statusElement.innerHTML = `<span class="inline-block px-2 py-1 rounded text-xs ${getStatusColorJS(status)}"> ${statusFormatted}</span>`;
+        // Fill modal with ticket data
+        document.getElementById('detail_ticket_number').textContent = ticketNumber;
+        document.getElementById('detail_section').textContent = section;
+        document.getElementById('detail_created').textContent = created;
+        document.getElementById('detail_creator').textContent = creator;
+        document.getElementById('detail_message').textContent = message;
 
-            // Fill documents table
-            const documentsList = document.getElementById('detail_documents_list');
-            documentsList.innerHTML = '';
+        // Set SharePoint Link
+        const sharepointLink = document.getElementById('detail_sharepoint');
+        sharepointLink.href = sharepoint;
+        sharepointLink.textContent = sharepoint;
 
-            ticketDocuments.forEach(doc => {
-                const row = document.createElement('tr');
-                row.className = 'border-t';
+        // Format and display status
+        const statusElement = document.getElementById('detail_status');
+        statusElement.innerHTML = `<span class="inline-block px-2 py-1 rounded text-xs ${getStatusColorJS(status)}">${formatStatusText(status)}</span>`;
 
-                const classLabel = doc.classification.charAt(0).toUpperCase() + doc.classification.slice(1);
-                const sourceLabel = getSourceLabel(doc.source_type, doc.specific_type);
-
-                row.innerHTML = `
-                    <td class="px-3 py-2">${doc.document_code}</td>
-                    <td class="px-3 py-2">${doc.document_title}</td>
-                    <td class="px-3 py-2">
-                        <span class="inline-block px-2 py-1 text-xs rounded ${getClassificationColor(doc.classification)}">
-                            ${classLabel}
-                        </span>
-                    </td>
-                    <td class="px-3 py-2">${sourceLabel}</td>
-
-                    <td class="px-3 py-2">
-                        <span class="inline-block px-2 py-1 text-xs rounded ${getStatusColorJS(doc.status)}">
-                            ${formatStatusText(doc.status)}
-                        </span>
-                    </td>
-
-                    <td class="px-3 py-2">
-                        <div class="flex gap-2 justify-center">
-                            ${isRegistered ? 
-                            `<span class="text-xs text-gray-500 italic"> Locked </span>`
-                            :
-                            `
+        // Populate documents table
+        const documentsList = document.getElementById('detail_documents_list');
+        documentsList.innerHTML = '';
+        ticketDocuments.forEach(doc => {
+            const row = document.createElement('tr');
+            row.className = 'border-t';
+            const classLabel = doc.classification.charAt(0).toUpperCase() + doc.classification.slice(1);
+            const sourceLabel = getSourceLabel(doc.source_type, doc.specific_type);
+            row.innerHTML = `
+                <td class="px-3 py-2">${doc.document_code}</td>
+                <td class="px-3 py-2">${doc.document_title}</td>
+                <td class="px-3 py-2">
+                    <span class="inline-block px-2 py-1 text-xs rounded ${getClassificationColor(doc.classification)}">${classLabel}</span>
+                </td>
+                <td class="px-3 py-2">${sourceLabel}</td>
+                <td class="px-3 py-2">
+                    <span class="inline-block px-2 py-1 text-xs rounded ${getStatusColorJS(doc.status)}">${formatStatusText(doc.status)}</span>
+                </td>
+                <td class="px-3 py-2">
+                    <div class="flex gap-2 justify-center">
+                        ${isRegistered
+                            ? `<span class="text-xs text-gray-500 italic">Locked</span>`
+                            : `
                             <button onclick="updateDocStatus(${doc.id}, 'approved')"
                                 class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-xs font-semibold">
                                 Approved
@@ -421,29 +566,86 @@ function getStatusColor($status){
                                 class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs font-semibold">
                                 On-Hold
                             </button>`
-                            }
-                        </div>             
-                    </td>
-                `;
-                documentsList.appendChild(row);
-            });
+                        }
+                    </div>
+                </td>
+            `;
+            documentsList.appendChild(row);
+        });
 
-            // Show modal
-            detailsModal.classList.add('active');
+        // Show / hide Change Status section
+        const changeStatusSection = document.getElementById('change_status_section');
+        if (!isRegistered) {
+            changeStatusSection.style.display = 'block';
+            // Set the current status label
+            document.getElementById('current_status').textContent = formatStatusText(status);
+            // Set the form action URL
+            statusForm.action = `/iso/idc/${ticketId}/update-status`;
+        } else {
+            changeStatusSection.style.display = 'none';
         }
+
+
+        // Show / hide Delete Ticket button + action bar
+        const modalActionBar = document.getElementById('modal_action_bar');
+        if (!isRegistered) {
+            deleteTicketBtn.style.display = 'flex';
+            if (modalActionBar) modalActionBar.style.display = 'flex';
+        } else {
+            deleteTicketBtn.style.display = 'none';
+            if (modalActionBar) modalActionBar.style.display = 'none';
+        }
+
+        // Open modal
+        detailsModal.classList.add('active');
     });
 
+    // ============================================
+    // DELETE TICKET (Hard Delete via AJAX)
+    // ============================================
+    deleteTicketBtn.addEventListener('click', () => {
+        if (!currentTicketId) return;
+
+        const confirmed = confirm(
+            'Are you sure you want to PERMANENTLY DELETE this ticket?\n\n' +
+            '⚠️ This will remove the ticket AND all its documents from the database.\n' +
+            'This action CANNOT be undone!'
+        );
+        if (!confirmed) return;
+
+        fetch(`/iso/idc/${currentTicketId}/delete`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                detailsModal.classList.remove('active');
+                alert('Ticket permanently deleted.');
+                location.reload();
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Delete error:', error);
+            alert('An error occurred while deleting the ticket.');
+        });
+    });
+
+    // ============================================
     // Helper Functions
-    function formatStatusText(status){
+    // ============================================
+    function formatStatusText(status) {
         let text = status.replace(/_/g, ' ');
         text = text.charAt(0).toUpperCase() + text.slice(1);
-        if(status.includes('idc') || status.includes('qmr')){
-            text = text.replace(/idc/gi, 'IDC').replace(/qmr/gi, 'QMR');
-        }
-        return text;
+        return text.replace(/idc/gi, 'IDC').replace(/qmr/gi, 'QMR');
     }
 
-    function getStatusColorJS(status){
+    function getStatusColorJS(status) {
         const colors = {
             'pending': 'bg-yellow-100 text-yellow-800',
             'submitted_to_idc': 'bg-blue-100 text-blue-800',
@@ -454,7 +656,7 @@ function getStatusColor($status){
         return colors[status] || 'bg-gray-100 text-gray-800';
     }
 
-    function getSourceLabel(source, specificType){
+    function getSourceLabel(source, specificType) {
         const labels = {
             eoms: 'EOMS Manual',
             procedures: 'Procedures',
@@ -463,13 +665,11 @@ function getStatusColor($status){
             others: 'Others',
         };
         let label = labels[source] || source;
-        if (specificType){
-            label += ` (${specificType})`;
-        }
+        if (specificType) label += ` (${specificType})`;
         return label;
     }
 
-    function getClassificationColor(classification){
+    function getClassificationColor(classification) {
         const colors = {
             revision: 'bg-yellow-200 text-yellow-800',
             addition: 'bg-green-200 text-green-800',
@@ -477,92 +677,34 @@ function getStatusColor($status){
         };
         return colors[classification] || 'bg-gray-200 text-gray-800';
     }
-    // Update Document Status
-    function updateDocStatus(documentId, newStatus){
-        // Confirm the action
+
+    // Update individual Document Status
+    function updateDocStatus(documentId, newStatus) {
         const statusText = newStatus === 'approved' ? 'Approve' : 'Put On-Hold';
-        const confirmed = confirm(`Are you sure you want to ${statusText} this document?`);
+        if (!confirm(`Are you sure you want to ${statusText} this document?`)) return;
 
-        if(!confirmed) return;
-
-        // AJAX request to update status
         fetch(`/iso/idc/${documentId}/status`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             },
-            body: JSON.stringify({
-                status: newStatus
-            })
+            body: JSON.stringify({ status: newStatus })
         })
-        // .then(response => response.json())
-        .then(response => {
-            console.log("Response status: ", response.status);
-            console.log("Response OK?: ", response.ok);
-
-            // Clone the response so we can read it twice
-            return response.clone().text().then(text => {
-                console.log("Raw Response: ", text);
-
-                // Try parsing
-                try{
-                    const data = JSON.parse(text);
-                    return data;
-                } catch(e){
-                    console.error('JSON parse failed. Response was:'+text);
-                    throw new Error('Invalid JSON response');
-                }
-            });
-        })
+        .then(response => response.json())
         .then(data => {
-            if(data.success){
+            if (data.success) {
                 alert('Document status updated successfully!');
                 location.reload();
-            } else{
-                alert('Failed to updated document status');
+            } else {
+                alert('Failed to update document status.');
             }
         })
         .catch(error => {
             console.error('Error:', error);
             alert('An error occurred. Please try again.');
-        })
+        });
     }
-
-    // ============================================
-    // CHANGE STATUS MODAL
-    // ============================================
-    const statusModal = document.getElementById('status_modal');
-    const closeStatusBtn = document.getElementById('close_status_modal');
-    const cancelStatusBtn = document.getElementById('cancel_status_btn');
-    const statusForm = document.getElementById('status_form');
-
-    function openStatusModal(ticketId, currentStatus){
-        // Format current status for display
-        const formattedStatus = currentStatus.replace(/_/g, ' ').toUpperCase();
-        document.getElementById('current_status').textContent = formattedStatus;
-
-        // Set form action URL
-        statusForm.action = `/iso/idc/${ticketId}/update-status`;
-
-        // Show modal
-        statusModal.classList.add('active');
-    }
-    // Close Modal
-    closeStatusBtn.addEventListener('click', ()=>{
-        statusModal.classList.remove('active');
-    })
-
-    cancelStatusBtn.addEventListener('click', ()=>{
-        statusModal.classList.remove('active');
-    })
-
-    // Close Modal when clicking outside
-    statusModal.addEventListener('click', (e)=>{
-        if(e.target === statusModal){
-            statusModal.classList.remove('active');
-        }
-    })
 
     // ============================================
     // Reset System Function
@@ -629,39 +771,77 @@ function getStatusColor($status){
     });
 
     // ============================================
-    // Register Ticket Function
+    // Register Ticket — Styled Modal
     // ============================================
-    function confirmRegister(ticketId){
-        const confirmed = confirm(
-            'Register this ticket?\n\n'+
-            'This will:\n'+
-            '• Lock the ticket (no more edits)\n' +
-            '• Move documents to Management Menu\n' +
-            '• Mark as officially registered\n\n' +
-            'Continue?'
-        );
-        if(confirmed){
-            // Submit registration
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = `/iso/idc/${ticketId}/register`;
+    const registerModal = document.getElementById('register_modal');
+    document.body.appendChild(registerModal); // escape stacking context
 
-            // Add CSRF Token
-            const csrfInput = document.createElement('input');
-            csrfInput.type = 'hidden';
-            csrfInput.name = '_token';
-            csrfInput.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            form.appendChild(csrfInput);
+    const closeRegisterModal = document.getElementById('close_register_modal');
+    const cancelRegisterBtn = document.getElementById('cancel_register_btn');
+    const confirmRegisterBtn = document.getElementById('confirm_register_btn');
+    const registerCheckbox = document.getElementById('register_confirm_checkbox');
+    let pendingRegisterTicketId = null;
 
-            // Add method for spoofing for PATCH
-            const methodInput = document.createElement('input');
-            methodInput.type = 'hidden';
-            methodInput.name = '_method';
-            methodInput.value = 'PATCH';
-            form.appendChild(methodInput);
+    // Open the styled register modal
+    function confirmRegister(ticketId, ticketNumber) {
+        pendingRegisterTicketId = ticketId;
 
-            document.body.appendChild(form);
-            form.submit();
-        }
+        // Populate ticket number in subtitle
+        document.getElementById('register_ticket_number').textContent = ticketNumber || ('ID: ' + ticketId);
+
+        // Reset checkbox and button state every time modal opens
+        registerCheckbox.checked = false;
+        confirmRegisterBtn.disabled = true;
+        confirmRegisterBtn.style.background = '#d1d5db';
+        confirmRegisterBtn.style.color = '#9ca3af';
+        confirmRegisterBtn.style.cursor = 'not-allowed';
+
+        registerModal.classList.add('active');
     }
+
+    // Enable confirm button only when checkbox is ticked
+    registerCheckbox.addEventListener('change', () => {
+        if (registerCheckbox.checked) {
+            confirmRegisterBtn.disabled = false;
+            confirmRegisterBtn.style.background = '#16a34a';
+            confirmRegisterBtn.style.color = 'white';
+            confirmRegisterBtn.style.cursor = 'pointer';
+        } else {
+            confirmRegisterBtn.disabled = true;
+            confirmRegisterBtn.style.background = '#d1d5db';
+            confirmRegisterBtn.style.color = '#9ca3af';
+            confirmRegisterBtn.style.cursor = 'not-allowed';
+        }
+    });
+
+    // Close modal handlers
+    closeRegisterModal.addEventListener('click', () => registerModal.classList.remove('active'));
+    cancelRegisterBtn.addEventListener('click', () => registerModal.classList.remove('active'));
+    registerModal.addEventListener('click', (e) => {
+        if (e.target === registerModal) registerModal.classList.remove('active');
+    });
+
+    // Submit registration when confirmed
+    confirmRegisterBtn.addEventListener('click', () => {
+        if (!pendingRegisterTicketId || !registerCheckbox.checked) return;
+
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = `/iso/idc/${pendingRegisterTicketId}/register`;
+
+        const csrfInput = document.createElement('input');
+        csrfInput.type = 'hidden';
+        csrfInput.name = '_token';
+        csrfInput.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        form.appendChild(csrfInput);
+
+        const methodInput = document.createElement('input');
+        methodInput.type = 'hidden';
+        methodInput.name = '_method';
+        methodInput.value = 'PATCH';
+        form.appendChild(methodInput);
+
+        document.body.appendChild(form);
+        form.submit();
+    });
 </script>

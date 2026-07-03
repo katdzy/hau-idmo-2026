@@ -49,68 +49,92 @@
         </div>
 
         @foreach ($categories as $i => $cat)
-            <div id="tab-{{ Str::slug($cat, '-') }}" class="tab-content {{ $i === 0 ? '' : 'hidden' }}" style="border: 2px solid #70121D; border-radius: 0.75rem; padding: 1rem;">
-                <div class="w-full flex flex-col gap-8">
-                    <ul class="space-y-4">
+            <div id="tab-{{ Str::slug($cat, '-') }}" class="tab-content {{ $i === 0 ? '' : 'hidden' }}" style="border: 2px solid #70121D; border-radius: 0.75rem; padding: 1.5rem;">
+                <div class="w-full flex flex-col gap-6">
+                    <ul class="space-y-6">
                         @foreach (($linksByCategory[$cat] ?? []) as $subCategory => $subCatLinks)
                             <li>
                                 @if ($subCategory)
                                     {{-- Show collapsible button if subcategory exists --}}
-                                    <button type="button" class="subcategory-btn w-full text-left font-bold px-4 py-2 rounded transition">
+                                    <button type="button" class="subcategory-btn w-full text-left font-bold px-4 py-2 rounded transition mb-4">
                                         {{ $subCategory }}
                                     </button>
-                                    <ul class="ml-6 mt-2 hidden link-list space-y-8">
+                                    <div class="ml-6 hidden link-list grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                                         @foreach ($subCatLinks as $link)
-                                            <li class="mb-8">
-                                                <div class="flex flex-row">
+                                            <div class="link-card bg-white border border-gray-200 rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 flex flex-row items-center gap-6 md:gap-8">
+                                                <span class="link-meta hidden" data-type="{{ $link->type }}" data-image="{{ $link->image_path ? asset($link->image_path) : '' }}"></span>
+                                                @if ($link->type === 'Video')
+                                                    <div class="w-32 h-24 md:w-44 md:h-32 bg-gradient-to-br from-red-50 to-red-100 border border-red-200 rounded-xl shadow-sm flex items-center justify-center flex-shrink-0 text-red-700">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-12 h-12 md:w-16 md:h-16 transition-transform duration-300 hover:scale-110">
+                                                            <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm14.024-.986a.75.75 0 0 1 0 1.972l-5.677 3.195A.75.75 0 0 1 9.5 15.521V9.48a.75.75 0 0 1 1.097-.66l5.677 3.194Z" clip-rule="evenodd" />
+                                                        </svg>
+                                                    </div>
+                                                @else
                                                     @php
-                                                        $imageClass = 'w-60 h-60'; // default
+                                                        $imageClass = 'w-28 h-28 md:w-36 md:h-36 object-cover rounded-xl shadow-md border border-gray-200 flex-shrink-0'; // default
                                                         if ($link->type === 'Document') {
-                                                            $imageClass = 'w-48 h-68';
-                                                        } elseif ($link->type === 'Video') {
-                                                            $imageClass = 'w-72 h-48';
+                                                            $imageClass = 'w-32 h-44 md:w-40 md:h-56 object-cover rounded-xl shadow-md border border-gray-200 flex-shrink-0';
                                                         }
                                                     @endphp
                                                     <img src="{{ asset($link->image_path) }}" class="{{ $imageClass }}" alt="{{ $link->title }}" data-type="{{ $link->type }}"/>
-                                                    <div class="flex flex-col px-6">
-                                                        <div class="text-2xl text-[#70121D] font-bold mb-4">
+                                                @endif
+                                                <div class="flex flex-col flex-grow justify-between min-h-[140px] py-1">
+                                                    <div>
+                                                        <h4 class="link-card-title text-lg md:text-2xl font-bold text-red-950 hover:text-red-700 transition leading-snug mb-2 line-clamp-2">
                                                             {{ $link->title }}
-                                                        </div>
-                                                        <a href="{{ $link->url }}" target="_blank" title="{{ $link->description ?? '' }}">
+                                                        </h4>
+                                                        <p class="text-xs md:text-sm text-gray-500 font-medium mb-4">
+                                                            {{ $link->sub_category ?: ($link->type ?: 'Access Resource') }}
+                                                        </p>
+                                                    </div>
+                                                    <div>
+                                                        <a href="{{ $link->url }}" target="_blank" class="inline-flex items-center text-xs md:text-sm font-semibold text-red-700 hover:text-red-900 transition-colors">
                                                             [ Click here to view ]
                                                         </a>
                                                     </div>
                                                 </div>
-                                            </li>
+                                            </div>
                                         @endforeach
-                                    </ul>
+                                    </div>
                                 @else
                                     {{-- No subcategory - show links directly without button --}}
-                                    <ul class="space-y-8">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-2">
                                         @foreach ($subCatLinks as $link)
-                                            <li class="mb-8">
-                                                <div class="flex flex-row">
+                                            <div class="link-card bg-white border border-gray-200 rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 flex flex-row items-center gap-6 md:gap-8">
+                                                <span class="link-meta hidden" data-type="{{ $link->type }}" data-image="{{ $link->image_path ? asset($link->image_path) : '' }}"></span>
+                                                @if ($link->type === 'Video')
+                                                    <div class="w-32 h-24 md:w-44 md:h-32 bg-gradient-to-br from-red-50 to-red-100 border border-red-200 rounded-xl shadow-sm flex items-center justify-center flex-shrink-0 text-red-700">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-12 h-12 md:w-16 md:h-16 transition-transform duration-300 hover:scale-110">
+                                                            <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm14.024-.986a.75.75 0 0 1 0 1.972l-5.677 3.195A.75.75 0 0 1 9.5 15.521V9.48a.75.75 0 0 1 1.097-.66l5.677 3.194Z" clip-rule="evenodd" />
+                                                        </svg>
+                                                    </div>
+                                                @else
                                                     @php
-                                                        $imageClass = 'w-60 h-60'; // default
+                                                        $imageClass = 'w-28 h-28 md:w-36 md:h-36 object-cover rounded-xl shadow-md border border-gray-200 flex-shrink-0'; // default
                                                         if ($link->type === 'Document') {
-                                                            $imageClass = 'w-48 h-68';
-                                                        } elseif ($link->type === 'Video') {
-                                                            $imageClass = 'w-72 h-48';
+                                                            $imageClass = 'w-32 h-44 md:w-40 md:h-56 object-cover rounded-xl shadow-md border border-gray-200 flex-shrink-0';
                                                         }
                                                     @endphp
                                                     <img src="{{ asset($link->image_path) }}" class="{{ $imageClass }}" alt="{{ $link->title }}" data-type="{{ $link->type }}"/>
-                                                    <div class="flex flex-col px-6">
-                                                        <div class="text-2xl text-[#70121D] font-bold mb-4">
+                                                @endif
+                                                <div class="flex flex-col flex-grow justify-between min-h-[140px] py-1">
+                                                    <div>
+                                                        <h4 class="link-card-title text-lg md:text-2xl font-bold text-red-950 hover:text-red-700 transition leading-snug mb-2 line-clamp-2">
                                                             {{ $link->title }}
-                                                        </div>
-                                                        <a href="{{ $link->url }}" target="_blank" title="{{ $link->description ?? '' }}">
+                                                        </h4>
+                                                        <p class="text-xs md:text-sm text-gray-500 font-medium mb-4">
+                                                            {{ $link->sub_category ?: ($link->type ?: 'Access Resource') }}
+                                                        </p>
+                                                    </div>
+                                                    <div>
+                                                        <a href="{{ $link->url }}" target="_blank" class="inline-flex items-center text-xs md:text-sm font-semibold text-red-700 hover:text-red-900 transition-colors">
                                                             [ Click here to view ]
                                                         </a>
                                                     </div>
                                                 </div>
-                                            </li>
+                                            </div>
                                         @endforeach
-                                    </ul>
+                                    </div>
                                 @endif
                             </li>
                         @endforeach
@@ -208,13 +232,13 @@
         searchResultsContent.innerHTML = '';
 
         // Search through all link items by title
-        const allLinkContainers = document.querySelectorAll('.tab-content li .flex.flex-row');
+        const allLinkContainers = document.querySelectorAll('.tab-content .link-card');
         let resultsHTML = '';
         let hasResults = false;
 
         allLinkContainers.forEach(container => {
             // Get the title element
-            const titleElement = container.querySelector('.text-2xl.font-bold');
+            const titleElement = container.querySelector('.link-card-title');
             if (!titleElement) return;
             
             const title = titleElement.textContent.trim();
@@ -224,22 +248,12 @@
             if (titleLower.includes(searchTerm)) {
                 hasResults = true;
                 
-                // Get image src, type, and link info
-                const img = container.querySelector('img');
+                // Get image src, type, and link info via metadata
+                const meta = container.querySelector('.link-meta');
+                const imgType = meta ? meta.getAttribute('data-type') : '';
+                const imgSrc = meta ? meta.getAttribute('data-image') : '';
                 const link = container.querySelector('a[href]');
-                
-                const imgSrc = img ? img.getAttribute('src') : '';
-                const imgType = img ? img.getAttribute('data-type') : '';
                 const linkHref = link ? link.getAttribute('href') : '';
-                const linkTitle = link ? link.getAttribute('title') : '';
-                
-                // Determine image class based on type
-                let imageClass = 'w-60 h-60'; // default
-                if (imgType === 'Document') {
-                    imageClass = 'w-48 h-68';
-                } else if (imgType === 'Video') {
-                    imageClass = 'w-72 h-48';
-                }
                 
                 // Get subcategory if exists
                 let subCategoryOriginal = '';
@@ -256,31 +270,53 @@
                     }
                 }
                 
-                // Add result HTML
+                // Determine image or icon based on type
+                let mediaHTML = '';
+                if (imgType === 'Video') {
+                    mediaHTML = `
+                        <div class="w-32 h-24 md:w-44 md:h-32 bg-gradient-to-br from-red-50 to-red-100 border border-red-200 rounded-xl shadow-sm flex items-center justify-center flex-shrink-0 text-red-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-12 h-12 md:w-16 md:h-16 transition-transform duration-300 hover:scale-110">
+                                <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm14.024-.986a.75.75 0 0 1 0 1.972l-5.677 3.195A.75.75 0 0 1 9.5 15.521V9.48a.75.75 0 0 1 1.097-.66l5.677 3.194Z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                    `;
+                } else {
+                    let imageClass = 'w-28 h-28 md:w-36 md:h-36 object-cover rounded-xl shadow-md border border-gray-200 flex-shrink-0';
+                    if (imgType === 'Document') {
+                        imageClass = 'w-32 h-44 md:w-40 md:h-56 object-cover rounded-xl shadow-md border border-gray-200 flex-shrink-0';
+                    }
+                    mediaHTML = `<img src="${imgSrc}" class="${imageClass}" alt="${title}" data-type="${imgType}"/>`;
+                }
+
                 resultsHTML += `
-                    <li class="mb-8">
-                        <div class="flex flex-row">
-                            <img src="${imgSrc}" class="${imageClass}" alt="${title}"/>
-                            <div class="flex flex-col px-6">
-                                <div class="text-2xl text-[#70121D] font-bold mb-4">
+                    <div class="link-card bg-white border border-gray-200 rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 flex flex-row items-center gap-6 md:gap-8">
+                        ${mediaHTML}
+                        <div class="flex flex-col flex-grow justify-between min-h-[140px] py-1">
+                            <div>
+                                <h4 class="link-card-title text-lg md:text-2xl font-bold text-red-950 hover:text-red-700 transition leading-snug mb-2 line-clamp-2">
                                     ${highlightText(title, searchTerm)}
-                                </div>
-                                <a href="${linkHref}" target="_blank" title="${linkTitle}">
+                                </h4>
+                                <p class="text-xs md:text-sm text-gray-500 font-medium mb-4">
+                                    ${subCategoryOriginal ? subCategoryOriginal : (imgType ? imgType : 'Access Resource')}
+                                </p>
+                            </div>
+                            <div>
+                                <a href="${linkHref}" target="_blank" class="inline-flex items-center text-xs md:text-sm font-semibold text-red-700 hover:text-red-900 transition-colors">
                                     [ Click here to view ]
                                 </a>
                             </div>
                         </div>
-                    </li>
+                    </div>
                 `;
             }
         });
 
         if (hasResults) {
             searchResultsContent.innerHTML = `
-                <div style="border: 2px solid #70121D; border-radius: 0.75rem; padding: 1rem;">
-                    <ul class="space-y-8">
+                <div style="border: 2px solid #70121D; border-radius: 0.75rem; padding: 1.5rem;">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         ${resultsHTML}
-                    </ul>
+                    </div>
                 </div>
             `;
         } else {

@@ -333,4 +333,32 @@ class DeptController extends Controller
         return response()->download($path);
     }
 
+    public function store_dept(Request $request) { 
+        $request->validate([ 
+            'code'=> 'required|string|unique:departments,code',
+            'dept'=> 'required|string' 
+        ]); 
+
+        $logoFileName = '';
+        if($request->file('logo')){ 
+            $path = 'dept/logo';
+            if(!Storage::disk('public')->exists($path)){ 
+                Storage::disk('public')->makeDirectory($path, 0755, true); 
+            }
+        
+            $logoFileName = $request->code . '_logo.' . $request->file('logo')->getClientOriginalExtension();
+            $request->file('logo')->storeAs($path, $logoFileName, 'public'); 
+        }
+
+        Departments::create([ 
+            'code'=> $request->code, 
+            'dept'=> $request->dept,
+            'logo'=> $logoFileName
+        ]); 
+
+        return redirect()->route('admin.registry.dept')->with([ 
+            'msg'=> 'Department record created successfully.'
+        ]); 
+    }
+
 }

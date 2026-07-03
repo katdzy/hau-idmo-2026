@@ -25,6 +25,10 @@
                     <span class="text-gray-500 text-sm">Registered Documents Dashboard</span>
                 </div>
                 <div class="w-full flex gap-4">
+                    <!-- Manage Departments -->
+                    <a href="{{ route('iso.management.departments.index') }}" class="bg-red-900 hover:bg-red-800 text-white px-4 py-2 rounded-lg font-semibold flex items-center">
+                        <span>Manage Departments</span>
+                    </a>
                     <!-- Switch to IDC Admin Dashboard -->
                     <a href="{{ route('iso.idc.dashboard') }}" class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg font-semibold">
                         Switch to IDC Admin Dashboard
@@ -406,104 +410,17 @@
 </style>
 
 <script>
-const specificOfficeOptions = {
-    oop: [
-        "(OOP) Office of the President",
-        "(OOP-AVI) Aviation Insitute",
-        "(OOP-CKS) Center for Kapampangan Studies",
-        "(OOP-DPO) Data Privacy Office",
-        "(OOP-ITC) Institutional Testing and Evaluation Center",
-        "(OOP-ITS) Information Technology Systems & Services",
-        "(OOP-OIA) Office of International Affairs",
-        "(OOP-TRO) Treasury Office",
-        "(OOP-UCO) University Chaplain Office"
-        ],
-    aac: [
-        '(AAC) Academic Affairs Office',
-        '(AAC-BED) School of Basic Education',
-        '(AAC-CJE) College of Criminal Justice Education & Forensics',
-        '(AAC-CTL) Center for Teaching & Learning',
-        '(AAC-GSR) Graduate Studies & Research',
-        '(AAC-HAT) Holy Angel Travel Services',
-        '(AAC-IRB) Institutional Review Board',
-        '(AAC-LIB) Library Department',
-        '(AAC-LMS) Learning Management System',
-        '(AAC-SAS) School of Arts & Sciences',
-        '(AAC-SBA) School of Business & Accountancy',
-        '(AAC-SEA) School of Engineering & Architecture',
-        '(AAC-SED) School of Education',
-        '(AAC-SNA) SChool of Nursing & Allied Medical Sciences',
-        '(AAC-SOC) School of Computing',
-        '(AAC-STM) School of Hospitality & Tourism Management',
-        '(AAC-URO) University Research Office'
-        ],
-    oie: [
-        '(OIE) Office of the Institutional Effectiveness',
-        '(OIE-DMO) Institutional Database Management Office',
-        '(OIE-IDC) Insitutional Document Controller',
-        '(OIE-IPR) Institutional Research, Planning & Publications Office',
-        '(OIE-QAO) Quality Assurance Office'
-    ],
-    cfs: [
-        '(CFS) Institute for Catholic Formation & Social Integration',
-        '(CFS-CES) Office of the Community Extension Services',
-        '(CFS-CEP) Character Education Program Desk',
-        '(CFS-CLE) Christian Living Education',
-        '(CFS-CMO) Campus Ministry Office'
-    ],
-    hro: [
-        '(HRO) Human Resource Management Office',
-        '(HRO-HRD) Human Resource Development',
-        '(HRO-HRM) Recruitment and Maintenance'
-    ],
-    frm: [
-        '(FRM) Finance and Resource Management Office',
-        '(FRM-ACC) Accounts & Collection',
-        '(FRM-ASA) Ancillary Services Accounting',
-        '(FRM-ASE) Ancillary Services',
-        '(FRM-ATO) Accounting',
-        '(FRM-GRT) Grants Accountant',
-        '(FRM-PAO) Payroll'
-    ],
-    rss: [
-        '(RSS) Records Systems & Services',
-        '(RSS-ADO) Admissions Office'
-    ],
-    ssa: [
-        '(SSA-CPO) Career and Placement Office',
-        '(SSA-MDS) Medical and Dental Services',
-        '(SSA-SAO) Student Affairs',
-        '(SSA-SGO) Scholarships & Grants',
-        '(SSA-UGC) University Guidance Center',
-        '(SSA-USO) University Sports'
-    ],
-    eac: [
-        '(EAC) External Affairs Office',
-        '(EAC-ARO) Alumni Relations Office',
-        '(EAC-CRE) Creative Services',
-        '(EAC-PAM) Performing Arts and Events Management',
-        '(EAC-PRO) Public Relations Office'
-    ],
-    csd: [
-        '(CSD) Campus Services & Development Office',
-        '(CSD-CPO) Central Purchasing Office',
-        '(CSD-CSO) Campus Services Office',
-        '(CSD-ECM) Engineering Construction and Maintenance',
-        '(CSD-MCM) Motorpool/Campus Maintenance',
-        '(CSD-PCO) Property Custodianship Office',
-        '(CSD-SEC) Campus Security',
-        '(CSD-VLO) Venues and Logistics Office'
-    ],
-    aie: [
-        '(AIE) Institute for academic Innovation & Entrepreneurship',
-        '(AIE-ETA) Expanded Tertiary Education, Equivalency & Accreditation',
-        '(AIE-SPL) School of Professional Education and Lifelong Learning',
-        '(AIE-TBI) Technology Business Incubator - KITTO'
-    ],
-    iat: [
-        '(IAT) Internal Audit Team'
-    ]
-};
+@php
+    $dbDepartments = \App\Models\Departments::orderBy('code', 'asc')->get();
+    $jsOptions = [];
+    foreach ($dbDepartments as $d) {
+        $parts = explode('-', $d->code);
+        $cluster = strtolower($parts[0]);
+        $formatted = "({$d->code}) {$d->dept}";
+        $jsOptions[$cluster][] = $formatted;
+    }
+@endphp
+const specificOfficeOptions = @json($jsOptions);
 const filterModal = document.getElementById('filter_modal');
 const openFilterBtn = document.getElementById('open_filter_modal');
 const closeFilterBtn = document.getElementById('close_filter_modal');

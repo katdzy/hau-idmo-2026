@@ -72,7 +72,15 @@ class IsoDocumentController extends Controller
         $request -> validate([
             'document_code' => 'required|string'
         ]);
-        $exists = IsoMasterDocument::where('document_code', $request->document_code)->exists();
+        $code = trim($request->document_code);
+        $existsInMaster = IsoMasterDocument::where('document_code', $code)->exists();
+        $existsInActiveTickets = IsoTicketDocument::where('document_code', $code)
+            ->where('classification', 'addition')
+            ->whereHas('ticket', function($q) {
+                $q->whereIn('status', ['pending', 'submitted_to_idc', 'with_qmr', 'on_hold']);
+            })
+            ->exists();
+        $exists = $existsInMaster || $existsInActiveTickets;
         return response()->json(['exists' => $exists]);
     }
 
@@ -113,6 +121,37 @@ class IsoDocumentController extends Controller
 
         // Parse the documents JSON
         $documents = json_decode($validated['documents'], true);
+
+
+
+        // Check for document code uniqueness and active ticket duplicates
+        foreach ($documents as $doc) {
+            $code = trim($doc['code']);
+
+            // 1. Check if this document code is already in use by another active ticket (regardless of classification)
+            $existsInActiveTickets = IsoTicketDocument::where('document_code', $code)
+                ->whereHas('ticket', function($q) use ($ticket) {
+                    $q->whereIn('status', ['pending', 'submitted_to_idc', 'with_qmr', 'on_hold'])
+                      ->where('id', '!=', $ticket->id);
+                })
+                ->exists();
+
+            if ($existsInActiveTickets) {
+                return redirect()->back()
+                    ->withInput()
+                    ->with('error', "The document code '{$code}' is already in use by another active ticket. Multiple concurrent tickets cannot process the same document code.");
+            }
+
+            // 2. If it is a new addition, check if it already exists in the Master Document List
+            if ($doc['classification'] === 'addition') {
+                $existsInMaster = IsoMasterDocument::where('document_code', $code)->exists();
+                if ($existsInMaster) {
+                    return redirect()->back()
+                        ->withInput()
+                        ->with('error', "The document code '{$code}' is already registered in the Master Document List. New documents must have a unique code.");
+                }
+            }
+        }
 
         // Update the ticket
         $ticket->update([
@@ -169,9 +208,39 @@ class IsoDocumentController extends Controller
             'documents' => 'required|json'
 
         ]);
-        
+
+
+
         // Parsing the JSON documents
         $documents = json_decode($validated['documents'], true);
+
+        // Check for document code uniqueness and active ticket duplicates
+        foreach ($documents as $doc) {
+            $code = trim($doc['code']);
+
+            // 1. Check if this document code is already in use by another active ticket (regardless of classification)
+            $existsInActiveTickets = IsoTicketDocument::where('document_code', $code)
+                ->whereHas('ticket', function($q) {
+                    $q->whereIn('status', ['pending', 'submitted_to_idc', 'with_qmr', 'on_hold']);
+                })
+                ->exists();
+
+            if ($existsInActiveTickets) {
+                return redirect()->back()
+                    ->withInput()
+                    ->with('error', "The document code '{$code}' is already in use by another active ticket. Multiple concurrent tickets cannot process the same document code.");
+            }
+
+            // 2. If it is a new addition, check if it already exists in the Master Document List
+            if ($doc['classification'] === 'addition') {
+                $existsInMaster = IsoMasterDocument::where('document_code', $code)->exists();
+                if ($existsInMaster) {
+                    return redirect()->back()
+                        ->withInput()
+                        ->with('error', "The document code '{$code}' is already registered in the Master Document List. New documents must have a unique code.");
+                }
+            }
+        }
         
         $ticket = IsoTicket::create([
             'originating_section'=> $validated['originating_section'],
@@ -417,8 +486,41 @@ class IsoDocumentController extends Controller
     }
 
     // ==================================
-    // Reset Ticket Function
+    // Delete Ticket Permanently (Hard Delete)
     // ==================================
+    public function deleteTicket(IsoTicket $ticket){
+        // Auth check: only IDC Admin or SuperAdmin
+        $userRole = auth()->user()->role;
+        if($userRole !== 'IDC Admin' && $userRole !== 'SuperAdmin'){
+            return response()->json(['success' => false, 'message' => 'Unauthorized action.'], 403);
+        }
+
+        // Prevent deleting registered tickets
+        if($ticket->is_registered){
+            return response()->json(['success' => false, 'message' => 'Cannot delete a registered ticket.'], 403);
+        }
+
+        try{
+            // Disable foreign key checks
+            DB::statement('SET FOREIGN_KEY_CHECKS=0');
+
+            // Delete child documents first
+            $ticket->documents()->delete();
+
+            // Hard delete the ticket itself
+            $ticket->delete();
+
+            // Re-enable foreign key checks
+            DB::statement('SET FOREIGN_KEY_CHECKS=1');
+
+            return response()->json(['success' => true, 'message' => 'Ticket permanently deleted.']);
+        } catch(\Exception $e){
+            DB::statement('SET FOREIGN_KEY_CHECKS=1');
+            \Log::error('Delete ticket failed: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Failed to delete ticket.'], 500);
+        }
+    }
+
     public function resetSystem(Request $request){
         // Double check if user is IDC Admin
         $userRole = auth()->user()->role;
