@@ -213,4 +213,107 @@ class IsoManagementController extends Controller
             'iso_documents_template.xlsx'
         );
     }
+
+    // ===============================
+    // ISO Department Management
+    // ===============================
+
+    private function authorizeManagement()
+    {
+        $allowedRoles = ['IDC Admin', 'SuperAdmin'];
+        if (!in_array(auth()->user()->role, $allowedRoles)) {
+            abort(403, 'Unauthorized Action');
+        }
+    }
+
+    public function departmentsIndex(Request $request)
+    {
+        $this->authorizeManagement();
+
+        $query = \App\Models\Departments::query();
+
+        $searchQuery = $request->input('query');
+        $cluster     = $request->input('cluster');
+
+        if (!empty($searchQuery)) {
+            $query->where(function ($q) use ($searchQuery) {
+                $q->where('code', 'LIKE', "%{$searchQuery}%")
+                  ->orWhere('dept', 'LIKE', "%{$searchQuery}%");
+            });
+        }
+
+        if (!empty($cluster)) {
+            $query->where(function ($q) use ($cluster) {
+                $q->where('code', $cluster)
+                  ->orWhere('code', 'LIKE', "{$cluster}-%");
+            });
+        }
+
+        $departments = $query->orderBy('code', 'asc')->paginate(20);
+
+        return view('iso.management.departments.index', compact('departments', 'searchQuery', 'cluster'))
+            ->with('query', $searchQuery);
+    }
+
+    public function departmentsCreate()
+    {
+        $this->authorizeManagement();
+        return view('iso.management.departments.create');
+    }
+
+    public function departmentsStore(Request $request)
+    {
+        $this->authorizeManagement();
+
+        $request->validate([
+            'code' => 'required|string|max:50|unique:departments,code',
+            'dept' => 'required|string|max:255',
+        ]);
+
+        \App\Models\Departments::create([
+            'code' => strtoupper(trim($request->code)),
+            'dept' => trim($request->dept),
+        ]);
+
+        return redirect()->route('iso.management.departments.index')
+            ->with('success', 'Department created successfully.');
+    }
+
+    public function departmentsEdit($id)
+    {
+        $this->authorizeManagement();
+        $dept = \App\Models\Departments::findOrFail($id);
+        return view('iso.management.departments.edit', compact('dept'));
+    }
+
+    public function departmentsUpdate(Request $request, $id)
+    {
+        $this->authorizeManagement();
+
+        $dept = \App\Models\Departments::findOrFail($id);
+
+        $request->validate([
+            'code' => 'required|string|max:50|unique:departments,code,' . $id,
+            'dept' => 'required|string|max:255',
+        ]);
+
+        $dept->update([
+            'code' => strtoupper(trim($request->code)),
+            'dept' => trim($request->dept),
+        ]);
+
+        return redirect()->route('iso.management.departments.index')
+            ->with('success', 'Department updated successfully.');
+    }
+
+    public function departmentsDestroy($id)
+    {
+        $this->authorizeManagement();
+
+        $dept = \App\Models\Departments::findOrFail($id);
+        $dept->delete();
+
+        return redirect()->route('iso.management.departments.index')
+            ->with('success', 'Department deleted successfully.');
+    }
 }

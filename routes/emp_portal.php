@@ -610,5 +610,19 @@ Route::middleware('auth','revalidate')->group(function () {
         ->name('iso.management.export');
     Route::get('iso/management/template', [IsoManagementController::class, 'downloadTemplate'])
         ->name('iso.management.template');
-        
+
+    // ISO Management - Department CRUD
+    Route::get('iso/management/departments', [IsoManagementController::class, 'departmentsIndex'])
+        ->name('iso.management.departments.index');
+    Route::get('iso/management/departments/create', [IsoManagementController::class, 'departmentsCreate'])
+        ->name('iso.management.departments.create');
+    Route::post('iso/management/departments', [IsoManagementController::class, 'departmentsStore'])
+        ->name('iso.management.departments.store');
+    Route::get('iso/management/departments/{id}/edit', [IsoManagementController::class, 'departmentsEdit'])
+        ->name('iso.management.departments.edit');
+    Route::put('iso/management/departments/{id}', [IsoManagementController::class, 'departmentsUpdate'])
+        ->name('iso.management.departments.update');
+    Route::delete('iso/management/departments/{id}', [IsoManagementController::class, 'departmentsDestroy'])
+        ->name('iso.management.departments.destroy');
+
 });
