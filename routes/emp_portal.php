@@ -33,7 +33,7 @@ use App\Http\Controllers\certificationController;
 use App\Http\Controllers\UpdatesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SharepointController;
-use App\Http\Controllers\InformationHubController;
+use App\Http\Controllers\KnowledgeHubController;
 use App\Http\Controllers\IsoDocumentController;
 use App\Http\Controllers\IsoManagementController;
 use App\Http\Controllers\VisitorController;
@@ -50,7 +50,7 @@ Route::middleware('auth','revalidate')->group(function () {
         $userInfo = Employee::where('emp_id', Auth::user()->id)->first();
         return view('portal.dashboard')->with(['userInfo' => $userInfo]);
     })->name('portal.dashboard');
-
+    
     // Privacy routes
     Route::post('/privacy-agree', function () {
         session()->forget('show_privacy_modal');
@@ -533,9 +533,9 @@ Route::middleware('auth','revalidate')->group(function () {
     Route::get('sharepoint-sites/dashboard', [SharepointController::class, 'index'])->name('sharepoint-sites.dashboard');
 
     /*------------------------------------------------------------------
-    | 19. Information Hub
+    | 19. Knowledge Hub
     |------------------------------------------------------------------*/
-    Route::get('information-hub/dashboard', [InformationHubController::class, 'index'])->name('information-hub.dashboard');
+    Route::get('knowledge-hub/dashboard', [KnowledgeHubController::class, 'index'])->name('knowledge-hub.dashboard');
     
     /*------------------------------------------------------------------
     | 20. KPI Library
@@ -592,6 +592,8 @@ Route::middleware('auth','revalidate')->group(function () {
         ->name('iso.idc.status.update');
     Route::delete('/iso/idc/reset-system', [IsoDocumentController::class, 'resetSystem'])
         ->name('iso.idc.reset.system');
+    Route::delete('/iso/idc/{ticket}/delete', [IsoDocumentController::class, 'deleteTicket'])
+        ->name('iso.idc.delete.ticket');
     
     /*------------------------------------------------------------------
     | 23. ISO Document Management
@@ -611,6 +613,7 @@ Route::middleware('auth','revalidate')->group(function () {
     Route::get('iso/management/template', [IsoManagementController::class, 'downloadTemplate'])
         ->name('iso.management.template');
 
+
     // ISO Management - Department CRUD
     Route::get('iso/management/departments', [IsoManagementController::class, 'departmentsIndex'])
         ->name('iso.management.departments.index');
@@ -624,5 +627,15 @@ Route::middleware('auth','revalidate')->group(function () {
         ->name('iso.management.departments.update');
     Route::delete('iso/management/departments/{id}', [IsoManagementController::class, 'departmentsDestroy'])
         ->name('iso.management.departments.destroy');
+
+    /*------------------------------------------------------------------
+    | 24. Visit Counter
+    |------------------------------------------------------------------*/
+    Route::get('/visitor-count/visitors', [VisitorController::class, 'index'])
+        ->name('visitor-count.dashboard');
+    Route::post('/visitor-count/visitors/homepage-period', [VisitorController::class, 'setHomepagePeriod'])
+        ->name('visitor-count.homepage-period');
+    Route::delete('/visitor-count/clear', [VisitorController::class, 'clearAll'])
+        ->name('visitor-count.clear');
 
 });

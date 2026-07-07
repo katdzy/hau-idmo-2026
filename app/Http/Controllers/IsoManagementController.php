@@ -214,6 +214,7 @@ class IsoManagementController extends Controller
         );
     }
 
+
     // ===============================
     // ISO Department Management
     // ===============================
@@ -230,26 +231,26 @@ class IsoManagementController extends Controller
     {
         $this->authorizeManagement();
 
-        $query = \App\Models\Departments::query();
+        $dbQuery = \App\Models\Departments::query();
 
         $searchQuery = $request->input('query');
         $cluster     = $request->input('cluster');
 
         if (!empty($searchQuery)) {
-            $query->where(function ($q) use ($searchQuery) {
+            $dbQuery->where(function ($q) use ($searchQuery) {
                 $q->where('code', 'LIKE', "%{$searchQuery}%")
                   ->orWhere('dept', 'LIKE', "%{$searchQuery}%");
             });
         }
 
         if (!empty($cluster)) {
-            $query->where(function ($q) use ($cluster) {
+            $dbQuery->where(function ($q) use ($cluster) {
                 $q->where('code', $cluster)
                   ->orWhere('code', 'LIKE', "{$cluster}-%");
             });
         }
 
-        $departments = $query->orderBy('code', 'asc')->paginate(20);
+        $departments = $dbQuery->orderBy('code', 'asc')->paginate(20);
 
         return view('iso.management.departments.index', compact('departments', 'searchQuery', 'cluster'))
             ->with('query', $searchQuery);
@@ -297,13 +298,36 @@ class IsoManagementController extends Controller
             'dept' => 'required|string|max:255',
         ]);
 
+        $oldCode = $dept->code;
+        $oldName = $dept->dept;
+        $newCode = strtoupper(trim($request->code));
+        $newName = trim($request->dept);
+
         $dept->update([
-            'code' => strtoupper(trim($request->code)),
-            'dept' => trim($request->dept),
+            'code' => $newCode,
+            'dept' => $newName,
         ]);
 
+        // Cascading Updates for user profiles:
+        \Illuminate\Support\Facades\DB::table('tbl_info')
+            ->where('emp_dept', $oldCode)
+            ->orWhere('emp_dept', $oldName)
+            ->update(['emp_dept' => $newCode]);
+
+        // Cascading Updates for existing registered ISO documents:
+        \Illuminate\Support\Facades\DB::table('iso_master_documents')
+            ->where('originating_section', 'LIKE', "%({$oldCode})%")
+            ->orWhere('originating_section', 'LIKE', "%{$oldName}%")
+            ->update(['originating_section' => "({$newCode}) {$newName}"]);
+
+        // Cascading Updates for tickets:
+        \Illuminate\Support\Facades\DB::table('iso_tickets')
+            ->where('originating_section', 'LIKE', "%({$oldCode})%")
+            ->orWhere('originating_section', 'LIKE', "%{$oldName}%")
+            ->update(['originating_section' => "({$newCode}) {$newName}"]);
+
         return redirect()->route('iso.management.departments.index')
-            ->with('success', 'Department updated successfully.');
+            ->with('success', 'Department updated successfully and all related profiles/ISO records were synchronized.');
     }
 
     public function departmentsDestroy($id)

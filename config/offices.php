@@ -43,16 +43,16 @@ return [
         // OIE - Office of the Institutional Effectiveness
         'OIE' => '(OIE) Office of the Institutional Effectiveness',
         'OIE-DMO' => '(OIE-DMO) Institutional Database Management Office',
-        'OIE-IDC' => '(OIE-IDC) Insitutional Document Controller',
+        'OIE-IDC' => '(OIE-IDC) Institutional Document Controller',
         'OIE-IPR' => '(OIE-IPR) Institutional Research, Planning & Publications Office',
         'OIE-QAO' => '(OIE-QAO) Quality Assurance Office',
 
-        // CFS
-        'CFS' => '(CFS) Institute for Catholic Formation & Social Integration',
-        'CFS-CEP' => '(CFS-CEP) Character Education Program Desk',
-        'CFS-CES' => '(CFS-CES) Office of the Community Extension Services',
-        'CFS-CLE' => '(CFS-CLE) Christian Living Education',
-        'CFS-CMO' => '(CFS-CMO) Campus Ministry Office',
+        // ICFSI
+        'ICFSI' => '(ICFSI) Institute for Catholic Formation & Social Integration',
+        'ICFSI-CEP' => '(ICFSI-CEP) Character Education Program Desk',
+        'ICFSI-CES' => '(ICFSI-CES) Office of the Community Extension Services',
+        'ICFSI-CLE' => '(ICFSI-CLE) Christian Living Education',
+        'ICFSI-CMO' => '(ICFSI-CMO) Campus Ministry Office',
 
         // HRO
         'HRO'     =>'(HRO) Human Resource Management Office',

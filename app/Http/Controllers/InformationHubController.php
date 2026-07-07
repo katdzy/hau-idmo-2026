@@ -87,10 +87,7 @@ class InformationHubController extends Controller
 
         // Handle image upload
         if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '_' . $image->getClientOriginalName();
-            $image->move(public_path('images/information-hub'), $imageName);
-            $validated['image_path'] = 'images/information-hub/' . $imageName;
+            $validated['image_path'] = $this->uploadAndSyncImage($request->file('image'));
         }
 
         InformationHubLinks::create($validated);
@@ -152,24 +149,17 @@ class InformationHubController extends Controller
 
         // Handle image removal
         if ($request->has('remove_image') && $link->image_path) {
-            if (file_exists(public_path($link->image_path))) {
-                unlink(public_path($link->image_path));
-            }
+            $this->deleteImageFiles($link->image_path);
             $validated['image_path'] = null;
         }
 
         // Handle new image upload
         if ($request->hasFile('image')) {
             // Delete old image if exists
-            if ($link->image_path && file_exists(public_path($link->image_path))) {
-                unlink(public_path($link->image_path));
+            if ($link->image_path) {
+                $this->deleteImageFiles($link->image_path);
             }
-            
-            // Upload new image
-            $image = $request->file('image');
-            $imageName = time() . '_' . $image->getClientOriginalName();
-            $image->move(public_path('images/information-hub'), $imageName);
-            $validated['image_path'] = 'images/information-hub/' . $imageName;
+            $validated['image_path'] = $this->uploadAndSyncImage($request->file('image'));
         }
 
         // Remove image and remove_image from validated array if not uploading
@@ -190,8 +180,8 @@ class InformationHubController extends Controller
         $link = InformationHubLinks::findOrFail($id);
         
         // Delete the image file if it exists
-        if ($link->image_path && file_exists(public_path($link->image_path))) {
-            unlink(public_path($link->image_path));
+        if ($link->image_path) {
+            $this->deleteImageFiles($link->image_path);
         }
         
         // Delete the database record
@@ -222,5 +212,51 @@ class InformationHubController extends Controller
         $id = decrypt($validated['link_id']);
 
         return redirect()->route('information-hub.edit', ['id' => $id]);
+    }
+
+    /**
+     * Sync uploaded image to both public_html and public paths.
+     */
+    protected function uploadAndSyncImage($image)
+    {
+        $imageName = time() . '_' . $image->getClientOriginalName();
+        $destPath = base_path('public_html/images/information_hub');
+        
+        if (!is_dir($destPath)) {
+            mkdir($destPath, 0755, true);
+        }
+        $image->move($destPath, $imageName);
+        
+        // Sync to public/ directory for local development environment
+        $localDestPath = base_path('public/images/information_hub');
+        if (is_dir(base_path('public'))) {
+            if (!is_dir($localDestPath)) {
+                mkdir($localDestPath, 0755, true);
+            }
+            copy($destPath . '/' . $imageName, $localDestPath . '/' . $imageName);
+        }
+        
+        return 'images/information_hub/' . $imageName;
+    }
+
+    /**
+     * Delete image files from both public_html and public paths.
+     */
+    protected function deleteImageFiles($path)
+    {
+        if (!$path) {
+            return;
+        }
+        
+        $paths = [
+            base_path('public_html/' . $path),
+            base_path('public/' . $path)
+        ];
+
+        foreach ($paths as $filePath) {
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
+        }
     }
 }

@@ -28,7 +28,7 @@
                                 <option value="oop">Office of the President (OOP)</option>
                                 <option value="aac">Academic Affairs Cluster (AAC)</option>
                                 <option value="oie">Office of Institutional Effectiveness (OIE)</option>
-                                <option value="icfsi">Institute for Christian Formation & Social Integration (ICFSI)</option>
+                                <option value="icfsi">Institute for Catholic Formation & Social Integration (ICFSI)</option>
                                 <option value="hro">Human Resource Management Office (HRO)</option>
                                 <option value="frm">Finance & Resources Management Services (FRM)</option>
                                 <option value="rss">Records Services & Affairs (RSS)</option>

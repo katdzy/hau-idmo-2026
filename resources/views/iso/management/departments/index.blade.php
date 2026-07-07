@@ -44,7 +44,7 @@
                         <option value="">All Clusters</option>
                         <option value="AAC" {{ ($cluster ?? '') == 'AAC' ? 'selected' : '' }}>Academic Affairs (AAC)</option>
                         <option value="AIE" {{ ($cluster ?? '') == 'AIE' ? 'selected' : '' }}>Academic Innovation (AIE)</option>
-                        <option value="ICFSI" {{ ($cluster ?? '') == 'ICFSI' ? 'selected' : '' }}>Catholic Formation (ICFSI)</option>
+                        <option value="ICFSI" {{ ($cluster ?? '') == 'ICFSI' ? 'selected' : '' }}>Institute for Catholic Formation & Social Integration (ICFSI)</option>
                         <option value="CSD" {{ ($cluster ?? '') == 'CSD' ? 'selected' : '' }}>Campus Services (CSD)</option>
                         <option value="EAC" {{ ($cluster ?? '') == 'EAC' ? 'selected' : '' }}>External Affairs (EAC)</option>
                         <option value="FRM" {{ ($cluster ?? '') == 'FRM' ? 'selected' : '' }}>Finance & Resources (FRM)</option>
