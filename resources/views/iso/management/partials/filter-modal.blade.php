@@ -105,11 +105,11 @@
                             <span class="text-sm">All Documents</span>
                         </label>
                         <label class="flex items-center bg-gray-50 p-2 rounded hover:bg-gray-100 cursor-pointer">
-                            <input type="radio" name="revision_filter" value="original_only" class="mr-2 text-purple-500 focus:ring-purple-500" checked>
+                            <input type="radio" name="revision_filter" value="original_only" class="mr-2 text-purple-500 focus:ring-purple-500">
                             <span class="text-sm">Original Documents Only</span>
                         </label>
                         <label class="flex items-center bg-gray-50 p-2 rounded hover:bg-gray-100 cursor-pointer">
-                            <input type="radio" name="revision_filter" value="has_revisions" class="mr-2 text-purple-500 focus:ring-purple-500" checked>
+                            <input type="radio" name="revision_filter" value="has_revisions" class="mr-2 text-purple-500 focus:ring-purple-500">
                             <span class="text-sm">Documents with Revisions</span>
                         </label>
                     </div>
